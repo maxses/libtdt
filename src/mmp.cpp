@@ -1,0 +1,244 @@
+//-----------------------------------------------------------------------------
+///
+/// \brief  Multi-message-package suzpport for TDT protocol
+///
+///         Transfer BLOBs from one device to another.
+///
+/// \date   20241003
+/// \author Maximilian Seesslen <mes@seesslen.net>
+///
+//-----------------------------------------------------------------------------
+
+
+//---Includes-----------------------------------------------------------------
+
+
+//---Own------------------------------
+
+#include <lepto/can_tdt_mmp.h>
+
+
+//---Implementation-----------------------------------------------------------
+
+
+namespace Tdt
+{
+
+
+CMmpTransfer::CMmpTransfer()
+{
+   static int counter=0;
+   m_nodeId=counter;
+   counter++;
+}
+
+
+CMmpTransfer::~CMmpTransfer() /* virtual */
+{
+   return;
+}
+
+
+void CMmpTransferData::updateCrc()
+{
+   if( m_header.dataLength == 0 )
+   {
+      m_header.crc32Data=0xFFFFFFFF;
+   }
+   else
+   {
+      m_header.crc32Data=crc32DefaultInit( );
+      m_header.crc32Data=crc32Update( m_header.crc32Data
+                                       , m_data, m_header.dataLength );
+      m_header.crc32Data=crc32Finalize( m_header.crc32Data );
+   }
+};
+
+
+void CMmpTransfer::writeMMP( Tdt::EObject object, int pos, uint32_t value )
+{
+   //if( pos % 100 == 0 )
+   {
+      qDebug("MMP out: pos %d; length=%d", pos, m_data.header().dataLength);
+   }
+   Tdt::CMessage message( m_counterNodeId,
+                         Tdt::EFunctionCode::dataBlob, 
+                         object, pos, value);
+   //m_socketCan << message;
+   emit send(message);
+}
+
+
+void CMmpNode::receive(Tdt::CMessage& msg)
+{
+   qDebug("MMP in");
+   switch( msg.getFunctionCode() )
+   {
+      case ( Tdt::EFunctionCode::dataBlob ):
+         qDebug("   MMP Data");
+         m_rx.handleRx(msg);
+         break;
+      case ( Tdt::EFunctionCode::ackDataBlob ):
+         qDebug("   MMP Ack");
+         m_tx.handleTx(msg);
+         break;
+      default:
+         break;
+   }
+}
+
+
+void CMmpTransfer::handleRx(Tdt::CMessage& msg)
+{
+   lDebug( "   handle Receiver [%d]", m_nodeId );
+   // lDebug("pos %d dlen:%d", (int)msg.getMmpPos(), m_data.header().dataLength);
+   if( m_data.pos() == -1 )
+   {
+      lCritical( "MMP abort" );
+      m_data.reset();
+      return;
+   }
+   if( m_data.pos() && ( msg.getMmpPos() == m_data.pos() - 1 ) )
+   {
+      lCritical( LDS("IGRE", "Ignoring retransmit" ) );
+      sendAck( m_data.pos()-1 );
+      return;
+   }
+   else if( msg.getMmpPos() != m_data.pos() )
+   {
+      lCritical( LDS("MMP ODNM", "MMP order does not match:" ) );
+      lCritical( "   msg %d vs. cur %d"
+                , (int)msg.getMmpPos(), (int)m_data.pos() );
+
+      m_data.reset();
+      sendAck( -1 );
+      return;
+   }
+   
+   lDebug("Pushing data");
+   m_data.data32()=msg.getTdtValue()->_uint;
+   sendAck( m_data.pos( ) );
+   m_data.inc( );
+   lDebug( "Pushing data, now at %d", m_data.pos() );
+   
+   if( m_data.pos() * 4 == sizeof( Tdt::SMmpHeader ) )
+   {
+      if( m_data.header().dataLength > m_data.maxReceiveSize() )
+      {
+         lFatal( LDS("POTB", "Block too big: %d"), m_data.header().dataLength );
+      }
+   }
+   
+   if( ( m_data.pos() * 4 >= sizeof( Tdt::SMmpHeader ) )
+       && ( m_data.pos() * 4
+           >= sizeof( Tdt::SMmpHeader ) + m_data.header().dataLength )
+       )
+   {
+      lDebug(LDS("TRFI p=%d", "Transfer finished; pos=%d"), m_data.pos());
+      crc32_t crc32=crc32Init( );
+      crc32=crc32Update( crc32, m_data.data(), m_data.header().dataLength );
+      crc32=crc32Finalize(crc32);
+      if( ! m_data.header().dataLength )
+      {
+         crc32=0xffffffff;
+      }
+      if( crc32 != m_data.header().crc32Data )
+      {
+         lWarning(LDS("CRC WR: HD 0x%X vs. CL 0x%X",
+                      "CRC32 wrong: header 0x%X vs. calc 0x%X")
+                  , m_data.header().crc32Data, crc32);
+         lWarning( "Cl: 0x%X", crc32);
+         //dumpMem(m_data.header(), sizeof( Tdt::SMmpHeader ) );
+      }
+      else
+      {
+         //handleMmpTransfer( m_data );
+         m_data.m_finished=true;
+      }
+      //m_data.reset();
+   }
+}
+
+
+void CMmpTransfer::handleTx(Tdt::CMessage& msg)
+{
+   lDebug( "   handle Transceiver [%d]", m_nodeId );
+   qDebug( "   RCV ACK pos %d", msg.getTdtValue()->_uint );
+   
+   if( msg.getTdtObject() != Tdt::EObject::acknowledgeShred )
+   {
+      qFatal("TDT-Object was not a shred acknowledge");
+   };
+   
+   if( msg.getTdtValue()->_int == -1 )
+   {
+      qCritical( "Resetting position" );
+      m_data.reset();
+      return;
+   }
+   if( msg.getTdtValue()->_int > 0 )
+   {
+      if( msg.getTdtValue()->_int == m_data.pos()-1 )
+      {
+         qCritical( "Ignoring old ACK" );
+         return;
+      }
+      if( msg.getTdtValue()->_int != m_data.pos() )
+      {
+         qWarning("ACK not plausible");
+         qWarning("msg %d vs. cur %d", msg.getTdtValue()->_uint
+                  ,m_data.pos() );
+         sendAbort();
+         return;
+      }
+   }
+   m_data.inc();
+   if( ( m_data.pos() * sizeof(uint32_t) )
+       >= sizeof(Tdt::SMmpHeader) + m_data.header().dataLength )
+   {
+      emit finishTransfer( m_data );
+   }
+   else
+   {
+      sendShred();
+   }
+}
+
+
+void CMmpTransfer::sendShred()
+{
+   writeMMP( Tdt::EObject::firmwareDate, m_data.pos()
+            , m_data.data32() );
+   m_timeoutTimer.start( m_shredTimeout );
+}
+
+
+void CMmpTransfer::sendAbort()
+{
+   writeMMP( Tdt::EObject::firmwareDate, -1, 0 );
+   m_timeoutTimer.stop( );
+}
+
+
+void CMmpTransfer::sendAck( uint32_t pos )
+{
+   Tdt::CMessage message
+       { 0,
+           Tdt::EFunctionCode::ackDataBlob,
+           Tdt::EObject::acknowledgeShred,
+           Tdt::EUnit::null, { ._uint = pos }
+       };
+   emit send(message);
+}
+
+
+void CMmpTransfer::handleMmpTransfer(CMmpTransferData& data)
+{
+   lInfo("TRANSFER!");
+}
+
+
+}; // namespace Tdt
+
+
+//---fin----------------------------------------------------------------------
