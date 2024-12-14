@@ -32,7 +32,8 @@ set(headers
 
 set(sources
    src/message.cpp
-   src/mmp.cpp
+   src/mmpTransfer.cpp
+   src/mmpNode.cpp
 )
 
 if ( NOT MCU_REV OR "${MCU_REV}" MATCHES "x86" )
