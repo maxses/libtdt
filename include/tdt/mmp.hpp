@@ -242,38 +242,6 @@ class CMmpTransfer   :// public CMmpTransferData,
       }
 };
 
-#if 0
-
-class CMmpTransferTx: public CMmpTransfer // , QObject
-{
-   //Q_OBJECT
-   
-   private:
-       QTimer m_timeoutTimer;
-       static constexpr const int m_shredTimeout=250;
-       
-   public:
-       virtual ~CMmpTransferTx()
-       {
-          return;
-       }
-      void startTx()
-      {
-         m_td.reset();
-         writeMMP( m_td.m_object, 0, m_td.data32() );
-         m_timeoutTimer.start( m_shredTimeout );
-      }
-};
-
-
-class CMmpTransferRx: public CMmpTransferData
-{
-   //Q_OBJECT
-   
-   public:
-};
-
-#endif
 
 class CMmpNode: public QObject
 {

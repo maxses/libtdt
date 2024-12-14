@@ -22,15 +22,15 @@ if( "${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86_64" )
 
    add_definitions( "-fPIC" )
    set( MCU_PLATFORM "linux" )
-endif()
+endif( )
 
 
-set(headers
+set( headers
    include/tdt/message.hpp
    include/tdt/mmp.hpp
 )
 
-set(sources
+set( sources
    src/message.cpp
    src/mmpTransfer.cpp
    src/mmpNode.cpp
