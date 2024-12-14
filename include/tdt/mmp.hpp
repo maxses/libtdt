@@ -17,7 +17,7 @@
 
 //---Own------------------------------
 
-#include <lepto/can_message_tdt.h>
+#include <tdt/message.hpp>
 #include <lepto/crc32.h>
 
 #include <QTimer>
@@ -65,7 +65,7 @@ class CMmpTransferData
    private:
       SMmpHeader m_header;
       char* m_data;
-      int m_maxTransferSize;
+      int m_maxReceiveSize;
       int m_retry=0;
       bool m_finished=false;
       /*
@@ -91,25 +91,17 @@ class CMmpTransferData
       CMmpTransferData()
       {
          m_header.dataLength=0;
-         m_maxTransferSize=0x200;
-         m_data=(char*)malloc( m_maxTransferSize );
+         m_header.mmpObject=EMmpObject::null;
+         m_maxReceiveSize=0x0;
+         m_data=nullptr;
          reset();
       };
-      CMmpTransferData(EMmpObject object, const char* data, int size)
-         :m_header{
-               .magic=0x1234,
-               .dataLength=(uint32_t)size,
-               .sourceNodeId=0,
-               .mmpObject=object,
-               //.mmpFunctionCode=0,
-           }
-         ,m_data( (char*)data )
-         //,m_state( EState::init )
+      void alloc()
       {
-         updateCrc();
-         m_maxTransferSize=0;
+         m_maxReceiveSize=0x200;
+         m_data=(char*)malloc( m_maxReceiveSize );
          reset();
-      }
+      };
       void updateCrc();
       int pos()
       {
@@ -145,6 +137,7 @@ class CMmpTransferData
          lDebug("Reset data");
          m_retry=0;
          m_pos=0;
+         //m_header.mmpObject=EMmpObject::null;
          m_finished=false;
       }
       int incRetry()
@@ -158,13 +151,21 @@ class CMmpTransferData
       }
       int maxReceiveSize()
       {
-         return(m_maxTransferSize);
+         return(m_maxReceiveSize);
       }
-      void setData(const char* data, uint32_t size)
+      void setData(EMmpObject object, const char* data, uint32_t size)
       {
+         m_header={
+             .magic=0x1234,
+             .dataLength=(uint32_t)size,
+             .sourceNodeId=0,
+             .mmpObject=object,
+             .flashAddress=0
+             //.mmpFunctionCode=0,
+         };
          m_data=(char*)data;
-         m_header.dataLength=size;
          updateCrc();
+         m_maxReceiveSize=0;
          reset();
       }
       void setFlashAddress(address_t addr)
@@ -186,20 +187,28 @@ class CMmpTransfer   :// public CMmpTransferData,
       //CSocketCan& m_socketCan;
       
    //Q_SIGNALS:
-   //signals:
+   #if ! defined( CONFIG_TDT_TX_LIST )
+   signals:
+         void sendMessage( const Tdt::CMessage& msg );
+   #endif
+         
    public:
+         
+   #if defined( CONFIG_TDT_TX_LIST )
          QList<Tdt::CMessage> m_txList;
-         void send( Tdt::CMessage& msg )
+         void send( const Tdt::CMessage& msg )
          {
             m_txList << msg;
          }
+   #endif
+       
    signals:
          void finishTransfer( CMmpTransferData &data );
       
    public:
       CMmpTransferData m_data;
-       QTimer m_timeoutTimer;
-       static constexpr const int m_shredTimeout=250;
+      QTimer m_timeoutTimer;
+      static constexpr const int m_shredTimeout=250;
       
    public:
       CMmpTransfer();
@@ -215,7 +224,7 @@ class CMmpTransfer   :// public CMmpTransferData,
       }
        
       void handleRx(Tdt::CMessage& msg);
-      void handleTx(Tdt::CMessage& msg);
+      bool handleTx(Tdt::CMessage& msg);
       
       void sendShred( );
       void sendAbort( );
@@ -226,6 +235,10 @@ class CMmpTransfer   :// public CMmpTransferData,
       bool finished()
       {
          return( m_data.m_finished );
+      }
+      void setCounterNodeId( int nodeId )
+      {
+         m_counterNodeId=nodeId;
       }
 };
 
@@ -270,14 +283,57 @@ class CMmpNode: public QObject
       CMmpTransfer m_tx;
       CMmpTransfer m_rx;
       
-  //signals:
+   //signals:
       //void send(Tdt::CMessage& msg);
+   signals:
+      void sendMessage( const Tdt::CMessage& msg );
       
-  public slots:
+   public slots:
       void receive(Tdt::CMessage& msg);
+      void slotSendMessage( const Tdt::CMessage& msg );
+      
+   public:
+      CMmpNode();
       bool finishedRx()
       {
          return( m_rx.finished() );
+      }
+      void finishTransmit()
+      {
+         //m_tx.m_data.header().mmpObject = EMmpObject::null;
+         m_tx.m_data.reset();
+      }
+      bool retryTransmit()
+      {
+         if( m_tx.m_data.incRetry() > 4 )
+         {
+            qWarning( "Too much retries" );
+            return(false);
+         }
+         qWarning( "Retry pos %d", m_tx.m_data.pos() );
+         m_tx.sendShred();
+         
+         return(true);
+      }
+      bool transmitActive()
+      {
+         return( m_tx.m_data.header().mmpObject != EMmpObject::null );
+      }
+      void startTx(EMmpObject object, const char* data, uint32_t length)
+      {
+         m_tx.m_data.setData(object, data, length);
+         m_tx.startTx();
+      }
+      void setDestinationNodeId( int nodeId )
+      {
+         m_tx.setCounterNodeId( nodeId );
+      }
+      void sendTransfer(Tdt::EMmpObject object, const char *data=0
+                     , int length=0, int flashPos=0)
+      {
+         m_tx.m_data.setData( object, data, length );
+         m_tx.m_data.setFlashAddress( flashPos );
+         m_tx.startTx( );
       }
 };
 

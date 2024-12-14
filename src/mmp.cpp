@@ -15,7 +15,7 @@
 
 //---Own------------------------------
 
-#include <lepto/can_tdt_mmp.h>
+#include <tdt/mmp.hpp>
 
 
 //---Implementation-----------------------------------------------------------
@@ -65,9 +65,17 @@ void CMmpTransfer::writeMMP( Tdt::EObject object, int pos, uint32_t value )
                          Tdt::EFunctionCode::dataBlob, 
                          object, pos, value);
    //m_socketCan << message;
-   emit send(message);
+   emit sendMessage(message);
 }
 
+
+CMmpNode::CMmpNode()
+{
+   connect( &m_tx, SIGNAL( sendMessage( const Tdt::CMessage& ) ),
+           this, SLOT( slotSendMessage( const Tdt::CMessage& ) ) );
+   connect( &m_rx, SIGNAL( sendMessage( const Tdt::CMessage& ) ),
+           this, SLOT( slotSendMessage( const Tdt::CMessage& ) ) );
+}
 
 void CMmpNode::receive(Tdt::CMessage& msg)
 {
@@ -160,10 +168,18 @@ void CMmpTransfer::handleRx(Tdt::CMessage& msg)
 }
 
 
-void CMmpTransfer::handleTx(Tdt::CMessage& msg)
+bool CMmpTransfer::handleTx(Tdt::CMessage& msg)
 {
    lDebug( "   handle Transceiver [%d]", m_nodeId );
-   qDebug( "   RCV ACK pos %d", msg.getTdtValue()->_uint );
+   qDebug( "   RCV ACK pos %d %s", msg.getTdtValue()->_uint,
+          (msg.getTdtObject() == Tdt::EObject::acknowledgeTransfer)
+            ? "TRANSFER" : "SHRED" );
+   
+   if( msg.getTdtObject() == Tdt::EObject::acknowledgeTransfer )
+   {
+      // TBD: check for plausibility
+      return(true);
+   };
    
    if( msg.getTdtObject() != Tdt::EObject::acknowledgeShred )
    {
@@ -174,14 +190,14 @@ void CMmpTransfer::handleTx(Tdt::CMessage& msg)
    {
       qCritical( "Resetting position" );
       m_data.reset();
-      return;
+      return(false);
    }
    if( msg.getTdtValue()->_int > 0 )
    {
       if( msg.getTdtValue()->_int == m_data.pos()-1 )
       {
          qCritical( "Ignoring old ACK" );
-         return;
+         return(false);
       }
       if( msg.getTdtValue()->_int != m_data.pos() )
       {
@@ -189,19 +205,30 @@ void CMmpTransfer::handleTx(Tdt::CMessage& msg)
          qWarning("msg %d vs. cur %d", msg.getTdtValue()->_uint
                   ,m_data.pos() );
          sendAbort();
-         return;
+         return(false);
       }
    }
    m_data.inc();
    if( ( m_data.pos() * sizeof(uint32_t) )
        >= sizeof(Tdt::SMmpHeader) + m_data.header().dataLength )
    {
-      emit finishTransfer( m_data );
+      // The transmission finished. But still waiting for Transfer Ack.
+      // "Reboot" and "Jump to application" wont send an transfer ack.
+      if( ( m_data.header().mmpObject == EMmpObject::jumpApplication )
+       || ( m_data.header().mmpObject == EMmpObject::reset ) )
+      {
+         // manipulate the shred Ack to be the transfer ack.
+         msg.setObject( EObject::acknowledgeTransfer );
+         msg.setValue( {._uint=0} );
+         return( true );
+      }
+      return( false );
    }
    else
    {
       sendShred();
    }
+   return(false);
 }
 
 
@@ -228,7 +255,7 @@ void CMmpTransfer::sendAck( uint32_t pos )
            Tdt::EObject::acknowledgeShred,
            Tdt::EUnit::null, { ._uint = pos }
        };
-   emit send(message);
+   emit sendMessage(message);
 }
 
 
@@ -237,6 +264,11 @@ void CMmpTransfer::handleMmpTransfer(CMmpTransferData& data)
    lInfo("TRANSFER!");
 }
 
+
+void CMmpNode::slotSendMessage( const Tdt::CMessage& msg )
+{
+   emit sendMessage( msg );
+}
 
 }; // namespace Tdt
 

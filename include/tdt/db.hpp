@@ -10,7 +10,7 @@
 #include <lepto/can_message.h>
 #include <lepto/log.h>
 #include <stdio.h>               // snprintf
-#include <lepto/can_message_tdt.h>
+#include <tdt/message.hpp>
 #include <QTextStream>
 #include <QMap>
 

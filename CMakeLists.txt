@@ -36,11 +36,11 @@ set(sources
 )
 
 if ( NOT MCU_REV OR "${MCU_REV}" MATCHES "x86" )
-	set(sources
-		${sources}
-		src/ansiparser.cpp
-                src/printer.cpp
-                src/db.cpp
+   set(sources
+      ${sources}
+      # src/ansiparser.cpp
+      src/printer.cpp
+      src/db.cpp
 	)
    set(headers
       ${headers}
@@ -109,6 +109,11 @@ if( NOT TDT_CONFIGURED )
             "root cmake file. If you are sure that you don't need it, set "
             "'TDT_CONFIGURED' cmake variable")
 endif()
+
+target_link_libraries(
+   ${PROJECT_NAME}
+   lepto
+)
 
 if( "${MCU_PLATFORM}" MATCHES "linux" )
    target_link_libraries(

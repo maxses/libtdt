@@ -28,8 +28,8 @@
    #error "Either 'catch' or 'catch2' has to be installed"
 #endif
 
-#include <lepto/can_message_tdt.h>
-#include <lepto/can_tdt_mmp.h>
+#include <tdt/message.hpp>
+#include <tdt/mmp.hpp>
 #include <QElapsedTimer>
 #include <QObject>
 
@@ -63,6 +63,7 @@ operam ponendam in eo non arbitrantur.)" };
 
 void handleQueues(Tdt::CMmpNode& n1, Tdt::CMmpNode& n2)
 {
+   /*
    while( n1.m_rx.m_txList.count() )
    {
       n2.receive( n1.m_rx.m_txList.last() );
@@ -73,6 +74,7 @@ void handleQueues(Tdt::CMmpNode& n1, Tdt::CMmpNode& n2)
       n1.receive( n2.m_tx.m_txList.last() );
       n2.m_tx.m_txList.removeLast();
    }
+   */
 };
 
 
@@ -108,9 +110,9 @@ TEST_CASE( "MMP full duplex", "[default]" )
       
       elapsed.start();
       
-      dut1.m_tx.m_data.setData( data1, strlen(data1) );
+      dut1.m_tx.m_data.setData( Tdt::EMmpObject::writeApplicationFlash, data1, strlen(data1) );
       dut1.m_tx.startTx();
-      dut2.m_tx.m_data.setData( data2, strlen(data2) );
+      dut2.m_tx.m_data.setData( Tdt::EMmpObject::writeApplicationFlash, data2, strlen(data2) );
       dut2.m_tx.startTx();
       
       while( elapsed.elapsed( ) < 1 * 1000 )

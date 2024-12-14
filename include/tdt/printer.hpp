@@ -7,10 +7,9 @@
 //-----------------------------------------------------------------------------
 
 
-#include <lepto/can_message.h>
+#include <tdt/message.hpp>
 #include <lepto/log.h>
 #include <stdio.h>               // snprintf
-#include <lepto/can_message_tdt.h>
 #include <QTextStream>
 #include <QMap>
 #include <lepto/events.h>

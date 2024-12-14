@@ -28,7 +28,7 @@
    #error "Either 'catch' or 'catch2' has to be installed"
 #endif
 
-#include <lepto/can_message_tdt.h>
+#include <tdt/message.hpp>
 
 //--- Own ----------------------------
 
