@@ -43,6 +43,7 @@ enum class EMmpObject: uint32_t
    //disableApplication,
    jumpApplication,
    reset,
+   sendEeprom,
 };
 
 struct SMmpHeader
