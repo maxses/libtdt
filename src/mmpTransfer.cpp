@@ -66,7 +66,7 @@ void CMmpTransfer::writeMMP( Tdt::EObject object, int pos, uint32_t value )
                          object, pos, value);
    //m_socketCan << message;
    #if ! defined ( STM32 )
-      emit sendMessage(message);
+      emit sendTdtMessage(message);
    #elif 0
       // TBD
       sendMessage.emitSignal( message );
@@ -234,13 +234,18 @@ void CMmpTransfer::sendAbort()
 void CMmpTransfer::sendAck( uint32_t pos )
 {
    Tdt::CMessage message
-       { cbGetNodeId(),
-           Tdt::EFunctionCode::ackDataBlob,
-           Tdt::EObject::acknowledgeShred,
-           Tdt::EUnit::null, { ._uint = pos }
-       };
+   {
+      #if defined STM32
+      cbGetNodeId(),
+      #else
+      emit getNodeId(),
+      #endif
+      Tdt::EFunctionCode::ackDataBlob,
+      Tdt::EObject::acknowledgeShred,
+      Tdt::EUnit::null, { ._uint = pos }
+   };
    #if ! defined ( STM32 )
-      emit sendMessage( message );
+      emit sendTdtMessage( message );
    #else
       // TBD
       cbSendTdtMessage( message );
@@ -250,12 +255,21 @@ void CMmpTransfer::sendAck( uint32_t pos )
 void CMmpTransfer::sendTransferAck(int sta)
 {
    Tdt::CMessage message
-       { cbGetNodeId(),
-           Tdt::EFunctionCode::ackDataBlob,
-           Tdt::EObject::acknowledgeTransfer,
-           Tdt::EUnit::null, { ._uint = sta }
-       };
-   cbSendTdtMessage( message );
+   {
+      #if defined STM32
+      cbGetNodeId(),
+      #else
+      emit getNodeId(),
+      #endif
+      Tdt::EFunctionCode::ackDataBlob,
+      Tdt::EObject::acknowledgeTransfer,
+      Tdt::EUnit::null, { ._uint = sta }
+   };
+   #if ! defined ( STM32 )
+      sendTdtMessage( message );
+   #else
+      cbSendTdtMessage( message );
+   #endif
 }
 
 /*
