@@ -41,9 +41,11 @@ namespace Tdt
    class CMmpTransferData;
 }
 
-void cbSendTdtMessage( const Tdt::CMessage& );
-int cbGetNodeId();
-int cbHandleMmpTransfer( const Tdt::CMmpTransferData& );
+#if defined( STM32 )
+   void cbSendTdtMessage( const Tdt::CMessage& );
+   int cbGetNodeId();
+   int cbHandleMmpTransfer( const Tdt::CMmpTransferData& );
+#endif
 
 namespace Tdt
 {
