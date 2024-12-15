@@ -16,6 +16,9 @@
 //---Own------------------------------
 
 #include <tdt/mmp.hpp>
+#if defined ( STM32 )
+   //#include <biwak/can.hpp>
+#endif
 
 
 //---Implementation-----------------------------------------------------------
@@ -27,25 +30,39 @@ namespace Tdt
 
 CMmpNode::CMmpNode()
 {
+   m_rx.m_data.alloc();
+
+   #if ! defined ( STM32 )
    connect( &m_tx, SIGNAL( sendMessage( const Tdt::CMessage& ) ),
            this, SLOT( slotSendMessage( const Tdt::CMessage& ) ) );
    connect( &m_rx, SIGNAL( sendMessage( const Tdt::CMessage& ) ),
            this, SLOT( slotSendMessage( const Tdt::CMessage& ) ) );
+   #elif 0
+   m_tx.sendMessage.connect(this, &CMmpNode::slotSendMessage );
+   m_rx.sendMessage.connect(this, &CMmpNode::slotSendMessage );
+   #else
+   #endif
 }
 
 
-void CMmpNode::receive(Tdt::CMessage& msg)
+void CMmpNode::receive( const Tdt::CMessage& msg )
 {
-   qDebug("MMP in");
+   //lInfo("MMP in");
    switch( msg.getFunctionCode() )
    {
       case ( Tdt::EFunctionCode::dataBlob ):
-         qDebug("   MMP Data");
-         m_rx.handleRx(msg);
+         lDebug("   MMP Data");
+         if ( m_rx.handleRx( msg ) )
+         {
+            //signalHandleMmpTransfer.emitSignal( m_rx.m_data );
+            int sta=cbHandleMmpTransfer( m_rx.m_data );
+            m_rx.sendTransferAck(sta);
+            m_rx.m_data.reset();
+         }
          break;
       case ( Tdt::EFunctionCode::ackDataBlob ):
-         qDebug("   MMP Ack");
-         m_tx.handleTx(msg);
+         lDebug("   MMP Ack");
+         m_tx.handleTx( msg );
          break;
       default:
          break;
@@ -55,7 +72,16 @@ void CMmpNode::receive(Tdt::CMessage& msg)
 
 void CMmpNode::slotSendMessage( const Tdt::CMessage& msg )
 {
-   emit sendMessage( msg );
+   //lInfo("MMP out");
+   #if ! defined ( STM32 )
+      emit sendMessage( msg );
+   #elif 0
+      signalSendMessage.emitSignal( msg );
+   #else
+      cbSendTdtMessage( msg );
+      // TBD
+      //mmpCan->send( msg );
+   #endif
 }
 
 

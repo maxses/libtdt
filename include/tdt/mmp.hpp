@@ -5,6 +5,10 @@
 /// \brief  Multi-message-package suzpport for TDT protocol
 ///
 ///         Transfer BLOBs from one device to another.
+/// 
+///         Handling the shreds directly (writing them to flash) are making CRC
+///         handling impossible. Retransmitting an transfer does not work any 
+///         more because the flash would be needed to erased again.
 ///
 /// \date   20241003
 /// \author Maximilian Seesslen <mes@seesslen.net>
@@ -19,15 +23,18 @@
 
 #include <tdt/message.hpp>
 #include <lepto/crc32.h>
+#include <stdlib.h>           // malloc
+#include <lepto/signal.h>
 
-#include <QTimer>
-
-
-//---Forward declarations-----------------------------------------------------
+#if defined( STM32 )
+   #define slots
+#endif
 
 
 //---Declaration--------------------------------------------------------------
 
+class CCan;
+extern CCan* mmpCan;
 
 namespace Tdt
 {
@@ -67,7 +74,7 @@ class CMmpTransferData
       char* m_data;
       int m_maxReceiveSize;
       int m_retry=0;
-      bool m_finished=false;
+      //bool m_finished=false;
       /*
       enum class EState
       {
@@ -138,7 +145,7 @@ class CMmpTransferData
          m_retry=0;
          m_pos=0;
          //m_header.mmpObject=EMmpObject::null;
-         m_finished=false;
+         //m_finished=false;
       }
       int incRetry()
       {
@@ -176,38 +183,35 @@ class CMmpTransferData
 
 class CSocketCan;
 
-class CMmpTransfer   :// public CMmpTransferData, 
-                      public QObject
+class CMmpTransfer
+            #if ! defined STM32
+            :public QObject
+            #endif
 {
+   #if ! defined STM32
    Q_OBJECT
+   #endif
    
    private:
       int m_counterNodeId=0;
        int m_nodeId=0;
-      //CSocketCan& m_socketCan;
-      
-   //Q_SIGNALS:
-   #if ! defined( CONFIG_TDT_TX_LIST )
+
+   #if ! defined( STM32 )
    signals:
          void sendMessage( const Tdt::CMessage& msg );
+   #else
+      //public:
+      // CSignal< void, const Tdt::CMessage& > sendMessage;
+       void cbSendMessage( const Tdt::CMessage& );
+       int cbGetNodeId();
    #endif
          
-   public:
-         
-   #if defined( CONFIG_TDT_TX_LIST )
-         QList<Tdt::CMessage> m_txList;
-         void send( const Tdt::CMessage& msg )
-         {
-            m_txList << msg;
-         }
-   #endif
-       
-   signals:
-         void finishTransfer( CMmpTransferData &data );
+   //signals:
+   //      void finishTransfer( CMmpTransferData &data );
       
    public:
       CMmpTransferData m_data;
-      QTimer m_timeoutTimer;
+      //QTimer m_timeoutTimer;
       static constexpr const int m_shredTimeout=250;
       
    public:
@@ -220,22 +224,24 @@ class CMmpTransfer   :// public CMmpTransferData,
       {
          m_data.reset();
          writeMMP( m_data.m_object, 0, m_data.data32() );
-         m_timeoutTimer.start( m_shredTimeout );
+         //m_timeoutTimer.start( m_shredTimeout );
       }
-       
-      void handleRx(Tdt::CMessage& msg);
-      bool handleTx(Tdt::CMessage& msg);
+      
+      bool handleRx( const Tdt::CMessage& msg );
+      bool handleTx( const Tdt::CMessage& msg );
       
       void sendShred( );
       void sendAbort( );
       void sendAck( uint32_t pos=false );
+      void sendTransferAck(int sta);
       
-      void handleMmpTransfer(CMmpTransferData& data);
-      
+      //void handleMmpTransfer(CMmpTransferData& data);
+      /*
       bool finished()
       {
          return( m_data.m_finished );
       }
+      */
       void setCounterNodeId( int nodeId )
       {
          m_counterNodeId=nodeId;
@@ -243,9 +249,14 @@ class CMmpTransfer   :// public CMmpTransferData,
 };
 
 
-class CMmpNode: public QObject
+class CMmpNode
+               #if ! defined STM32
+               :public QObject
+               #endif
 {
+   #if ! defined STM32
    Q_OBJECT
+   #endif
    
    public:
       CMmpTransfer m_tx;
@@ -253,32 +264,46 @@ class CMmpNode: public QObject
       
    //signals:
       //void send(Tdt::CMessage& msg);
-   signals:
-      void sendMessage( const Tdt::CMessage& msg );
+   //signals:
+      //void sendMessage( const Tdt::CMessage& msg );
+      #if ! defined( STM32 )
+         signals:
+         void sendMessage( const Tdt::CMessage& msg );
+      #elif 0
+         CSignal< void, const Tdt::CMessage& > signalSendMessage;
+         CSignal< int, const Tdt::CMmpTransferData& > signalHandleMmpTransfer;
+      #else
+         void cbSendTdtMessage( const Tdt::CMessage& );
+         int cbHandleMmpTransfer( const Tdt::CMmpTransferData& );
+      #endif
       
    public slots:
-      void receive(Tdt::CMessage& msg);
+         void receive(const CMessage &msg);
       void slotSendMessage( const Tdt::CMessage& msg );
       
    public:
       CMmpNode();
+       /*
       bool finishedRx()
       {
          return( m_rx.finished() );
       }
+      */
+      /*
       void finishTransmit()
       {
          //m_tx.m_data.header().mmpObject = EMmpObject::null;
          m_tx.m_data.reset();
       }
+*/
       bool retryTransmit()
       {
          if( m_tx.m_data.incRetry() > 4 )
          {
-            qWarning( "Too much retries" );
+            lWarning( "Too much retries" );
             return(false);
          }
-         qWarning( "Retry pos %d", m_tx.m_data.pos() );
+         lWarning( "Retry pos %d", m_tx.m_data.pos() );
          m_tx.sendShred();
          
          return(true);
