@@ -51,7 +51,7 @@ CMmpNode::CMmpNode()
 
 void CMmpNode::receive( const Tdt::CMessage& msg )
 {
-   //lInfo("MMP in");
+   lDebug("MMP in");
    switch( msg.getFunctionCode() )
    {
       case ( Tdt::EFunctionCode::dataBlob ):

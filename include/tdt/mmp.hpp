@@ -62,6 +62,7 @@ enum class EMmpObject: uint32_t
    jumpApplication,
    reset,
    sendEeprom,
+   sendFirmware,
    eeprom,
 };
 
@@ -238,6 +239,9 @@ class CMmpTransfer
       void startTx()
       {
          m_data.reset();
+         #if defined STM32
+            m_counterNodeId=0x14;
+         #endif
          writeMMP( m_data.m_object, 0, m_data.data32() );
          //m_timeoutTimer.start( m_shredTimeout );
       }
@@ -317,10 +321,10 @@ class CMmpNode
       {
          if( m_tx.m_data.incRetry() > 4 )
          {
-            lWarning( "Too much retries" );
+            lWarning( LDS( "TMR", "Too much retries" ) );
             return(false);
          }
-         lWarning( "Retry pos %d", m_tx.m_data.pos() );
+         lWarning( LDS( "RTP%d", "Retry pos %d"), m_tx.m_data.pos() );
          m_tx.sendShred();
          
          return(true);
