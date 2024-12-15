@@ -71,7 +71,7 @@ void CMmpTransfer::writeMMP( Tdt::EObject object, int pos, uint32_t value )
       // TBD
       sendMessage.emitSignal( message );
    #else
-      cbSendMessage( message );
+      cbSendTdtMessage( message );
    #endif
 }
 
@@ -243,7 +243,7 @@ void CMmpTransfer::sendAck( uint32_t pos )
       emit sendMessage( message );
    #else
       // TBD
-      cbSendMessage( message );
+      cbSendTdtMessage( message );
    #endif
 }
 
@@ -255,7 +255,7 @@ void CMmpTransfer::sendTransferAck(int sta)
            Tdt::EObject::acknowledgeTransfer,
            Tdt::EUnit::null, { ._uint = sta }
        };
-   cbSendMessage( message );
+   cbSendTdtMessage( message );
 }
 
 /*

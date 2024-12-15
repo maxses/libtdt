@@ -38,6 +38,15 @@ extern CCan* mmpCan;
 
 namespace Tdt
 {
+   class CMmpTransferData;
+}
+
+void cbSendTdtMessage( const Tdt::CMessage& );
+int cbGetNodeId();
+int cbHandleMmpTransfer( const Tdt::CMmpTransferData& );
+
+namespace Tdt
+{
 
 enum class EMmpObject: uint32_t
 {
@@ -51,6 +60,7 @@ enum class EMmpObject: uint32_t
    jumpApplication,
    reset,
    sendEeprom,
+   eeprom,
 };
 
 struct SMmpHeader
@@ -127,7 +137,7 @@ class CMmpTransferData
             return( ( (uint32_t*)&m_header ) [ m_pos ] );
          if(!m_data)
          {
-            lFatal("No data to send");
+            lFatal("NDTS");
          }
          return( ( (uint32_t*)m_data )[ m_pos - ( sizeof(SMmpHeader) / 4 ) ] );
       };
@@ -203,8 +213,8 @@ class CMmpTransfer
    #else
       //public:
       // CSignal< void, const Tdt::CMessage& > sendMessage;
-       void cbSendMessage( const Tdt::CMessage& );
-       int cbGetNodeId();
+      // void cbSendMessage( const Tdt::CMessage& );
+      // int cbGetNodeId();
    #endif
          
    //signals:
@@ -274,8 +284,8 @@ class CMmpNode
          CSignal< void, const Tdt::CMessage& > signalSendMessage;
          CSignal< int, const Tdt::CMmpTransferData& > signalHandleMmpTransfer;
       #else
-         void cbSendTdtMessage( const Tdt::CMessage& );
-         int cbHandleMmpTransfer( const Tdt::CMmpTransferData& );
+         // void cbSendTdtMessage( const Tdt::CMessage& );
+         // int cbHandleMmpTransfer( const Tdt::CMmpTransferData& );
       #endif
       
    public slots:
