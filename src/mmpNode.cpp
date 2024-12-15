@@ -33,10 +33,14 @@ CMmpNode::CMmpNode()
    m_rx.m_data.alloc();
 
    #if ! defined ( STM32 )
-   connect( &m_tx, SIGNAL( sendMessage( const Tdt::CMessage& ) ),
-           this, SLOT( slotSendMessage( const Tdt::CMessage& ) ) );
-   connect( &m_rx, SIGNAL( sendMessage( const Tdt::CMessage& ) ),
-           this, SLOT( slotSendMessage( const Tdt::CMessage& ) ) );
+   connect( &m_tx, SIGNAL( sendTdtMessage( const Tdt::CMessage& ) ),
+           this, SLOT( slotSendTdtMessage( const Tdt::CMessage& ) ) );
+   connect( &m_rx, SIGNAL( sendTdtMessage( const Tdt::CMessage& ) ),
+           this, SLOT( slotSendTdtMessage( const Tdt::CMessage& ) ) );
+   connect( &m_tx, SIGNAL( handleMmpTransfer( Tdt::CMmpTransferData& ) ),
+           this, SLOT( slotHandleMmpTransfer( Tdt::CMmpTransferData& ) ) );
+   connect( &m_rx, SIGNAL( handleMmpTransfer( Tdt::CMmpTransferData& ) ),
+           this, SLOT( slotHandleMmpTransfer( Tdt::CMmpTransferData& ) ) );
    #elif 0
    m_tx.sendMessage.connect(this, &CMmpNode::slotSendMessage );
    m_rx.sendMessage.connect(this, &CMmpNode::slotSendMessage );
@@ -55,7 +59,11 @@ void CMmpNode::receive( const Tdt::CMessage& msg )
          if ( m_rx.handleRx( msg ) )
          {
             //signalHandleMmpTransfer.emitSignal( m_rx.m_data );
-            int sta=cbHandleMmpTransfer( m_rx.m_data );
+            #if defined STM32
+               int sta=cbHandleMmpTransfer( m_rx.m_data );
+            #else
+               int sta=emit handleMmpTransfer( m_rx.m_data );
+            #endif
             m_rx.sendTransferAck(sta);
             m_rx.m_data.reset();
          }
@@ -70,11 +78,11 @@ void CMmpNode::receive( const Tdt::CMessage& msg )
 }
 
 
-void CMmpNode::slotSendMessage( const Tdt::CMessage& msg )
+void CMmpNode::slotSendTdtMessage( const Tdt::CMessage& msg )
 {
    //lInfo("MMP out");
    #if ! defined ( STM32 )
-      emit sendMessage( msg );
+      emit sendTdtMessage( msg );
    #elif 0
       signalSendMessage.emitSignal( msg );
    #else
@@ -84,6 +92,14 @@ void CMmpNode::slotSendMessage( const Tdt::CMessage& msg )
    #endif
 }
 
+#if ! defined STM32
+
+int CMmpNode::slotHandleMmpTransfer( CMmpTransferData &data )
+{
+   return( emit handleMmpTransfer( data ) );
+}
+
+#endif
 
 }; // namespace Tdt
 
