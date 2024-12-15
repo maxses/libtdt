@@ -16,6 +16,9 @@
 //---Own------------------------------
 
 #include <tdt/mmp.hpp>
+#if ! defined STM32
+   #include <lepto/print.h>      // hexDump
+#endif
 
 
 //---Implementation-----------------------------------------------------------
@@ -123,6 +126,7 @@ bool CMmpTransfer::handleRx( const Tdt::CMessage& msg )
        )
    {
       lDebug(LDS("TRFI p=%d", "Transfer finished; pos=%d"), m_data.pos());
+      lDebug(LDS(" dl=%d", "   dataLength=%d"), m_data.header().dataLength );
       crc32_t crc32=crc32Init( );
       crc32=crc32Update( crc32, m_data.data(), m_data.header().dataLength );
       crc32=crc32Finalize(crc32);
@@ -136,8 +140,12 @@ bool CMmpTransfer::handleRx( const Tdt::CMessage& msg )
          //": HD 0x%X vs. CL 0x%X",
          //             "CRC32 wrong: header 0x%X vs. calc 0x%X")
          //         , m_data.header().crc32Data, crc32);
-         lDebug( "Cl: 0x%X", crc32);
-         //dumpMem(m_data.header(), sizeof( Tdt::SMmpHeader ) );
+         #if ! defined STM32
+            lDebug( "   Calck: 0x%X", crc32 );
+            lDebug( "   Header: 0x%X", m_data.header().crc32Data );
+            //dumpMem(m_data.header(), sizeof( Tdt::SMmpHeader ) );
+            hexDump( m_data.data(), m_data.header().dataLength );
+         #endif
       }
       else
       {
