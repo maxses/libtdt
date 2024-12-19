@@ -7,8 +7,11 @@
 //-----------------------------------------------------------------------------
 
 
-#include <lepto/can_message.h>
-#include <lepto/log.h>
+#if defined USE_LEPTO
+   #include <lepto/can_message.h>
+   #include <lepto/log.h>
+#endif
+
 #include <stdio.h>               // snprintf
 #include <tdt/message.hpp>
 #include <QTextStream>

@@ -16,7 +16,7 @@
 //---Own------------------------------
 
 #include <tdt/mmp.hpp>
-#if ! defined STM32
+#if ( ! defined STM32 ) && defined ( USE_LEPTO )
    #include <lepto/print.h>      // hexDump
 #endif
 
@@ -50,10 +50,14 @@ void CMmpTransferData::updateCrc()
    }
    else
    {
-      m_header.crc32Data=crc32DefaultInit( );
-      m_header.crc32Data=crc32Update( m_header.crc32Data
-                                       , m_data, m_header.dataLength );
-      m_header.crc32Data=crc32Finalize( m_header.crc32Data );
+      #if defined USE_LEPTO
+         m_header.crc32Data = crc32DefaultInit( );
+         m_header.crc32Data = crc32Update( m_header.crc32Data
+                                          , m_data, m_header.dataLength );
+         m_header.crc32Data = crc32Finalize( m_header.crc32Data );
+      #else
+      m_header.crc32Data = 0;
+      #endif
    }
 };
 
@@ -62,7 +66,7 @@ void CMmpTransfer::writeMMP( Tdt::EObject object, int pos, uint32_t value )
 {
    //if( pos % 100 == 0 )
    {
-      lDebug("MMP out: pos %d; length=%d", pos, m_data.header().dataLength);
+      qDebug("MMP out: pos %d; length=%d", pos, m_data.header().dataLength);
    }
    Tdt::CMessage message( m_counterNodeId,
                          Tdt::EFunctionCode::dataBlob, 
@@ -81,24 +85,24 @@ void CMmpTransfer::writeMMP( Tdt::EObject object, int pos, uint32_t value )
 
 bool CMmpTransfer::handleRx( const Tdt::CMessage& msg )
 {
-   lDebug( "   handle Receiver [%d]", m_nodeId );
-   // lDebug("pos %d dlen:%d", (int)msg.getMmpPos(), m_data.header().dataLength);
+   qDebug( "   handle Receiver [%d]", m_nodeId );
+   // qDebug("pos %d dlen:%d", (int)msg.getMmpPos(), m_data.header().dataLength);
    if( m_data.pos() == -1 )
    {
-      lCritical( LDS( "MMAB", "MMP abort" ) );
+      qCritical( LDS( "MMAB", "MMP abort" ) );
       m_data.reset();
       return( false );
    }
    if( m_data.pos() && ( msg.getMmpPos() == m_data.pos() - 1 ) )
    {
-      lCritical( LDS("IGRE", "Ignoring retransmit" ) );
+      qCritical( LDS("IGRE", "Ignoring retransmit" ) );
       sendAck( m_data.pos()-1 );
       return( false );
    }
    else if( msg.getMmpPos() != m_data.pos() )
    {
-      lCritical( LDS("M ODNM", "MMP order does not match:" ) );
-      lDebug( "   msg %d vs. cur %d"
+      qCritical( LDS("M ODNM", "MMP order does not match:" ) );
+      qDebug( "   msg %d vs. cur %d"
                 , (int)msg.getMmpPos(), (int)m_data.pos() );
 
       m_data.reset();
@@ -106,17 +110,17 @@ bool CMmpTransfer::handleRx( const Tdt::CMessage& msg )
       return( false );
    }
    
-   lDebug("Pushing data");
+   qDebug("Pushing data");
    m_data.data32()=msg.getTdtValue()->_uint;
    sendAck( m_data.pos( ) );
    m_data.inc( );
-   lDebug( "Pushing data, now at %d", m_data.pos() );
+   qDebug( "Pushing data, now at %d", m_data.pos() );
    
    if( m_data.pos() * 4 == sizeof( Tdt::SMmpHeader ) )
    {
       if( m_data.header().dataLength > m_data.maxReceiveSize() )
       {
-         lFatal( LDS("POTB", "Block too big: %d"), m_data.header().dataLength );
+         qFatal( LDS("POTB", "Block too big: %d"), m_data.header().dataLength );
       }
    }
    
@@ -125,8 +129,10 @@ bool CMmpTransfer::handleRx( const Tdt::CMessage& msg )
            >= sizeof( Tdt::SMmpHeader ) + m_data.header().dataLength )
        )
    {
-      lDebug(LDS("TRFI p=%d", "Transfer finished; pos=%d"), m_data.pos());
-      lDebug(LDS(" dl=%d", "   dataLength=%d"), m_data.header().dataLength );
+      qDebug(LDS("TRFI p=%d", "Transfer finished; pos=%d"), m_data.pos());
+      qDebug(LDS(" dl=%d", "   dataLength=%d"), m_data.header().dataLength );
+
+      #if defined ( USE_LEPTO )
       crc32_t crc32=crc32Init( );
       crc32=crc32Update( crc32, m_data.data(), m_data.header().dataLength );
       crc32=crc32Finalize(crc32);
@@ -136,18 +142,19 @@ bool CMmpTransfer::handleRx( const Tdt::CMessage& msg )
       }
       if( crc32 != m_data.header().crc32Data )
       {
-         lWarning( LDS( "CRCWR", "CRC Wrong" ) );
+         qWarning( LDS( "CRCWR", "CRC Wrong" ) );
          //": HD 0x%X vs. CL 0x%X",
          //             "CRC32 wrong: header 0x%X vs. calc 0x%X")
          //         , m_data.header().crc32Data, crc32);
          #if ! defined STM32
-            lDebug( "   Calck: 0x%X", crc32 );
-            lDebug( "   Header: 0x%X", m_data.header().crc32Data );
+            qDebug( "   Calck: 0x%X", crc32 );
+            qDebug( "   Header: 0x%X", m_data.header().crc32Data );
             //dumpMem(m_data.header(), sizeof( Tdt::SMmpHeader ) );
             hexDump( m_data.data(), m_data.header().dataLength );
          #endif
       }
       else
+      #endif // ? USE_LEPTO
       {
          //handleMmpTransfer( m_data );
          //m_data.m_finished=true;
@@ -161,8 +168,8 @@ bool CMmpTransfer::handleRx( const Tdt::CMessage& msg )
 
 bool CMmpTransfer::handleTx( const Tdt::CMessage& msg )
 {
-   lDebug( "   handle Transceiver [%d]", m_nodeId );
-   lDebug( "   RCV ACK pos %d %s", msg.getTdtValue()->_uint,
+   qDebug( "   handle Transceiver [%d]", m_nodeId );
+   qDebug( "   RCV ACK pos %d %s", msg.getTdtValue()->_uint,
           (msg.getTdtObject() == Tdt::EObject::acknowledgeTransfer)
             ? "TRANSFER" : "SHRED" );
    
@@ -174,12 +181,12 @@ bool CMmpTransfer::handleTx( const Tdt::CMessage& msg )
    
    if( msg.getTdtObject() != Tdt::EObject::acknowledgeShred )
    {
-      lFatal( LDS( "ONSA", "TDT-Object was not a shred acknowledge" ) );
+      qFatal( LDS( "ONSA", "TDT-Object was not a shred acknowledge" ) );
    };
    
    if( msg.getTdtValue()->_int == -1 )
    {
-      lCritical( LDS("RSTP", "Resetting position" ) );
+      qCritical( LDS("RSTP", "Resetting position" ) );
       m_data.reset();
       return(false);
    }
@@ -187,13 +194,13 @@ bool CMmpTransfer::handleTx( const Tdt::CMessage& msg )
    {
       if( msg.getTdtValue()->_int == m_data.pos()-1 )
       {
-         lCritical( LDS( "IOA", "Ignoring old ACK" ) );
+         qCritical( LDS( "IOA", "Ignoring old ACK" ) );
          return(false);
       }
       if( msg.getTdtValue()->_int != m_data.pos() )
       {
-         lWarning( LDS("ANP", "ACK not plausible") );
-         //lWarning("msg %d vs. cur %d", msg.getTdtValue()->_uint
+         qWarning( LDS("ANP", "ACK not plausible") );
+         //qWarning("msg %d vs. cur %d", msg.getTdtValue()->_uint
          //         ,m_data.pos() );
          sendAbort();
          return(false);
@@ -271,7 +278,7 @@ void CMmpTransfer::sendTransferAck(int sta)
       #endif
       Tdt::EFunctionCode::ackDataBlob,
       Tdt::EObject::acknowledgeTransfer,
-      Tdt::EUnit::null, { ._uint = sta }
+      Tdt::EUnit::null, { ._int = sta }
    };
    #if ! defined ( STM32 )
       sendTdtMessage( message );

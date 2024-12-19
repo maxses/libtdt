@@ -22,12 +22,19 @@
 //---Own------------------------------
 
 #include <tdt/message.hpp>
-#include <lepto/crc32.h>
 #include <stdlib.h>           // malloc
-#include <lepto/signal.h>
+
+#if defined USE_LEPTO
+   #include <lepto/crc32.h>
+   #include <lepto/signal.h>
+#else
+   typedef uint32_t address_t;
+#endif
 
 #if defined( STM32 )
    #define slots
+#else
+   #include <QObject>
 #endif
 
 
@@ -140,7 +147,7 @@ class CMmpTransferData
             return( ( (uint32_t*)&m_header ) [ m_pos ] );
          if(!m_data)
          {
-            lFatal("NDTS");
+            qFatal("NDTS");
          }
          return( ( (uint32_t*)m_data )[ m_pos - ( sizeof(SMmpHeader) / 4 ) ] );
       };
@@ -155,7 +162,7 @@ class CMmpTransferData
       }
       void reset()
       {
-         lDebug("Reset data");
+         qDebug("Reset data");
          m_retry=0;
          m_pos=0;
          //m_header.mmpObject=EMmpObject::null;
@@ -321,10 +328,10 @@ class CMmpNode
       {
          if( m_tx.m_data.incRetry() > 4 )
          {
-            lWarning( LDS( "TMR", "Too much retries" ) );
+            qWarning( LDS( "TMR", "Too much retries" ) );
             return(false);
          }
-         lWarning( LDS( "RTP%d", "Retry pos %d"), m_tx.m_data.pos() );
+         qWarning( LDS( "RTP%d", "Retry pos %d"), m_tx.m_data.pos() );
          m_tx.sendShred();
          
          return(true);

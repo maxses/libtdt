@@ -8,11 +8,14 @@
 
 
 #include <tdt/message.hpp>
-#include <lepto/log.h>
 #include <stdio.h>               // snprintf
 #include <QTextStream>
 #include <QMap>
-#include <lepto/events.h>
+
+#if defined USE_LEPTO
+   #include <lepto/events.h>
+   #include <lepto/log.h>
+#endif
 
 #define ENUM_MAP( a, e ) { a::e, "" #e }
 #define ENUM_MAP_TEXT( a, e, t ) { a::e, t }
@@ -147,14 +150,18 @@ class CCanTdtPrinter
          //ENUM_MAP( Tdt::EFunctionCode, log ),
          ENUM_MAP( Tdt::EFunctionCode, max ),
 		};
-      
+
+      #if 0
       const QMap< int, const char *> m_eventComponentMap{
          { CAN_TRANSMIT_BUFFER,     "CAN transmit buffer"},
          { RADIO_TRANSMIT_BUFFER,   "radio transmit buffer"},
       };
+      #endif
       
       const QMap< int, const char *> m_eventMap{
+         #if 0
          { BUFFER_FULL,     "buffer full"},
+         #endif
           ENUM_MAP( (int)Tdt::EEvent, wannaSleepStart ),
           ENUM_MAP( (int)Tdt::EEvent, wannaSleepAll ),
           ENUM_MAP( (int)Tdt::EEvent, wannaSleepRoom0 ),
@@ -429,6 +436,7 @@ class CCanTdtPrinter
                }
                break;
             }
+            #if 0
             case Tdt::EUnit::eventCode:
             {
                QString component;
@@ -449,6 +457,7 @@ class CCanTdtPrinter
                ts << component << " : " << eventString;
                break;
             }
+            #endif
             case Tdt::EUnit::flags:
             {
                QTextStream ts( &s );

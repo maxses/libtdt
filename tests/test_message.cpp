@@ -52,7 +52,7 @@ TEST_CASE( "CAN TDT", "[default]" )
          0x00, 0x00,
       };
 
-      CCanMessage msg(
+      Tdt::CCanMessage msg(
          ( (int)Tdt::EFunctionCode::sendObject
                   << Tdt::FUNCTIONCODE_BITSHIFT )
                | 0x10
@@ -80,7 +80,8 @@ TEST_CASE( "CAN TDT", "[default]" )
       Tdt::CMessage sendMessage
           {0x32,
            Tdt::EFunctionCode::sendObject,
-                                Tdt::EObject::logCode, Tdt::EUnit::logCode, Tdt::SValue{.logCode=ELogCategory::Critical | 1}};
+                                // ELogCategory::Critical does not exist without lepto
+                                Tdt::EObject::logCode, Tdt::EUnit::logCode, Tdt::SValue{ .logCode=(ELogCode)0 }};
       REQUIRE ( sendMessage.getLen() == 8 );
       
    }
