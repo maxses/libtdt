@@ -42,6 +42,11 @@ void CUnit::parse( QJsonObject& o )
    {
       m_postfix=o["postfix"].toString();
    }
+   
+   if( o.contains("format") )
+   {
+      m_format=o["format"].toString();
+   }
 }
 
 void CUnit::appendObjectNumber( QString& str, int objectNumber ) const
@@ -82,6 +87,7 @@ QString CUnit::printerString()
    str=str.leftJustified( 20, ' ' );
    str+=QString("{ \"%1\" " ).arg( m_name );
    str+=QString(", \"%1\" " ).arg( m_postfix );
+   str+=QString(", '%1' " ).arg( m_format.isEmpty() ? " " : m_format );
    str+=QString(", %1 " ).arg( m_decimalPower );
    str+="} },";
    str=str.leftJustified( 60, ' ' );

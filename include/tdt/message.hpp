@@ -373,7 +373,7 @@ union SValue
       uint32_t _uint;
       int32_t permill;
       int32_t zenti;
-      struct
+      struct SSoftwareVersion
       {
          struct {
             uint8_t dirty : 1;

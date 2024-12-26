@@ -32,6 +32,7 @@ class CUnit
    const QString m_desc;
    QString m_postfix;
    int m_decimalPower=1;
+   QString m_format;
       
    public:
        

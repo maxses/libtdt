@@ -23,9 +23,8 @@
 #define ENUM_MAP_TEXT( a, e, t ) { a::e, t }
 // #define EID( id, subId ) ( ( id << 4 ) | subId )
 
-//using namespace Tdt;
 
-class CCanTdtPrinter: public Tdt::CPrinterBase /* CPrinterBase */
+class CCanTdtPrinter: public Tdt::CPrinterBase
 {
       const Tdt::CMessage &m_message;
 
@@ -80,11 +79,12 @@ class CCanTdtPrinter: public Tdt::CPrinterBase /* CPrinterBase */
       CCanTdtPrinter( const Tdt::CMessage &message )
          :m_message( message )
       {
-		};
+      };
 
-		QString printValue( ) const
+      QString printValue( ) const
       {
-			QString s;
+         QString s;
+         QTextStream ts( &s );
          switch( m_message.getFunctionCode() )
          {
             case Tdt::EFunctionCode::alert:
@@ -98,21 +98,18 @@ class CCanTdtPrinter: public Tdt::CPrinterBase /* CPrinterBase */
          {
             case Tdt::EUnit::version:
             {
-               QTextStream( &s )
-                        << ( m_message.getTdtValue()->softwareVersion.drift.bootloader ? "BL " : "")
+               Tdt::SValue::SSoftwareVersion sw
+                        =m_message.getTdtValue()->softwareVersion;
+               ts       << ( sw.drift.bootloader ? "BL " : "")
                         << "v"
-                        << m_message.getTdtValue()->softwareVersion.major << "."
-                        << m_message.getTdtValue()->softwareVersion.minor << "."
-                        << m_message.getTdtValue()->softwareVersion.patch << "-"
-                        << m_message.getTdtValue()->softwareVersion.drift.distance
-                        << ( m_message.getTdtValue()->softwareVersion.drift.dirty ? "+" : "");
+                        << sw.major << "." << sw.minor << "." << sw.patch
+                        << "-" << sw.drift.distance
+                        << ( sw.drift.dirty ? "+" : "");
                break;
             }
             case Tdt::EUnit::durationSeconds:
             {
                int secs = (int)m_message.getTdtValueUInt();
-               QTextStream ts( &s );
-               
                if ( secs < 100 )
                {
                   ts << m_message.getTdtValue()->_int << " s";
@@ -135,35 +132,26 @@ class CCanTdtPrinter: public Tdt::CPrinterBase /* CPrinterBase */
                break;
             }
             case Tdt::EUnit::time:
-				{
-               QTextStream( &s )
-                        << m_message.getTdtValue()->time.hour << ":"
-                        << m_message.getTdtValue()->time.min << ":"
-                        << m_message.getTdtValue()->time.sec;
-					break;
-				}
+            {
+               ts << m_message.getTdtValue()->time.hour << ":"
+                  << m_message.getTdtValue()->time.min << ":"
+                  << m_message.getTdtValue()->time.sec;
+               break;
+            }
             case Tdt::EUnit::percentHumidity:
             {
-               QTextStream( &s )
-                     << ( ( m_message.getTdtValue()->_int / 10 ) / 100.0) << " %";
+               ts << ( ( m_message.getTdtValue()->_int / 10 ) / 100.0) << " %";
                break;
             }
             case Tdt::EUnit::_switch:
             {
-               QTextStream( &s ) << (m_message.getTdtValue()->_bool ? "ON" : "OFF");
+               ts << (m_message.getTdtValue()->_bool ? "ON" : "OFF");
                break;
             }
             case Tdt::EUnit::numberHex:
             {
-               QTextStream ts( &s );
                ts.setIntegerBase(16);
                ts << "0x" << m_message.getTdtValue()->_uint;
-               break;
-            }
-            case Tdt::EUnit::number:
-            case Tdt::EUnit::nodeId:
-            {
-               QTextStream( &s ) << m_message.getTdtValue()->_uint;
                break;
             }
             case Tdt::EUnit::percentQuality:
@@ -178,12 +166,12 @@ class CCanTdtPrinter: public Tdt::CPrinterBase /* CPrinterBase */
                   {  0, "Hazardous" },
                };
                unsigned int value=m_message.getTdtValue()->_uint;
-               QTextStream( &s ) << value << " %; ";
+               ts << value << " %; ";
                for(int i1=0; i1<sizeof(ranges)/sizeof(ranges[0]); i1++)
                {
                   if( value >= ranges[i1].value )
                   {
-                     QTextStream( &s ) << ranges[i1].text;
+                     ts << ranges[i1].text;
                      break;
                   }
                }
@@ -204,11 +192,11 @@ class CCanTdtPrinter: public Tdt::CPrinterBase /* CPrinterBase */
                };
                if( map.contains(m_message.getTdtValue()->_uint) )
                {
-                  QTextStream( &s ) << map[m_message.getTdtValue()->_uint];
+                  ts << map[m_message.getTdtValue()->_uint];
                }
                else
                {
-                  QTextStream( &s ) << "UK Article: " << m_message.getTdtValue()->_uint;
+                  ts << "UK Article: " << m_message.getTdtValue()->_uint;
                }
                break;
             }
@@ -227,17 +215,17 @@ class CCanTdtPrinter: public Tdt::CPrinterBase /* CPrinterBase */
                                        + (int)Tdt::EObject::powerSwitchStart);
                if( m_objectMap.contains(object) )
                {
-                  QTextStream( &s ) << m_objectMap[object];
+                  ts << m_objectMap[object];
                }
                else
                {
-                  QTextStream( &s ) << "UK Object (via Func): " << (int)object;
+                  ts << "UK Object (via Func): " << (int)object;
                }
                break;
             }
             case Tdt::EUnit::index:
             {
-               QTextStream( &s ) << "[" << m_message.getTdtValue()->_uint << "]";
+               ts << "[" << m_message.getTdtValue()->_uint << "]";
                break;
             }
             case Tdt::EUnit::deviceStatus:
@@ -247,22 +235,22 @@ class CCanTdtPrinter: public Tdt::CPrinterBase /* CPrinterBase */
                   // Brrr, There   friend class CTopic; should not be a depency to biwak;
                   // CHeartBeats "DeviceStatus" should be moved to lepto
                   case 0:
-                     QTextStream( &s ) << "Good";
+                     ts << "Good";
                      break;
                   case 1:
-                     QTextStream( &s ) << "Warning";
+                     ts << "Warning";
                      break;
                   case 2 ... 3:
-                     QTextStream( &s ) << "Error(" << m_message.getTdtValue()->_uint << ")";
+                     ts << "Error(" << m_message.getTdtValue()->_uint << ")";
                      break;
                   case 5:
-                     QTextStream( &s ) << "Calm";
+                     ts << "Calm";
                      break;
                   case 8:
-                     QTextStream( &s ) << "Resetting";
+                     ts << "Resetting";
                      break;
                   default:
-                     QTextStream( &s ) << "UK:" << m_message.getTdtValue()->_uint;
+                     ts << "UK:" << m_message.getTdtValue()->_uint;
                      break;
                }
                break;
@@ -273,7 +261,6 @@ class CCanTdtPrinter: public Tdt::CPrinterBase /* CPrinterBase */
                {
                   default:
                   {
-                     QTextStream ts( &s );
                      ts.setIntegerBase(16);
                      ts << "0x" << (int)m_message.getTdtValueUInt();
                      break;
@@ -305,7 +292,6 @@ class CCanTdtPrinter: public Tdt::CPrinterBase /* CPrinterBase */
             #endif
             case Tdt::EUnit::flags:
             {
-               QTextStream ts( &s );
                ts.setIntegerBase(16);
                ts << "0x" << (int)m_message.getTdtValueUInt();
                break;
@@ -314,23 +300,21 @@ class CCanTdtPrinter: public Tdt::CPrinterBase /* CPrinterBase */
             {
                if( m_roomMap.contains(m_message.getTdtValue()->_uint) )
                {
-                  QTextStream( &s ) << m_roomMap[m_message.getTdtValue()->_uint];
+                  ts << m_roomMap[m_message.getTdtValue()->_uint];
                }
                else
                {
-                     QTextStream( &s ) << "UK Article: " << m_message.getTdtValue()->_uint;
+                  ts << "UK Article: " << m_message.getTdtValue()->_uint;
                }
                break;
             }
             case Tdt::EUnit::capacity:
             {
-               QTextStream ts( &s );
                ts << (int)m_message.getTdtValueUInt() / 1000 << " KB";
                break;
             }
             case Tdt::EUnit::systemState:
             {
-               QTextStream ts( &s );
                switch( m_message.getTdtValue()->systemState )
                {
                   case Tdt::ESystemState::application:
@@ -349,7 +333,6 @@ class CCanTdtPrinter: public Tdt::CPrinterBase /* CPrinterBase */
             }
             default:
             {
-               QTextStream ts( &s );
                if( m_unitMap.contains( m_message.getTdtUnit() ) )
                {
                   SUnitDesc desc=m_unitMap[ m_message.getTdtUnit() ];
@@ -373,33 +356,33 @@ class CCanTdtPrinter: public Tdt::CPrinterBase /* CPrinterBase */
             }
          }
 
-			return(s);
-		};
+         return(s);
+      };
 
       const char *getUnitString() const
       {
-			if( m_unitMap.contains( m_message.getTdtUnit() ) )
-			{
-				return( m_unitMap[ m_message.getTdtUnit() ].name );
-			}
-			return("-");
+         if( m_unitMap.contains( m_message.getTdtUnit() ) )
+         {
+            return( m_unitMap[ m_message.getTdtUnit() ].name );
+         }
+         return("-");
       }
       const char *getObjectString() const
       {
-			if( m_objectMap.contains(m_message.getTdtObject()) )
-			{
-				return( m_objectMap[ m_message.getTdtObject() ] ); 
-			}
+         if( m_objectMap.contains(m_message.getTdtObject()) )
+         {
+            return( m_objectMap[ m_message.getTdtObject() ] ); 
+         }
          return("-");
       }
       const char *getFunctionCodeString() const
       {
-			if( m_functionCodeMap.contains(m_message.getFunctionCode()) )
-			{
-				return( m_functionCodeMap[ m_message.getFunctionCode() ] );
-			}
-			return("-");
-		}
+         if( m_functionCodeMap.contains(m_message.getFunctionCode()) )
+         {
+            return( m_functionCodeMap[ m_message.getFunctionCode() ] );
+         }
+         return("-");
+      }
       
       const QMap<Tdt::EObject, const char *>& getObjectMap() const
       {

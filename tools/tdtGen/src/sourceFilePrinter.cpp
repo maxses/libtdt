@@ -58,6 +58,7 @@ void CSourceFilePrinter::startUnits( )
    m_stream << "   struct SUnitDesc {\n";
    m_stream << "      const char* name;\n";
    m_stream << "      const char* postfix;\n";
+   m_stream << "      char format;\n";
    m_stream << "      int decimalPower;\n";
    m_stream << "   };\n";
    m_stream << "\n";

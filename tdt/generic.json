@@ -158,11 +158,13 @@
             },
             {
                "name": "errorCode",
-               "offset": "0x1C"
+               "offset": "0x1C",
+               "format": "x"
             },
             {
                "name": "eventCode",
-               "offset": "0x1D"
+               "offset": "0x1D",
+               "format": "x"
             },
             {
                "name": "flags",
