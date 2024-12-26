@@ -11,7 +11,7 @@
                "name": "Time",
                "example": "12:00:23"
             },
-            { 
+            {
                "offset": "0x0002",
                "name": "Date",
                "description": "Date",

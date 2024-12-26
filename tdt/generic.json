@@ -22,8 +22,7 @@
          "name": "generic units",
          "base": "0x10",
          "size": "0x30",
-         "units":
-         [
+         "units": [
             {
                "name": "null",
                "offset": "0x00"
