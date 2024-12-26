@@ -23,8 +23,8 @@
 
 void CSourceFilePrinter::writeTop( )
 {
-   m_stream << "#if ! defined TDT_PRINTER_HPP\n";
-   m_stream << "#define TDT_PRINTER_HPP\n";
+   m_stream << "#if ! defined TDT_PRINTER_BASE_HPP\n";
+   m_stream << "#define TDT_PRINTER_BASE_HPP\n";
    m_stream << "//---------------------------------------\n";
    m_stream << "// Generated file, do not change!\n";
    m_stream << "// tdtGen was used to create this file.\n";
@@ -73,7 +73,7 @@ void CSourceFilePrinter::writeBottom( )
    m_stream << "\n";
    m_stream << "} // namespace Tdt\n";
    m_stream << "\n";
-   m_stream << "#endif // ! ? TDT_PRINTER_HPP\n";
+   m_stream << "#endif // ! ? TDT_PRINTER_BASE_HPP\n";
 };
 
 

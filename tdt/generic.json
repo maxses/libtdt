@@ -48,7 +48,7 @@
             {
                "name": "centiCelsius",
                "offset": "0x04",
-               "postfix": "°",
+               "postfix": "°C",
                "decimalPower": "-2"
             },
             {
@@ -57,11 +57,13 @@
             },
             {
                "name": "voc",
-               "offset": "0x06"
+               "offset": "0x06",
+               "postfix": "Ohm"
             },
             {
                "name": "permilPwm",
-               "offset": "0x07"
+               "offset": "0x07",
+               "postfix": "‰ PWM"
             },
             {
                "name": "_switch",
@@ -81,7 +83,8 @@
             },
             {
                "name": "milliVolt",
-               "offset": "0x0B"
+               "offset": "0x0B",
+               "postfix": "mV"
             },
             {
                "name": "durationSeconds",
@@ -89,7 +92,8 @@
             },
             {
                "name": "pressure",
-               "offset": "0x0D"
+               "offset": "0x0D",
+               "postfix": "hPa"
             },
             {
                "name": "command",
@@ -97,11 +101,14 @@
             },
             {
                "name": "timeStamp",
-               "offset": "0x0F"
+               "offset": "0x0F",
+               "postfix": "s",
+               "type": "u"
             },
             {
                "name": "milliAmpere",
-               "offset": "0x10"
+               "offset": "0x10",
+               "postfix": "mA"
             },
             {
                "name": "address",
@@ -129,7 +136,9 @@
             },
             {
                "name": "timeStampDelta",
-               "offset": "0x17"
+               "offset": "0x17",
+               "postfix": "s",
+               "type": "i"
             },
             {
                "name": "article",
@@ -165,7 +174,8 @@
             },
             {
                "name": "permilHumidity",
-               "offset": "0x20"
+               "offset": "0x20",
+               "postfix": "‰"
             },
             {
                "name": "logCode",

@@ -29,27 +29,6 @@ class CCanTdtPrinter: public Tdt::CPrinterBase /* CPrinterBase */
 {
       const Tdt::CMessage &m_message;
 
-      const QMap<Tdt::EUnit, const char *> m_unitMap_Obsolete{
-         ENUM_MAP( Tdt::EUnit, none ),
-         ENUM_MAP( Tdt::EUnit, hz ),
-         ENUM_MAP( Tdt::EUnit, time ),
-         ENUM_MAP( Tdt::EUnit, date ),
-         ENUM_MAP( Tdt::EUnit, centiCelsius ),
-         ENUM_MAP( Tdt::EUnit, percentHumidity ),
-         ENUM_MAP( Tdt::EUnit, voc ),
-         ENUM_MAP( Tdt::EUnit, permilPwm ),
-         ENUM_MAP( Tdt::EUnit, _switch ),
-         ENUM_MAP( Tdt::EUnit, version ),
-         ENUM_MAP( Tdt::EUnit, softwareVersion ),
-         ENUM_MAP( Tdt::EUnit, hardwareRevision ),
-         ENUM_MAP( Tdt::EUnit, milliVolt ),
-         ENUM_MAP( Tdt::EUnit, durationSeconds ),
-         ENUM_MAP( Tdt::EUnit, timeStamp ),
-         ENUM_MAP( Tdt::EUnit, errorCode ),
-         ENUM_MAP( Tdt::EUnit, eventCode ),
-         ENUM_MAP( Tdt::EUnit, room ),
-      };
-
       const QMap<Tdt::EFunctionCode, const char *> m_functionCodeMap{
          ENUM_MAP( Tdt::EFunctionCode, nmt ),
          ENUM_MAP( Tdt::EFunctionCode, alert ),
@@ -117,12 +96,6 @@ class CCanTdtPrinter: public Tdt::CPrinterBase /* CPrinterBase */
 
          switch( m_message.getTdtUnit() )
          {
-            case Tdt::EUnit::centiCelsius:
-            {
-               float t = m_message.getTdtValue()->_int / 100.0;
-               QTextStream( &s ) << t <<  QString::fromUtf8(" °C");
-               break;
-            }
             case Tdt::EUnit::version:
             {
                QTextStream( &s )
@@ -133,11 +106,6 @@ class CCanTdtPrinter: public Tdt::CPrinterBase /* CPrinterBase */
                         << m_message.getTdtValue()->softwareVersion.patch << "-"
                         << m_message.getTdtValue()->softwareVersion.drift.distance
                         << ( m_message.getTdtValue()->softwareVersion.drift.dirty ? "+" : "");
-               break;
-            }
-            case Tdt::EUnit::hz:
-            {
-               QTextStream( &s ) << (int)(m_message.getTdtValue()->_int) << " Hz";
                break;
             }
             case Tdt::EUnit::durationSeconds:
@@ -180,34 +148,9 @@ class CCanTdtPrinter: public Tdt::CPrinterBase /* CPrinterBase */
                      << ( ( m_message.getTdtValue()->_int / 10 ) / 100.0) << " %";
                break;
             }
-            case Tdt::EUnit::pressure:
-            {
-               QTextStream( &s ) << m_message.getTdtValue()->_int << " hPa";
-               break;
-            }
-            case Tdt::EUnit::voc:
-            {
-               QTextStream( &s ) << m_message.getTdtValue()->_int << " Ohm";
-               break;
-            }
-            case Tdt::EUnit::permilPwm:
-            {
-               QTextStream( &s ) << m_message.getTdtValue()->_int << " ‰ PWM";
-               break;
-            }
             case Tdt::EUnit::_switch:
             {
                QTextStream( &s ) << (m_message.getTdtValue()->_bool ? "ON" : "OFF");
-               break;
-            }
-            case Tdt::EUnit::milliVolt:
-            {
-               QTextStream( &s ) << m_message.getTdtValue()->_int << " mV";
-               break;
-            }
-            case Tdt::EUnit::milliAmpere:
-            {
-               QTextStream( &s ) << m_message.getTdtValue()->_int << " mA";
                break;
             }
             case Tdt::EUnit::numberHex:
@@ -244,16 +187,6 @@ class CCanTdtPrinter: public Tdt::CPrinterBase /* CPrinterBase */
                      break;
                   }
                }
-               break;
-            }
-            case Tdt::EUnit::timeStamp:
-            {
-               QTextStream( &s ) << m_message.getTdtValue()->timestamp << "s";
-               break;
-            }
-            case Tdt::EUnit::timeStampDelta:
-            {
-               QTextStream( &s ) << m_message.getTdtValue()->timestampdelta << "s";
                break;
             }
             case Tdt::EUnit::article:
@@ -389,12 +322,6 @@ class CCanTdtPrinter: public Tdt::CPrinterBase /* CPrinterBase */
                }
                break;
             }
-            case Tdt::EUnit::permilHumidity:
-            {
-               QTextStream ts( &s );
-               ts << (int)m_message.getTdtValueUInt() << " ‰";
-               break;
-            }
             case Tdt::EUnit::capacity:
             {
                QTextStream ts( &s );
@@ -423,8 +350,25 @@ class CCanTdtPrinter: public Tdt::CPrinterBase /* CPrinterBase */
             default:
             {
                QTextStream ts( &s );
-               ts.setIntegerBase(16);
-               ts << "UK: Unit=0x" << (int)m_message.getTdtUnit();
+               if( m_unitMap.contains( m_message.getTdtUnit() ) )
+               {
+                  SUnitDesc desc=m_unitMap[ m_message.getTdtUnit() ];
+                  if( desc.decimalPower != 1 )
+                  {
+                     float t = m_message.getTdtValue()->_int * ( pow(10.0, desc.decimalPower ) );
+                     ts << t;
+                  }
+                  else
+                  {
+                     ts << (int)m_message.getTdtValueUInt();
+                  }
+                  ts << " " << QString::fromUtf8( desc.postfix );
+               }
+               else
+               {
+                  ts.setIntegerBase(16);
+                  ts << "UK: Unit=0x" << (int)m_message.getTdtUnit();
+               }
                break;
             }
          }
@@ -466,8 +410,6 @@ class CCanTdtPrinter: public Tdt::CPrinterBase /* CPrinterBase */
          return(m_roomMap);
       }
 };
-
-//extern CTopic topicPlants;extern CTopic topicPlants;
 
 
 //---fin-----------------------------------------------------------------------
