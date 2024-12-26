@@ -1,8 +1,8 @@
-#------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 #
 # \brief	CMakeLists.txt file for "libtdt"
 #
-#------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 
 cmake_minimum_required(VERSION 3.11)
@@ -23,6 +23,10 @@ if( "${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86_64" )
    add_definitions( "-fPIC" )
    set( MCU_PLATFORM "linux" )
 endif( )
+
+
+#--- tdtGen-------------------------------------------------------------------
+
 
 set( TDT_OUTPUT_DIR
    ${CMAKE_BINARY_DIR}/tdt_generated
@@ -57,7 +61,7 @@ ExternalProject_Add (
       INSTALL_DIR ${CMAKE_BINARY_DIR}
 )
 
-# gets single argument
+# have to transform it somehow; ";" as seperator did not work well
 STRING (JOIN ":" tdtProfilesJoined ${tdtProfiles} )
 
 file( MAKE_DIRECTORY ${TDT_OUTPUT_DIR}/tdt/gen )
@@ -78,6 +82,10 @@ add_custom_command(
     DEPENDS
          tdtGen tdtGenerate
 )
+
+
+#--- libtdt ------------------------------------------------------------------
+
 
 set( headers
    include/tdt/message.hpp
@@ -201,4 +209,4 @@ if( "${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86_64" )
 endif()
 
 
-#------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
