@@ -1,0 +1,18 @@
+{
+   "profiles": [
+      {
+         "name": "Power",
+         "description": "Power switches",
+         "base": "0x490",
+         "size": "0x20",
+         "objects": [
+            {
+               "offset": "0x0000",
+               "name": "switch",
+               "example": "-",
+               "size": "0x10"
+            }
+         ]
+      }
+   ]
+}

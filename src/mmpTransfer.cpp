@@ -170,16 +170,16 @@ bool CMmpTransfer::handleTx( const Tdt::CMessage& msg )
 {
    qDebug( "   handle Transceiver [%d]", m_nodeId );
    qDebug( "   RCV ACK pos %d %s", msg.getTdtValue()->_uint,
-          (msg.getTdtObject() == Tdt::EObject::acknowledgeTransfer)
+          (msg.getTdtObject() == Tdt::EObject::mmpAcknowledgeTransfer)
             ? "TRANSFER" : "SHRED" );
    
-   if( msg.getTdtObject() == Tdt::EObject::acknowledgeTransfer )
+   if( msg.getTdtObject() == Tdt::EObject::mmpAcknowledgeTransfer )
    {
       // TBD: check for plausibility
       return(true);
    };
    
-   if( msg.getTdtObject() != Tdt::EObject::acknowledgeShred )
+   if( msg.getTdtObject() != Tdt::EObject::mmpAcknowledgeShred )
    {
       qFatal( LDS( "ONSA", "TDT-Object was not a shred acknowledge" ) );
    };
@@ -212,8 +212,8 @@ bool CMmpTransfer::handleTx( const Tdt::CMessage& msg )
    {
       // The transmission finished. But still waiting for Transfer Ack.
       // "Reboot" and "Jump to application" wont send an transfer ack.
-      if( ( m_data.header().mmpObject == EMmpObject::jumpApplication )
-       || ( m_data.header().mmpObject == EMmpObject::reset ) )
+      if( ( m_data.header().mmpCommand == EMmpCommand::jumpApplication )
+       || ( m_data.header().mmpCommand == EMmpCommand::reset ) )
       {
          // manipulate the shred Ack to be the transfer ack.
          /*
@@ -234,14 +234,14 @@ bool CMmpTransfer::handleTx( const Tdt::CMessage& msg )
 
 void CMmpTransfer::sendShred()
 {
-   writeMMP( Tdt::EObject::firmwareDate, m_data.pos(), m_data.data32() );
+   writeMMP( Tdt::EObject::deviceFirmwareDate, m_data.pos(), m_data.data32() );
    //m_timeoutTimer.start( m_shredTimeout );
 }
 
 
 void CMmpTransfer::sendAbort()
 {
-   writeMMP( Tdt::EObject::firmwareDate, -1, 0 );
+   writeMMP( Tdt::EObject::deviceFirmwareDate, -1, 0 );
    //m_timeoutTimer.stop( );
 }
 
@@ -256,7 +256,7 @@ void CMmpTransfer::sendAck( uint32_t pos )
       emit getNodeId(),
       #endif
       Tdt::EFunctionCode::ackDataBlob,
-      Tdt::EObject::acknowledgeShred,
+      Tdt::EObject::mmpAcknowledgeShred,
       Tdt::EUnit::null, { ._uint = pos }
    };
    #if ! defined ( STM32 )
@@ -277,7 +277,7 @@ void CMmpTransfer::sendTransferAck(int sta)
       emit getNodeId(),
       #endif
       Tdt::EFunctionCode::ackDataBlob,
-      Tdt::EObject::acknowledgeTransfer,
+      Tdt::EObject::mmpAcknowledgeTransfer,
       Tdt::EUnit::null, { ._int = sta }
    };
    #if ! defined ( STM32 )

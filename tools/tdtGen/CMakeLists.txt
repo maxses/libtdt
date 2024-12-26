@@ -1,0 +1,46 @@
+#---------------------------------------------------------------------
+#
+# \brief CMake file for tdtGen
+#
+#---------------------------------------------------------------------
+
+cmake_minimum_required(VERSION 3.30)
+PROJECT( tdtGen CXX C)
+
+find_package( QT NAMES Qt5 Qt6 COMPONENTS Core REQUIRED )
+find_package( Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core )
+
+add_executable(
+    ${PROJECT_NAME}
+    src/main.cpp
+    # src/tdtGen.cpp
+    src/object.cpp
+    src/profile.cpp
+    src/sourceFileObjects.cpp
+    src/sourceFilePrinter.cpp
+    include/tdtGen.hpp
+    include/object.hpp
+    include/profile.hpp
+    include/sourceFileObjects.hpp
+    include/sourceFilePrinter.hpp
+)
+
+target_link_libraries(
+   ${PROJECT_NAME}
+   Qt${QT_VERSION_MAJOR}::Core
+)
+
+target_include_directories(
+   ${PROJECT_NAME}
+   PRIVATE
+      ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+install (
+    TARGETS ${PROJECT_NAME}
+    RUNTIME DESTINATION tools/bin
+)
+
+
+#---fin---------------------------------------------------------------
+

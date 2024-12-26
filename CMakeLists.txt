@@ -24,10 +24,63 @@ if( "${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86_64" )
    set( MCU_PLATFORM "linux" )
 endif( )
 
+set( TDT_OUTPUT_DIR
+   ${CMAKE_BINARY_DIR}/tdt_generated
+)
+
+set ( 
+    TDT_GEN_HEADER
+        ${TDT_OUTPUT_DIR}/tdt/gen/objects.hpp
+        ${TDT_OUTPUT_DIR}/tdt/gen/printerBase.hpp
+)
+
+list( APPEND
+    tdtProfiles
+    ${CMAKE_CURRENT_SOURCE_DIR}/tdt/device.json
+    ${CMAKE_CURRENT_SOURCE_DIR}/tdt/environment.json
+    ${CMAKE_CURRENT_SOURCE_DIR}/tdt/power.json
+    ${CMAKE_CURRENT_SOURCE_DIR}/tdt/mmp.json
+    ${CMAKE_CURRENT_SOURCE_DIR}/tdt/log.json
+)
+
+include(ExternalProject)
+
+ExternalProject_Add (
+   tdtGen
+      SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/tools/tdtGen
+      CMAKE_ARGS  
+         -DCMAKE_MODULE_PATH='${CMAKE_MODULE_PATH_JOINED2}'
+         -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}
+      INSTALL_DIR ${CMAKE_BINARY_DIR}
+)
+
+# gets single argument
+STRING (JOIN ":" tdtProfilesJoined ${tdtProfiles} )
+
+file( MAKE_DIRECTORY ${TDT_OUTPUT_DIR}/tdt/gen )
+
+add_custom_target( tdtGenerate
+    COMMAND
+        SOURCE_DIR=${CMAKE_SOURCE_DIR} 
+        OUTPUT_DIR=${CMAKE_BINARY_DIR}/git_version 
+        PROJECT=${CMAKE_PROJECT_NAME} 
+        ${CMAKE_BINARY_DIR}/tools/bin/tdtGen -i ${tdtProfilesJoined}
+               -o ${TDT_OUTPUT_DIR}/tdt/gen
+    DEPENDS tdtGen ${tdtProfiles}
+)
+
+add_custom_command(
+    OUTPUT
+         ${TDT_GEN_HEADER}
+    DEPENDS
+         tdtGen tdtGenerate
+)
 
 set( headers
    include/tdt/message.hpp
    include/tdt/mmp.hpp
+   include/tdt/topics/plants.hpp
+   ${TDT_GEN_HEADER}
 )
 
 set( sources
@@ -42,11 +95,14 @@ if ( NOT MCU_REV OR "${MCU_REV}" MATCHES "x86" )
       # src/ansiparser.cpp
       src/printer.cpp
       src/db.cpp
+      src/topics/plants.cpp
+      src/topic.cpp
 	)
    set(headers
       ${headers}
       include/tdt/printer.hpp
       include/tdt/db.hpp
+      include/tdt/topics/plants.hpp
    )
 else()
    set(sources
@@ -114,6 +170,13 @@ endif()
 target_link_libraries(
    ${PROJECT_NAME}
    # lepto
+)
+
+target_include_directories( ${PROJECT_NAME}
+   PRIVATE
+      ${CMAKE_BINARY_DIR}/tdt_generated
+   INTERFACE
+      ${CMAKE_BINARY_DIR}/tdt_generated
 )
 
 if( "${MCU_PLATFORM}" MATCHES "linux" )

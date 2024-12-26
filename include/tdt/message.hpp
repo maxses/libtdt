@@ -20,6 +20,7 @@
    enum class ELogCategory: int32_t;
 #endif
 
+#include <tdt/gen/objects.hpp>
 
 #define CAN_TDT_PROTOCOL_VERSION    3
 
@@ -28,6 +29,7 @@ namespace Tdt
 
 static constexpr int OBJECT_OFFSET=0x400;
 static constexpr int NMT_OBJECT_OFFSET=0x1000;
+static constexpr int MMP_OBJECT_OFFSET=0x6000;
 static constexpr int UNIT_OFFSET=0x10;
 static constexpr int TYPE_OFFSET=0x20;
 static constexpr int COMMAND_OFFSET=0x600;
@@ -82,10 +84,10 @@ static_assert( ( (int)EFunctionCode::max & FUNCTIONCODE_RSHIFTED_BITMASK )
                                                 == (int)EFunctionCode::max
                , "Masks not plausible");
 
-enum class EObject: uint16_t
+enum class ENmtObject: uint16_t
 {
-   null                       = 0x00,
-   error                      = 0x00,
+   //null                       = 0x00,
+   //error                      = 0x00,
    
    nmtScan                    = 0x00 + NMT_OBJECT_OFFSET,
    nmtScanConfig              = 0x01 + NMT_OBJECT_OFFSET,
@@ -99,12 +101,15 @@ enum class EObject: uint16_t
    nmtJumpApplication         = 0x09 + NMT_OBJECT_OFFSET,
    nmtEnableApplicationBoot   = 0x0A + NMT_OBJECT_OFFSET,
    //nmtStatus                   = 0x10 + NMT_OBJECT_OFFSET,
+};
 
+enum class EObjectObsolete: uint16_t
+{
    none                       = 0x00 + OBJECT_OFFSET,
    date                       = 0x05 + OBJECT_OFFSET,
    time                       = 0x06 + OBJECT_OFFSET,
    dummy                      = 0x07 + OBJECT_OFFSET,
-
+#if 0
    plantSensor                = 0x08 + OBJECT_OFFSET,
    plantSensor0               = 0x08 + OBJECT_OFFSET,
    plantSensor1               = 0x09 + OBJECT_OFFSET,
@@ -117,7 +122,7 @@ enum class EObject: uint16_t
    plantSensorRaw2            = 0x800A + OBJECT_OFFSET,
    plantSensorRaw3            = 0x800B + OBJECT_OFFSET,
    plantSensorRaw4            = 0x800C + OBJECT_OFFSET,
-
+#endif
    firmwareVersion            = 0x10 + OBJECT_OFFSET,
    firmwareDate               = 0x11 + OBJECT_OFFSET,
    hardwareRevision           = 0x12 + OBJECT_OFFSET,
@@ -206,17 +211,27 @@ enum class EObject: uint16_t
    
    rtcDrift                   = 0x5000 + OBJECT_OFFSET,
    timeStampDrift             = 0x5001 + OBJECT_OFFSET,
-   
-   acknowledgeShred           = 0x6001 + OBJECT_OFFSET,
-   acknowledgeTransfer        = 0x6002 + OBJECT_OFFSET,
 };
 
 
+enum EMmpObject: uint32_t
+{
+   acknowledgeShred           = 0x01 + MMP_OBJECT_OFFSET,
+   acknowledgeTransfer        = 0x02 + MMP_OBJECT_OFFSET,
+   reset                      = 0x06 + MMP_OBJECT_OFFSET,
+   jumpBootLoader          = 0x08 + MMP_OBJECT_OFFSET,
+   jumpApplication         = 0x09 + MMP_OBJECT_OFFSET,
+};
+
+#if 0
 static_assert ( ( (int)EObject::plantSensor & NO_SUBID_OBJECT_MASK )
                                        == (int)EObject::plantSensor,"" );
+#endif
+
+#if 0
 static_assert ( ( (int)EObject::temperature & NO_SUBID_OBJECT_MASK )
                                        == (int)EObject::temperature,"" );
-
+#endif
 
 constexpr bool matchesSubIndexedObject( const Tdt::EObject object, const Tdt::EObject base )
 {
@@ -418,7 +433,11 @@ struct SMessage
 {
    union {
       struct {
-         EObject object;      // 2 B
+         union {
+            EObject object;      // 2 B
+            ENmtObject nmtObject;      // 2 B
+            //EMmpObject mmpObject;      // 2 B
+         };
          EUnit unit;          // 1 B
          uint8_t reserved;    // 1 B
       } PACKED;
@@ -444,9 +463,6 @@ struct SMessageNmtIntro
 static_assert( sizeof( SMessageNmtIntro ) == 8, "Message (NMT Intro) size not plausible" );
 
 #define constexpr_nobug constexpr
-
-//typedef uint32_t id_t;
-//typedef int id_t;
 
 class CCanMessage
 {
@@ -502,6 +518,14 @@ class CCanMessage
       }
 };
 
+
+struct
+{
+   union{
+      EObject object;
+      EMmpObject mmpObject;
+   };
+}EAnyObject;
 
 class CMessage : public CCanMessage
 {
@@ -572,6 +596,12 @@ private:
       {
          return(m_tdtMessage.object);
       }
+      /*
+      EMmpObject getTdtMmpObject() const
+      {
+         return(m_tdtMessage.mmpObject);
+      }
+      */
       int getTdtSubId() const
       {
          return( (int)m_tdtMessage.object & 7 );
@@ -652,6 +682,7 @@ EObject operator+(const EObject &a, int value);
 int operator-(const EObject &a, EObject b);
 
 };  // namespace Tdt
+
 
 //---fin-----------------------------------------------------------------------
 #endif // ? ! LEPTO_CAN_MESSAGE_TDT_H_

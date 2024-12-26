@@ -1,0 +1,47 @@
+{
+   "profiles": [
+      {
+         "name": "Device",
+         "description": "Generic device node",
+         "base": "0x400",
+         "size": "0x20",
+         "objects": [
+            {
+               "offset": "0x0001",
+               "name": "Firmware version",
+               "example": "v0.1.10-12+"
+            },
+            {
+               "offset": "0x0002",
+               "name": "Device Temperature",
+               "description": "The generic device temperature which can be an I2C sensor or the MCU temperature.",
+               "example": "22.00°C"
+            },
+            {
+               "offset": "0x0011",
+               "name": "Firmware Date",
+               "description": "Release date. Probably not used anywhere"
+            }
+         ]
+      },
+      {
+         "name": "Global",
+         "description": "Global information like time/date",
+         "base": "0x420",
+         "size": "0x10",
+         "objects": [
+            {
+               "offset": "0x0001",
+               "name": "Time",
+               "example": "12:00:23"
+            },
+            { 
+               "offset": "0x0002",
+               "name": "Date",
+               "description": "Date",
+               "example": "17.10.2025"
+            }
+         ]
+      }
+   ]
+}

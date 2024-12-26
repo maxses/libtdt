@@ -1,5 +1,5 @@
-#ifndef LEPTO_CAN_TDT_PRINTER_H
-#define LEPTO_CAN_TDT_PRINTER_H
+#ifndef TDT_PRINTER_EXT_HPP
+#define TDT_PRINTER_EXT_HPP
 //-----------------------------------------------------------------------------
 //
 //
@@ -8,6 +8,9 @@
 
 
 #include <tdt/message.hpp>
+#include <tdt/topic.hpp>
+#include <tdt/gen/objects.hpp>
+#include <tdt/gen/printerBase.hpp>
 #include <stdio.h>               // snprintf
 #include <QTextStream>
 #include <QMap>
@@ -21,11 +24,15 @@
 #define ENUM_MAP_TEXT( a, e, t ) { a::e, t }
 // #define EID( id, subId ) ( ( id << 4 ) | subId )
 
-class CCanTdtPrinter
-{
-      const Tdt::CMessage &m_message;
+//using namespace Tdt;
 
-      const QMap<Tdt::EObject, const char *> m_objectMap{
+class CCanTdtPrinter: public Tdt::CPrinterBase /* CPrinterBase */
+{
+   friend class CTopic;
+      const Tdt::CMessage &m_message;
+#if 0
+      static QMap<Tdt::EObject, const char *> m_objectMap;
+      const QMap<Tdt::EObject, const char *> m_objectMap__{
          ENUM_MAP( Tdt::EObject, error ),
           
          ENUM_MAP( Tdt::EObject, none ),
@@ -44,14 +51,14 @@ class CCanTdtPrinter
          ENUM_MAP( Tdt::EObject, date ),
          ENUM_MAP( Tdt::EObject, time ),
          ENUM_MAP( Tdt::EObject, dummy ),
-
+#if 0
          ENUM_MAP( Tdt::EObject, plantSensor ),
          ENUM_MAP_TEXT( Tdt::EObject, plantSensor0, "plantSensor[0]" ),
          ENUM_MAP_TEXT( Tdt::EObject, plantSensor1, "plantSensor[1]" ),
          ENUM_MAP_TEXT( Tdt::EObject, plantSensor2, "plantSensor[2]" ),
          ENUM_MAP_TEXT( Tdt::EObject, plantSensor3, "plantSensor[3]" ),
          ENUM_MAP_TEXT( Tdt::EObject, plantSensor4, "plantSensor[4]" ),
-
+#endif
          ENUM_MAP( Tdt::EObject, firmwareVersion ),
          ENUM_MAP( Tdt::EObject, firmwareDate ),
          ENUM_MAP( Tdt::EObject, hardwareRevision ),
@@ -116,7 +123,7 @@ class CCanTdtPrinter
          ENUM_MAP_TEXT( Tdt::EObject, eventCodeRepeated, "Log code R" ),
          ENUM_MAP_TEXT( Tdt::EObject, logCode, "log code" ),
       };
-
+#endif
       const QMap<Tdt::EUnit, const char *> m_unitMap{
          ENUM_MAP( Tdt::EUnit, none ),
          ENUM_MAP( Tdt::EUnit, hz ),
@@ -379,7 +386,7 @@ class CCanTdtPrinter
                */
                Tdt::EObject object=
                    (Tdt::EObject)(m_message.getTdtValue()->_uint
-                                       + (int)Tdt::EObject::startSwitches);
+                                       + (int)Tdt::EObject::powerSwitchStart);
                if( m_objectMap.contains(object) )
                {
                   QTextStream( &s ) << m_objectMap[object];
@@ -555,6 +562,8 @@ class CCanTdtPrinter
       }
 };
 
+//extern CTopic topicPlants;extern CTopic topicPlants;
+
 
 //---fin-----------------------------------------------------------------------
-#endif // ? ! LEPTO_CAN_TDT_PRINTER_H
+#endif // ? ! TDT_PRINTER_EXT_HPP

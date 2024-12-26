@@ -57,7 +57,7 @@ namespace Tdt
 namespace Tdt
 {
 
-enum class EMmpObject: uint32_t
+enum class EMmpCommand: uint32_t
 {
    null,
    log,
@@ -79,7 +79,7 @@ struct SMmpHeader
    uint32_t dataLength;
    uint32_t sourceNodeId;
    uint32_t crc32Data;
-   EMmpObject mmpObject;
+   EMmpCommand mmpCommand;
    //uint32_t mmpFunctionCode;
    uint32_t flashAddress;
    uint32_t reserved[ 8 - 6 ];
@@ -113,13 +113,13 @@ class CMmpTransferData
       int m_pos;
       
   public:
-      Tdt::EObject m_object=Tdt::EObject::firmwareDate;
+      Tdt::EObject m_object=Tdt::EObject::deviceFirmwareDate;
 
    public:
       CMmpTransferData()
       {
          m_header.dataLength=0;
-         m_header.mmpObject=EMmpObject::null;
+         m_header.mmpCommand=EMmpCommand::null;
          m_maxReceiveSize=0x0;
          m_data=nullptr;
          reset();
@@ -181,13 +181,13 @@ class CMmpTransferData
       {
          return(m_maxReceiveSize);
       }
-      void setData(EMmpObject object, const char* data, uint32_t size)
+      void setData(EMmpCommand command, const char* data, uint32_t size)
       {
          m_header={
              .magic=0x1234,
              .dataLength=(uint32_t)size,
              .sourceNodeId=0,
-             .mmpObject=object,
+             .mmpCommand=command,
              .flashAddress=0
              //.mmpFunctionCode=0,
          };
@@ -338,21 +338,21 @@ class CMmpNode
       }
       bool transmitActive()
       {
-         return( m_tx.m_data.header().mmpObject != EMmpObject::null );
+         return( m_tx.m_data.header().mmpCommand != EMmpCommand::null );
       }
-      void startTx(EMmpObject object, const char* data, uint32_t length)
+      void startTx(EMmpCommand command, const char* data, uint32_t length)
       {
-         m_tx.m_data.setData(object, data, length);
+         m_tx.m_data.setData(command, data, length);
          m_tx.startTx();
       }
       void setDestinationNodeId( int nodeId )
       {
          m_tx.setCounterNodeId( nodeId );
       }
-      void sendTransfer(Tdt::EMmpObject object, const char *data=0
+      void sendTransfer(Tdt::EMmpCommand command, const char *data=0
                      , int length=0, int flashPos=0)
       {
-         m_tx.m_data.setData( object, data, length );
+         m_tx.m_data.setData( command, data, length );
          m_tx.m_data.setFlashAddress( flashPos );
          m_tx.startTx( );
       }

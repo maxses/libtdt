@@ -37,6 +37,18 @@
 
 //---Implementation------------------------------------------------------------
 
+namespace Tdt
+{
+   enum EObjectBath
+   {
+      bathWaterLevel=0x1000,
+   };
+
+   EObject operator +( EObjectBath object)
+   {
+      return( (EObject)object );
+   };
+}
 
 TEST_CASE( "CAN TDT", "[default]" )
 {
@@ -84,6 +96,13 @@ TEST_CASE( "CAN TDT", "[default]" )
                                 Tdt::EObject::logCode, Tdt::EUnit::logCode, Tdt::SValue{ .logCode=(ELogCode)0 }};
       REQUIRE ( sendMessage.getLen() == 8 );
       
+      // Enhanced 
+      Tdt::CMessage sendMessage2
+          {0x32,
+           Tdt::EFunctionCode::sendObject,
+           // ELogCategory::Critical does not exist without lepto
+           +Tdt::EObjectBath::bathWaterLevel, Tdt::EUnit::logCode, Tdt::SValue{ .logCode=(ELogCode)0 }};
+      REQUIRE ( sendMessage.getLen() == 8 );
    }
 }
 

@@ -1,0 +1,21 @@
+{
+   "profiles": [
+      {
+         "comment": "lowercase; tdtGen is not converting it automatically yet",
+         "name": "mmp",
+         "description": "Multi message package",
+         "base": "0x6000",
+         "size": "0x10",
+         "objects": [
+            {
+               "offset": "0x0001",
+               "name": "Acknowledge Shred"
+            },
+            {
+               "offset": "0x0002",
+               "name": "Acknowledge Transfer"
+            }
+         ]
+      }
+   ]
+}

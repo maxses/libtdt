@@ -1,0 +1,16 @@
+{
+   "profiles": [
+      {
+         "name": "log",
+         "description": "Some Logging",
+         "base": "0x0480",
+         "size": "0x10",
+         "objects": [
+            {
+               "offset": "0x000A",
+               "name": "Code"
+            }
+         ]
+      }
+   ]
+}

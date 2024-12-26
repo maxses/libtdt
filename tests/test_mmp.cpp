@@ -110,9 +110,9 @@ TEST_CASE( "MMP full duplex", "[default]" )
       
       elapsed.start();
       
-      dut1.m_tx.m_data.setData( Tdt::EMmpObject::writeApplicationFlash, data1, strlen(data1) );
+      dut1.m_tx.m_data.setData( Tdt::EMmpCommand::writeApplicationFlash, data1, strlen(data1) );
       dut1.m_tx.startTx();
-      dut2.m_tx.m_data.setData( Tdt::EMmpObject::writeApplicationFlash, data2, strlen(data2) );
+      dut2.m_tx.m_data.setData( Tdt::EMmpCommand::writeApplicationFlash, data2, strlen(data2) );
       dut2.m_tx.startTx();
       
       while( elapsed.elapsed( ) < 1 * 1000 )
