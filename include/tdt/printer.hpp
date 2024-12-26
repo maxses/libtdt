@@ -39,28 +39,14 @@ class CCanTdtPrinter: public Tdt::CPrinterBase
          ENUM_MAP( Tdt::EFunctionCode, reSendObject ),
          //ENUM_MAP( Tdt::EFunctionCode, log ),
          ENUM_MAP( Tdt::EFunctionCode, max ),
-		};
-
-      #if 0
-      const QMap< int, const char *> m_eventComponentMap{
-         { CAN_TRANSMIT_BUFFER,     "CAN transmit buffer"},
-         { RADIO_TRANSMIT_BUFFER,   "radio transmit buffer"},
       };
-      #endif
       
       const QMap< int, const char *> m_eventMap{
-         #if 0
-         { BUFFER_FULL,     "buffer full"},
-         #endif
           ENUM_MAP( (int)Tdt::EEvent, wannaSleepStart ),
           ENUM_MAP( (int)Tdt::EEvent, wannaSleepAll ),
           ENUM_MAP( (int)Tdt::EEvent, wannaSleepRoom0 ),
           ENUM_MAP( (int)Tdt::EEvent, wannaSleepRoom1 ),
           ENUM_MAP( (int)Tdt::EEvent, wannaSleepEnd ),
-          ENUM_MAP( (int)Tdt::EEvent, vbusLow ),
-          ENUM_MAP( (int)Tdt::EEvent, batteryLow ),
-          ENUM_MAP( (int)Tdt::EEvent, i2cIoError ),
-          ENUM_MAP_TEXT( (int)Tdt::EEvent, noRelease, "NO RELEASE!" ),
       };
       
       const QMap<int, const char*>m_roomMap{
@@ -133,9 +119,8 @@ class CCanTdtPrinter: public Tdt::CPrinterBase
             }
             case Tdt::EUnit::time:
             {
-               ts << m_message.getTdtValue()->time.hour << ":"
-                  << m_message.getTdtValue()->time.min << ":"
-                  << m_message.getTdtValue()->time.sec;
+               Tdt::SValue::STime t=m_message.getTdtValue()->time;
+               ts << t.hour << ":" << t.min << ":" << t.sec;
                break;
             }
             case Tdt::EUnit::percentHumidity:
@@ -146,12 +131,6 @@ class CCanTdtPrinter: public Tdt::CPrinterBase
             case Tdt::EUnit::_switch:
             {
                ts << (m_message.getTdtValue()->_bool ? "ON" : "OFF");
-               break;
-            }
-            case Tdt::EUnit::numberHex:
-            {
-               ts.setIntegerBase(16);
-               ts << "0x" << m_message.getTdtValue()->_uint;
                break;
             }
             case Tdt::EUnit::percentQuality:
@@ -202,14 +181,6 @@ class CCanTdtPrinter: public Tdt::CPrinterBase
             }
             case Tdt::EUnit::powerSwitchFunction:
             {
-               /*
-               QMap<int, const char*>map{
-                                           { 0x0, "Disabled (0)"},
-                                           { 0x1, "Ambient light(1)"},
-                                           { 0x2, "Plant light(2)"},
-                                           { 0x3, "Media(3)"},
-                                           };
-               */
                Tdt::EObject object=
                    (Tdt::EObject)(m_message.getTdtValue()->_uint
                                        + (int)Tdt::EObject::powerSwitchStart);
@@ -255,19 +226,6 @@ class CCanTdtPrinter: public Tdt::CPrinterBase
                }
                break;
             }
-            case Tdt::EUnit::errorCode:
-            {
-               switch( m_message.getTdtValue()->_uint )
-               {
-                  default:
-                  {
-                     ts.setIntegerBase(16);
-                     ts << "0x" << (int)m_message.getTdtValueUInt();
-                     break;
-                  }
-               }
-               break;
-            }
             #if 0
             case Tdt::EUnit::eventCode:
             {
@@ -290,12 +248,6 @@ class CCanTdtPrinter: public Tdt::CPrinterBase
                break;
             }
             #endif
-            case Tdt::EUnit::flags:
-            {
-               ts.setIntegerBase(16);
-               ts << "0x" << (int)m_message.getTdtValueUInt();
-               break;
-            }
             case Tdt::EUnit::room:
             {
                if( m_roomMap.contains(m_message.getTdtValue()->_uint) )
@@ -336,16 +288,27 @@ class CCanTdtPrinter: public Tdt::CPrinterBase
                if( m_unitMap.contains( m_message.getTdtUnit() ) )
                {
                   SUnitDesc desc=m_unitMap[ m_message.getTdtUnit() ];
-                  if( desc.decimalPower != 1 )
+                  if( desc.format == 'x' )
                   {
-                     float t = m_message.getTdtValue()->_int * ( pow(10.0, desc.decimalPower ) );
-                     ts << t;
+                     ts.setIntegerBase(16);
+                     ts << "0x" << (int)m_message.getTdtValueUInt();
                   }
                   else
                   {
-                     ts << (int)m_message.getTdtValueUInt();
+                     if( desc.decimalPower != 1 )
+                     {
+                        float t = m_message.getTdtValue()->_int * ( pow(10.0, desc.decimalPower ) );
+                        ts << t;
+                     }
+                     else
+                     {
+                        ts << (int)m_message.getTdtValueUInt();
+                     }
                   }
-                  ts << " " << QString::fromUtf8( desc.postfix );
+                  if( desc.postfix[0] )
+                  {
+                     ts << " " << QString::fromUtf8( desc.postfix );
+                  }
                }
                else
                {

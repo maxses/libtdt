@@ -104,112 +104,6 @@ enum class ENmtObject: uint16_t
    //nmtStatus                   = 0x10 + NMT_OBJECT_OFFSET,
 };
 
-enum class EObjectObsolete: uint16_t
-{
-   none                       = 0x00 + OBJECT_OFFSET,
-   date                       = 0x05 + OBJECT_OFFSET,
-   time                       = 0x06 + OBJECT_OFFSET,
-   dummy                      = 0x07 + OBJECT_OFFSET,
-   
-   firmwareVersion            = 0x10 + OBJECT_OFFSET,
-   firmwareDate               = 0x11 + OBJECT_OFFSET,
-   hardwareRevision           = 0x12 + OBJECT_OFFSET,
-   hardwareDate               = 0x13 + OBJECT_OFFSET,
-   humidity                   = 0x14 + OBJECT_OFFSET,
-   voc                        = 0x15 + OBJECT_OFFSET,
-   iaq                        = 0x16 + OBJECT_OFFSET,
-   voc2                       = 0x17 + OBJECT_OFFSET,
-
-   temperature                = 0x18 + OBJECT_OFFSET,
-   temperature0               = 0x18 + OBJECT_OFFSET,
-   temperature1               = 0x19 + OBJECT_OFFSET,
-   temperature2               = 0x1A + OBJECT_OFFSET,
-   temperature3               = 0x1B + OBJECT_OFFSET,
-   temperature4               = 0x1C + OBJECT_OFFSET,
-
-   batteryLevel               = 0x20 + OBJECT_OFFSET,
-   pressure                   = 0x21 + OBJECT_OFFSET,
-   nodeCommand                = 0x30 + OBJECT_OFFSET,
-   timeStamp                  = 0x31 + OBJECT_OFFSET,
-   current                    = 0x32 + OBJECT_OFFSET,
-   currentAvg                 = 0x33 + OBJECT_OFFSET,
-   SupplyVoltage              = 0x34 + OBJECT_OFFSET,
-   debug                      = 0x35 + OBJECT_OFFSET,
-   nodeId                     = 0x36 + OBJECT_OFFSET,
-   articleId                  = 0x37 + OBJECT_OFFSET,
-   serialNumber               = 0x38 + OBJECT_OFFSET,
-   uidLow                     = 0x39 + OBJECT_OFFSET,
-   uidHigh                    = 0x3A + OBJECT_OFFSET,
-   chipId                     = 0x3B + OBJECT_OFFSET,
-   flashSize                  = 0x3C + OBJECT_OFFSET,
-   
-   forcedSending              = 0x40 + OBJECT_OFFSET,
-   
-   foodTemperature            = 0x50 + OBJECT_OFFSET,
-   
-   // Candis: whose temperatures should be shown in display
-   displayNode                = 0x60 + OBJECT_OFFSET,
-   displayNode0               = 0x60 + OBJECT_OFFSET,
-   displayNode1               = 0x61 + OBJECT_OFFSET,
-   displayNode2               = 0x62 + OBJECT_OFFSET,
-   displayNode3               = 0x63 + OBJECT_OFFSET,
-   displayNode0ObjectOffset   = 0x64 + OBJECT_OFFSET,
-   displayNode1ObjectOffset   = 0x65 + OBJECT_OFFSET,
-   displayNode2ObjectOffset   = 0x66 + OBJECT_OFFSET,
-   displayNode3ObjectOffset   = 0x67 + OBJECT_OFFSET,
-   
-   switchObjectOffset         = 0x70 + OBJECT_OFFSET,
-   switchObjectOffset0        = 0x70 + OBJECT_OFFSET,
-   switchObjectOffset1        = 0x71 + OBJECT_OFFSET,
-   switchObjectOffset2        = 0x72 + OBJECT_OFFSET,
-   switchObjectOffset3        = 0x73 + OBJECT_OFFSET,
-   
-   deviceStatus               = 0x80 + OBJECT_OFFSET,
-   errorCode                  = 0x81 + OBJECT_OFFSET,
-   eventCode                  = 0x82 + OBJECT_OFFSET,
-   flags                      = 0x83 + OBJECT_OFFSET,
-   bootCounter                = 0x84 + OBJECT_OFFSET,
-   operatingTime              = 0x85 + OBJECT_OFFSET,
-   shutdownTime               = 0x86 + OBJECT_OFFSET,
-   releaseState               = 0x87 + OBJECT_OFFSET,
-   fadeTime                   = 0x88 + OBJECT_OFFSET,
-   eventCodeRepeated          = 0x89 + OBJECT_OFFSET,
-   logCode                    = 0x8A + OBJECT_OFFSET,
-   lastError                  = 0x8B + OBJECT_OFFSET,
-   systemState                = 0x8C + OBJECT_OFFSET,
-
-   startSwitches              = 0x90 + OBJECT_OFFSET,    // None
-   startAmbientSwitches       = 0x90 + OBJECT_OFFSET,    // None
-   ambientLightAll            = 0x91 + OBJECT_OFFSET,
-   ambientLightLivingRoom     = 0x92 + OBJECT_OFFSET,
-   ambientLightSleepingRoom   = 0x93 + OBJECT_OFFSET,
-   ambientLightKitchen        = 0x94 + OBJECT_OFFSET,
-   ambientLightOffice         = 0x95 + OBJECT_OFFSET,
-   ambientLightBath1          = 0x96 + OBJECT_OFFSET,
-   ambientLightBath2          = 0x97 + OBJECT_OFFSET,
-   plantLight                 = 0xA0 + OBJECT_OFFSET,
-   multimediaSwitch           = 0xA1 + OBJECT_OFFSET,
-   mainSwitch                 = 0xA2 + OBJECT_OFFSET,
-   endSwitches                = 0xBF + OBJECT_OFFSET,
-   
-   room                       = 0xC0 + OBJECT_OFFSET,
-   
-   dateStamp                  = 0xD5 + OBJECT_OFFSET, // days since 1.1.1970 UTC
-   clockStamp                 = 0xD6 + OBJECT_OFFSET, // seconds since 0:0:0 UTC
-   
-   rtcDrift                   = 0x5000 + OBJECT_OFFSET,
-   timeStampDrift             = 0x5001 + OBJECT_OFFSET,
-};
-
-
-enum EMmpObject_obsolete: uint32_t
-{
-   acknowledgeShred           = 0x01 + MMP_OBJECT_OFFSET,
-   acknowledgeTransfer        = 0x02 + MMP_OBJECT_OFFSET,
-   reset                      = 0x06 + MMP_OBJECT_OFFSET,
-   jumpBootLoader          = 0x08 + MMP_OBJECT_OFFSET,
-   jumpApplication         = 0x09 + MMP_OBJECT_OFFSET,
-};
 
 #if 0
 static_assert ( ( (int)EObject::plantSensor & NO_SUBID_OBJECT_MASK )
@@ -226,55 +120,8 @@ constexpr bool matchesSubIndexedObject( const Tdt::EObject object, const Tdt::EO
    return( ( (uint32_t)object & MASK_SUBINDEX_OBJECT ) == (uint32_t)base );
 }
 
-/*
-static_assert ( matchesSubIndexedObject(
-                  Tdt::EObject::ambientLight, Tdt::EObject::ambientLight) == true);
-*/
 
 typedef int32_t nodeId_t;
-
-enum class EUnitObsolete: uint8_t
-{
-   null                 = 0x00,
-   none                 = 0x00 + UNIT_OFFSET,
-   hz                   = 0x01 + UNIT_OFFSET,
-   time                 = 0x02 + UNIT_OFFSET,
-   date                 = 0x03 + UNIT_OFFSET,
-   centiCelsius         = 0x04 + UNIT_OFFSET,
-   percentHumidity      = 0x05 + UNIT_OFFSET,
-   voc                  = 0x06 + UNIT_OFFSET,
-   permilPwm            = 0x07 + UNIT_OFFSET,
-   _switch              = 0x08 + UNIT_OFFSET,
-   version              = 0x09 + UNIT_OFFSET,    // To be removed
-   softwareVersion      = 0x09 + UNIT_OFFSET,
-   hardwareRevision     = 0x0A + UNIT_OFFSET,
-   milliVolt            = 0x0B + UNIT_OFFSET,
-   durationSeconds      = 0x0C + UNIT_OFFSET,    // Seconds
-   pressure             = 0x0D + UNIT_OFFSET,
-   command              = 0x0E + UNIT_OFFSET,
-   timeStamp            = 0x0F + UNIT_OFFSET,
-   milliAmpere          = 0x10 + UNIT_OFFSET,
-   address              = 0x11 + UNIT_OFFSET,
-   nodeId               = 0x12 + UNIT_OFFSET,
-   tdtObject            = 0x13 + UNIT_OFFSET,
-   number               = 0x14 + UNIT_OFFSET,   // Serial number, Article ID etc.
-   numberHex            = 0x15 + UNIT_OFFSET,
-   percentQuality       = 0x16 + UNIT_OFFSET,
-   timeStampDelta       = 0x17 + UNIT_OFFSET,
-   article              = 0x18 + UNIT_OFFSET,
-   powerSwitchFunction  = 0x19 + UNIT_OFFSET,
-   index                = 0x1A + UNIT_OFFSET,
-   deviceStatus         = 0x1B + UNIT_OFFSET,
-   errorCode            = 0x1C + UNIT_OFFSET,
-   eventCode            = 0x1D + UNIT_OFFSET,
-   flags                = 0x1E + UNIT_OFFSET,
-   room                 = 0x1F + UNIT_OFFSET,
-   permilHumidity       = 0x20 + UNIT_OFFSET,
-   logCode              = 0x21 + UNIT_OFFSET,
-   capacityKB           = 0x22 + UNIT_OFFSET,
-   durationDays         = 0x23 + UNIT_OFFSET,    // Days
-   systemState          = 0x24 + UNIT_OFFSET,
-};
 
 
 enum class ECommand: uint32_t
@@ -312,28 +159,8 @@ enum class EEvent: uint32_t
    wannaSleepEnd        = 0x1F + EVENT_OFFSET,
    noRelease_OBS        = 0x20 + EVENT_OFFSET,
    shutdown             = 0x21 + EVENT_OFFSET,
-
-   // system/device
-   vbusLow              = 0x100 + EVENT_OFFSET,
-   batteryLow           
-= 0x101 + EVENT_OFFSET,
-   couldNotReadEeprom   = 0x100 + EVENT_OFFSET,
-   couldNotWriteEeprom  = 0x102 + EVENT_OFFSET,
-   noRelease            = 0x103 + EVENT_OFFSET,
-
-   // uart
-   uartRxBufferOverflow = 0x200 + EVENT_OFFSET,
-   uartTxBufferOverflow = 0x201 + EVENT_OFFSET,
-
-   // I2C
-   i2cIoError           = 0x300 + EVENT_OFFSET,
-
-   // CAN
-   canRxBufferFull      = 0x400 + EVENT_OFFSET,
-   canTxBufferFull      = 0x401 + EVENT_OFFSET,
-
-   lastEvent,
 };
+
 
 enum class ESystemState: uint32_t
 {
@@ -342,7 +169,6 @@ enum class ESystemState: uint32_t
    application
 };
 
-static_assert( (int)EEvent::lastEvent < 0x07FFFFFF, "EEvent last enum to high" );
 
 inline constexpr Tdt::EEvent operator+ ( Tdt::EEvent e1, int i1 )
 {
@@ -399,7 +225,7 @@ union SValue
       } PACKED date;
       static_assert( sizeof( date ) == 4 );
 
-      struct
+      struct STime
       {
          uint8_t sec;
          uint8_t min;

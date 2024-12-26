@@ -128,7 +128,8 @@
             },
             {
                "name": "numberHex",
-               "offset": "0x15"
+               "offset": "0x15",
+               "format": "x"
             },
             {
                "name": "percentQuality",
@@ -138,7 +139,7 @@
                "name": "timeStampDelta",
                "offset": "0x17",
                "postfix": "s",
-               "type": "i"
+               "format": "i"
             },
             {
                "name": "article",
@@ -168,7 +169,8 @@
             },
             {
                "name": "flags",
-               "offset": "0x1E"
+               "offset": "0x1E",
+               "format": "x"
             },
             {
                "name": "room",
