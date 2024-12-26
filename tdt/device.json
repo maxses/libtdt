@@ -25,21 +25,31 @@
          ]
       },
       {
-         "name": "Global",
-         "description": "Global information like time/date",
-         "base": "0x420",
-         "size": "0x10",
-         "objects": [
+         "name": "Device commands",
+         "description": "Generic device node commands",
+         "base": "0x600",
+         "size": "0x20",
+         "commands": [
             {
-               "offset": "0x0001",
-               "name": "Time",
-               "example": "12:00:23"
+               "name": "ident",
+               "offset": "0x5"
             },
-            { 
-               "offset": "0x0002",
-               "name": "Date",
-               "description": "Date",
-               "example": "17.10.2025"
+            {
+               "name": "bootToRecovery",
+               "offset": "0x8"
+            },
+            {
+               "name": "bootToProductive",
+               "offset": "0x9"
+            },
+            {
+               "name": "keepAwake",
+               "offset": "0x10",
+               "size": "0x10"
+            },
+            {
+               "name": "enableBootAplpication",
+               "offset": "0x21"
             }
          ]
       }

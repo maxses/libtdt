@@ -22,6 +22,7 @@
 
 #include <tdt/gen/objects.hpp>
 #include <tdt/gen/units.hpp>
+#include <tdt/gen/commands.hpp>
 
 #define CAN_TDT_PROTOCOL_VERSION    3
 
@@ -87,9 +88,6 @@ static_assert( ( (int)EFunctionCode::max & FUNCTIONCODE_RSHIFTED_BITMASK )
 
 enum class ENmtObject: uint16_t
 {
-   //null                       = 0x00,
-   //error                      = 0x00,
-   
    nmtScan                    = 0x00 + NMT_OBJECT_OFFSET,
    nmtScanConfig              = 0x01 + NMT_OBJECT_OFFSET,
    nmtRecipientLowId          = 0x02 + NMT_OBJECT_OFFSET,
@@ -101,7 +99,6 @@ enum class ENmtObject: uint16_t
    nmtJumpBootLoader          = 0x08 + NMT_OBJECT_OFFSET,
    nmtJumpApplication         = 0x09 + NMT_OBJECT_OFFSET,
    nmtEnableApplicationBoot   = 0x0A + NMT_OBJECT_OFFSET,
-   //nmtStatus                   = 0x10 + NMT_OBJECT_OFFSET,
 };
 
 
@@ -124,25 +121,12 @@ constexpr bool matchesSubIndexedObject( const Tdt::EObject object, const Tdt::EO
 typedef int32_t nodeId_t;
 
 
-enum class ECommand: uint32_t
+enum class ECommandObslete: uint32_t
 {
    null                    = 0x0,
    replay                  = 0x1 + COMMAND_OFFSET,
    destroy                 = 0x2 + COMMAND_OFFSET,
-   burnIn                  = 0x3 + COMMAND_OFFSET,
-   forceMeasure            = 0x4 + COMMAND_OFFSET,
-   ident                   = 0x5 + COMMAND_OFFSET,
-   burnInShort             = 0x6 + COMMAND_OFFSET,
-   burnInLong              = 0x7 + COMMAND_OFFSET,
-   bootToRecovery          = 0x8 + COMMAND_OFFSET,
-   bootToProductive        = 0x9 + COMMAND_OFFSET,
-   keepAwakeStart          = 0x10 + COMMAND_OFFSET,
-   keepAwakeAll            = 0x11 + COMMAND_OFFSET,
-   keepAwakeRoom0          = 0x12 + COMMAND_OFFSET,
-   keepAwakeEnd            = 0x1F + COMMAND_OFFSET,
    measureLoop             = 0x20 + COMMAND_OFFSET,
-   enableBootAplpication   = 0x21 + COMMAND_OFFSET,
-   unknownCommand    = 0x1000 + COMMAND_OFFSET,
 };
 
 enum class EEvent: uint32_t

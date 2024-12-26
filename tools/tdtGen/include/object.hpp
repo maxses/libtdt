@@ -31,6 +31,7 @@ class CObject
    const QString m_name;
    const QString m_desc;
    int m_size=0;
+   bool m_profileInEnum=true;
       
    public:
        
@@ -51,9 +52,13 @@ class CObject
    {
       m_size=size;
    }
-   const QString nsPrefix() const
+   virtual const QString nsPrefix() const
    {
       return( "Tdt::EObject::" );
+   }
+   void setProfileInEnum( bool doSo )
+   {
+      m_profileInEnum=doSo;
    }
 };
 

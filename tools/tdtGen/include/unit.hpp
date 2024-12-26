@@ -41,9 +41,9 @@ class CUnit
            ,m_unit( unit )
            ,m_name( name )
            ,m_desc( desc )
-       {
-          
-       };
+   {
+      return;
+   };
    void parse( QJsonObject& o );
    QString enumString();
    void appendObjectNumber( QString& str, int objectNumber ) const;

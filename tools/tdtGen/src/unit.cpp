@@ -31,6 +31,7 @@ QString CUnit::enumString()
    return( str );
 }
 
+
 void CUnit::parse( QJsonObject& o )
 {
    if( o.contains("decimalPower") )
@@ -49,6 +50,7 @@ void CUnit::parse( QJsonObject& o )
    }
 }
 
+
 void CUnit::appendObjectNumber( QString& str, int objectNumber ) const
 {
    str=str.leftJustified( 35, ' ' );
@@ -56,6 +58,7 @@ void CUnit::appendObjectNumber( QString& str, int objectNumber ) const
               .arg( objectNumber, 4, 16, QChar('0') );
    return;
 }
+
 
 QString CUnit::nameToEnum()
 {
@@ -97,4 +100,4 @@ QString CUnit::printerString()
 }
 
 
-//--- Fin. -------------------------------------------------------------------
+//--- fin. -------------------------------------------------------------------

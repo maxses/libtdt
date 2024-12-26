@@ -20,6 +20,7 @@
 #include <QList>
 #include <object.hpp>
 #include <unit.hpp>
+#include <command.hpp>
 
 
 //--- Implementation----------------------------------------------------------
@@ -33,6 +34,7 @@ class CProfile
    int m_size=0;
    QList <QSharedPointer<CObject>> m_objects;
    QList <QSharedPointer<CUnit>> m_units;
+   QList <QSharedPointer<CCommand>> m_commands;
    
 public:
    
@@ -45,6 +47,7 @@ public:
    void parseProfile( const QJsonObject& obj );
    int parseObjects( const QJsonArray& array );
    int parseUnits( const QJsonArray& array );
+   int parseCommands( const QJsonArray& array );
    const QString& getName() const;
    int generate();
    void setBase( int base )
@@ -54,6 +57,7 @@ public:
    int getBase() const;
    void writeObjectsEnums( QTextStream& s );
    void writeUnitsEnums( QTextStream& s );
+   void writeCommandsEnums( QTextStream& s );
    void writeInfo( QTextStream& s );
    void writeObjectsPrinters( QTextStream& s );
    void writeUnitsPrinters( QTextStream& s );

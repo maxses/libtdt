@@ -45,6 +45,30 @@
                "example": "40 %"
             }
          ]
+      },
+      {
+         "name": "Environment sensor commands",
+         "description": "Environment sendor commands",
+         "base": "0x600",
+         "size": "0x20",
+         "commands": [
+            {
+               "name": "burnIn",
+               "offset": "0x3"
+            },
+            {
+               "name": "forceMeasure",
+               "offset": "0x4"
+            },
+            {
+               "name": "burnInShort",
+               "offset": "0x6"
+            },
+            {
+               "name": "burnInLong",
+               "offset": "0x7"
+            }
+         ]
       }
    ]
 }

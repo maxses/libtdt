@@ -1,11 +1,11 @@
-#if ! defined TDT_TDTGEN_SOURCE_FILE_TEXT_HPP
-#define TDT_TDTGEN_SOURCE_FILE_TEXT_HPP
+#if ! defined TDT_TDTGEN_SOURCE_FILE_HEADER_HPP
+#define TDT_TDTGEN_SOURCE_FILE_HEADER_HPP
 //----------------------------------------------------------------------------
 ///
-///   \file    sourceFileText.hpp
-///   \brief   Source file generator for generic text file
+///   \file    sourceFileHeader.hpp
+///   \brief   Source file generator for generic header
 ///
-///            Print som info text to a file
+///            Print an generic header
 /// 
 ///   \author  Maximilian Seesslen <mes@seesslen.net>
 ///
@@ -25,15 +25,20 @@
 //--- Implementation----------------------------------------------------------
 
 
-class CSourceFileText: public CSourceFile
+class CSourceFileHeader: public CSourceFile
 {
+   QString m_name;
+   QString m_enum;
+   
    public:
-      CSourceFileText( QString fileName )
+      CSourceFileHeader( QString fileName, QString name, QString _enum )
          :CSourceFile( fileName )
+         ,m_name( name )
+         ,m_enum( _enum )
       {
          start();
       };
-      ~CSourceFileText()
+      ~CSourceFileHeader()
       {
          close();
       }
@@ -43,4 +48,4 @@ class CSourceFileText: public CSourceFile
 
 
 //--- Fin. -------------------------------------------------------------------
-#endif //   ? ! TDT_TDTGEN_SOURCE_FILE_TEXT_HPP
+#endif //   ? ! TDT_TDTGEN_SOURCE_FILE_HEADER_HPP

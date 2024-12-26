@@ -1,0 +1,26 @@
+{
+   "profiles": [
+      {
+         "name": "Recorder",
+         "description": "Stores tdt traffic on medium",
+         "base": "0x400",
+         "size": "0x20"
+      },
+      {
+         "name": "Recorder commands",
+         "description": "Stores tdt traffic on medium",
+         "base": "0x600",
+         "size": "0x20",
+         "commands": [
+            {
+               "name": "replay",
+               "offset": "0x1"
+            },
+            {
+               "name": "destroy",
+               "offset": "0x2"
+            }
+         ]
+      }
+   ]
+}

@@ -20,10 +20,6 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <profile.hpp>
-#include <sourceFileObjects.hpp>
-#include <sourceFilePrinter.hpp>
-#include <sourceFileUnits.hpp>
-#include <sourceFileText.hpp>
 
 
 //--- Declaration ------------------------------------------------------------
@@ -69,54 +65,8 @@ class CTdtGen
          return(profiles);
       }
       
-      int generate()
-      {
-         if( m_profiles.count() == 0 )
-         {
-            qFatal("No profiles");
-         }
-         
-         CSourceFileObjects sfo( m_outDir + "/objects.hpp");
-         QTextStream& so=sfo.getStream();
-         
-         for( const auto& profile : m_profiles )
-         {
-            profile->writeObjectsEnums( so );
-         }
-         
-         CSourceFilePrinter sfp( m_outDir + "/printerBase.hpp" );
-         QTextStream& sp=sfp.getStream();
-         
-         for( const auto& profile : m_profiles )
-         {
-            profile->writeObjectsPrinters( sp );
-         }
-         sfp.endObjects();
-         sfp.startUnits();
-         for( const auto& profile : m_profiles )
-         {
-            profile->writeUnitsPrinters( sp );
-         }
-         
-         CSourceFileUnits sfu( m_outDir + "/units.hpp" );
-         QTextStream& su=sfu.getStream();
-         
-         for( const auto& profile : m_profiles )
-         {
-            profile->writeUnitsEnums( su );
-         }
-         
-         CSourceFileText sft( m_outDir + "/info.txt" );
-         QTextStream& st=sft.getStream();
-         
-         for( const auto& profile : m_profiles )
-         {
-            profile->writeInfo( st );
-         }
-         
-         return(0);
-      }
-      
+      int generate();
+
       int parseFile( const QString &fileName )
       {
          QFile file( fileName );
@@ -159,3 +109,6 @@ class CTdtGen
          return(0);
       }
 };
+
+
+//--- fin. -------------------------------------------------------------------

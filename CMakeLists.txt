@@ -43,6 +43,7 @@ list( APPEND
     ${CMAKE_CURRENT_SOURCE_DIR}/tdt/log.json
     ${CMAKE_CURRENT_SOURCE_DIR}/tdt/plants.json
     ${CMAKE_CURRENT_SOURCE_DIR}/tdt/generic.json
+    ${CMAKE_CURRENT_SOURCE_DIR}/tdt/recorder.json
 )
 
 include(ExternalProject)

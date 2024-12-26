@@ -84,13 +84,16 @@ QString CObject::nameToEnum()
       enumName.replace( pos, 1, enumName.at(pos).toUpper() );
    }
    
-   QString profile=m_profile.getName();
-   if( profile.length() )
+   if( m_profileInEnum )
    {
-      profile.replace( 0, 1, profile.at(0).toUpper() );
+      QString profile=m_profile.getName();
+      if( profile.length() )
+      {
+         profile.replace( 0, 1, profile.at(0).toUpper() );
+      }
+      enumName.replace( 0, 1, enumName.at(0).toUpper() );
+      enumName.insert( 0 /* 1 if 'eName' is used' */ , profile);
    }
-   enumName.replace( 0, 1, enumName.at(0).toUpper() );
-   enumName.insert( 0 /* 1 if 'eName' is used' */ , profile);
    
    // Just be sure first char is lowercase
    enumName.replace( 0, 1, enumName.at(0).toLower() );

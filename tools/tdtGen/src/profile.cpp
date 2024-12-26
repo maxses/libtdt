@@ -34,6 +34,7 @@ void CProfile::parseProfile( const QJsonObject& obj )
 
    parseObjects( obj["objects"].toArray() );
    parseUnits( obj["units"].toArray() );
+   parseCommands( obj["commands"].toArray() );
 }
 
 
@@ -66,6 +67,23 @@ int CProfile::parseUnits( const QJsonArray& array )
       unit->parse( o );
       qDebug() << "   Unit: " << o["offset"].toString().toInt( nullptr, 0 );
       m_units+=unit;
+   }
+   return(0);
+}
+
+
+int CProfile::parseCommands( const QJsonArray& array )
+{
+   for( auto obj : array )
+   {
+      QJsonObject o=obj.toObject();
+      QSharedPointer<CCommand> command=QSharedPointer<CCommand>(new 
+                                                         CCommand( *this, o["offset"].toString().toInt( nullptr, 0 ),
+                                                               o["name"].toString(),
+                                                               o["description"].toString() ) );
+      command->parse( o );
+      qDebug() << "   Command: " << o["offset"].toString().toInt( nullptr, 0 );
+      m_commands+=command;
    }
    return(0);
 }
@@ -114,6 +132,18 @@ void CProfile::writeUnitsEnums( QTextStream& s )
    for( const auto& unit : m_units )
    {
       s << unit->enumString() << "\n";
+   }
+   return;
+}
+
+
+void CProfile::writeCommandsEnums( QTextStream& s )
+{
+   s << "\n";
+   s << "      // Profile: " << m_name << "; " << m_desc << "\n";
+   for( const auto& command : m_commands )
+   {
+      s << command->enumString() << "\n";
    }
    return;
 }
