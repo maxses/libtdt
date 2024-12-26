@@ -20,6 +20,7 @@ add_executable(
     src/sourceFileObjects.cpp
     src/sourceFilePrinter.cpp
     src/sourceFileUnits.cpp
+    src/sourceFileText.cpp
     include/tdtGen.hpp
     include/object.hpp
     include/profile.hpp
@@ -27,6 +28,7 @@ add_executable(
     include/sourceFileObjects.hpp
     include/sourceFilePrinter.hpp
     include/sourceFileUnits.hpp
+    include/sourceFileText.hpp
 )
 
 target_link_libraries(

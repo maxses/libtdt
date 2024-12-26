@@ -27,6 +27,10 @@ void CProfile::parseProfile( const QJsonObject& obj )
    {
       setBase( obj["base"].toString().toInt( nullptr, 0) );
    }
+   if( obj.contains("size") )
+   {
+      m_size=obj["size"].toString().toInt( nullptr, 0);
+   }
 
    parseObjects( obj["objects"].toArray() );
    parseUnits( obj["units"].toArray() );
@@ -111,6 +115,17 @@ void CProfile::writeUnitsEnums( QTextStream& s )
    {
       s << unit->enumString() << "\n";
    }
+   return;
+}
+
+
+void CProfile::writeInfo( QTextStream& s )
+{
+   s << "\n";
+   s << "Profile: " << m_name << "; " << m_desc << "\n";
+   s.setIntegerBase(16);
+   s << "   Base: 0x" << m_base;
+   s << "   Size: 0x" << m_size;
    return;
 }
 

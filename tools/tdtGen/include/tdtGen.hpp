@@ -23,6 +23,7 @@
 #include <sourceFileObjects.hpp>
 #include <sourceFilePrinter.hpp>
 #include <sourceFileUnits.hpp>
+#include <sourceFileText.hpp>
 
 
 //--- Declaration ------------------------------------------------------------
@@ -103,6 +104,14 @@ class CTdtGen
          for( const auto& profile : m_profiles )
          {
             profile->writeUnitsEnums( su );
+         }
+         
+         CSourceFileText sft( m_outDir + "/info.txt" );
+         QTextStream& st=sft.getStream();
+         
+         for( const auto& profile : m_profiles )
+         {
+            profile->writeInfo( st );
          }
          
          return(0);

@@ -1,5 +1,5 @@
-#ifndef LEPTO_CAN_MESSAGE_TDT_H_
-#define LEPTO_CAN_MESSAGE_TDT_H_
+#ifndef LEPTO_CAN_MESSAGE_TDT_HPP
+#define LEPTO_CAN_MESSAGE_TDT_HPP
 //-----------------------------------------------------------------------------
 //
 //
@@ -261,7 +261,10 @@ struct SMessage
       } PACKED;
    };
    SValue value __attribute ( ( aligned(4) ) );
-
+   /*
+static_assert ( matchesSubIndexedObject(
+                  Tdt::EObject::ambientLight, Tdt::EObject::ambientLight) == true);
+*/
    static_assert( sizeof(value) == 4, "Message size not plausible" );
 } PACKED;
 
@@ -500,4 +503,4 @@ int operator-(const EObject &a, EObject b);
 
 
 //---fin-----------------------------------------------------------------------
-#endif // ? ! LEPTO_CAN_MESSAGE_TDT_H_
+#endif // ? ! LEPTO_CAN_MESSAGE_TDT_HPP
