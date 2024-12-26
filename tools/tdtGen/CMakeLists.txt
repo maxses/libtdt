@@ -16,13 +16,17 @@ add_executable(
     # src/tdtGen.cpp
     src/object.cpp
     src/profile.cpp
+    src/unit.cpp
     src/sourceFileObjects.cpp
     src/sourceFilePrinter.cpp
+    src/sourceFileUnits.cpp
     include/tdtGen.hpp
     include/object.hpp
     include/profile.hpp
+    include/unit.hpp
     include/sourceFileObjects.hpp
     include/sourceFilePrinter.hpp
+    include/sourceFileUnits.hpp
 )
 
 target_link_libraries(

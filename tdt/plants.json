@@ -1,0 +1,23 @@
+{
+   "profiles": [
+      {
+         "name": "plant",
+         "description": "Plant sensors",
+         "base": "0x0400",
+         "size": "0x10",
+         "comment": "next object in 'device' is 0x410, TBD",
+         "objects": [
+            {
+               "offset": "0x0008",
+               "name": "Sensor",
+               "size": "0x8"
+            },
+            {
+               "offset": "0x8008",
+               "name": "SensorRaw",
+               "size": "0x8"
+            }
+         ]
+      }
+   ]
+}

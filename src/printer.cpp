@@ -28,7 +28,7 @@ int operator-(const EObject &a, EObject b)
 };
 
 
-} // namespace Tdt
+}; // namespace Tdt
 
 //QMap<Tdt::EObject, const char *> CCanTdtPrinter::m_objectMap;
 

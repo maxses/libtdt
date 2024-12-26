@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 15.0.0, 2024-12-26T12:12:48. -->
+<!-- Written by QtCreator 15.0.0, 2024-12-26T14:10:10. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -435,7 +435,7 @@
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">CMakeProjectManager.CMakeRunConfiguration.</value>
     <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">tdtGen</value>
     <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">true</value>
-    <value type="QString" key="RunConfiguration.Arguments">-i /home/mase/wp/src/TDTPrompt/libtdt/tdt/device.json -i &quot;/home/mase/wp/src/TDTPrompt/libtdt/tdt/environment.json:/home/mase/wp/src/TDTPrompt/libtdt/tdt/power.json&quot; -o /data/mase/obj/tdtGen/Desktop-Debug</value>
+    <value type="QString" key="RunConfiguration.Arguments">-i /home/mase/wp/src/TDTPrompt/libtdt/tdt/device.json -i &quot;/home/mase/wp/src/TDTPrompt/libtdt/tdt/environment.json:/home/mase/wp/src/TDTPrompt/libtdt/tdt/power.json:/home/mase/wp/src/TDTPrompt/libtdt/tdt/generic.json&quot; -o /data/mase/obj/tdtGen/Desktop-Debug</value>
     <value type="bool" key="RunConfiguration.Arguments.multi">true</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>

@@ -22,6 +22,7 @@
 #include <profile.hpp>
 #include <sourceFileObjects.hpp>
 #include <sourceFilePrinter.hpp>
+#include <sourceFileUnits.hpp>
 
 
 //--- Declaration ------------------------------------------------------------
@@ -74,12 +75,12 @@ class CTdtGen
             qFatal("No profiles");
          }
          
-         CSourceFileObjects sf( m_outDir + "/objects.hpp");
-         QTextStream& s=sf.getStream();
+         CSourceFileObjects sfo( m_outDir + "/objects.hpp");
+         QTextStream& so=sfo.getStream();
          
          for( const auto& profile : m_profiles )
          {
-            profile->writeEnums( s );
+            profile->writeObjectsEnums( so );
          }
          
          CSourceFilePrinter sfp( m_outDir + "/printerBase.hpp" );
@@ -87,7 +88,21 @@ class CTdtGen
          
          for( const auto& profile : m_profiles )
          {
-            profile->writePrinters( sp );
+            profile->writeObjectsPrinters( sp );
+         }
+         sfp.endObjects();
+         sfp.startUnits();
+         for( const auto& profile : m_profiles )
+         {
+            profile->writeUnitsPrinters( sp );
+         }
+         
+         CSourceFileUnits sfu( m_outDir + "/units.hpp" );
+         QTextStream& su=sfu.getStream();
+         
+         for( const auto& profile : m_profiles )
+         {
+            profile->writeUnitsEnums( su );
          }
          
          return(0);
@@ -110,7 +125,8 @@ class CTdtGen
          }
          if( error.error != QJsonParseError::NoError )
          {
-            qWarning("Parse error");
+            qCritical("Parse error");
+            qFatal("fin.");
          }
          else
          {

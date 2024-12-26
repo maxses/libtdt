@@ -21,6 +21,7 @@
 #endif
 
 #include <tdt/gen/objects.hpp>
+#include <tdt/gen/units.hpp>
 
 #define CAN_TDT_PROTOCOL_VERSION    3
 
@@ -109,20 +110,7 @@ enum class EObjectObsolete: uint16_t
    date                       = 0x05 + OBJECT_OFFSET,
    time                       = 0x06 + OBJECT_OFFSET,
    dummy                      = 0x07 + OBJECT_OFFSET,
-#if 0
-   plantSensor                = 0x08 + OBJECT_OFFSET,
-   plantSensor0               = 0x08 + OBJECT_OFFSET,
-   plantSensor1               = 0x09 + OBJECT_OFFSET,
-   plantSensor2               = 0x0A + OBJECT_OFFSET,
-   plantSensor3               = 0x0B + OBJECT_OFFSET,
-   plantSensor4               = 0x0C + OBJECT_OFFSET,
-   plantSensorRaw             = 0x8008 + OBJECT_OFFSET,
-   plantSensorRaw0            = 0x8008 + OBJECT_OFFSET,
-   plantSensorRaw1            = 0x8009 + OBJECT_OFFSET,
-   plantSensorRaw2            = 0x800A + OBJECT_OFFSET,
-   plantSensorRaw3            = 0x800B + OBJECT_OFFSET,
-   plantSensorRaw4            = 0x800C + OBJECT_OFFSET,
-#endif
+   
    firmwareVersion            = 0x10 + OBJECT_OFFSET,
    firmwareDate               = 0x11 + OBJECT_OFFSET,
    hardwareRevision           = 0x12 + OBJECT_OFFSET,
@@ -214,7 +202,7 @@ enum class EObjectObsolete: uint16_t
 };
 
 
-enum EMmpObject: uint32_t
+enum EMmpObject_obsolete: uint32_t
 {
    acknowledgeShred           = 0x01 + MMP_OBJECT_OFFSET,
    acknowledgeTransfer        = 0x02 + MMP_OBJECT_OFFSET,
@@ -245,7 +233,7 @@ static_assert ( matchesSubIndexedObject(
 
 typedef int32_t nodeId_t;
 
-enum class EUnit: uint8_t
+enum class EUnitObsolete: uint8_t
 {
    null                 = 0x00,
    none                 = 0x00 + UNIT_OFFSET,
@@ -518,7 +506,7 @@ class CCanMessage
       }
 };
 
-
+#if 0
 struct
 {
    union{
@@ -526,6 +514,7 @@ struct
       EMmpObject mmpObject;
    };
 }EAnyObject;
+#endif
 
 class CMessage : public CCanMessage
 {
@@ -546,7 +535,7 @@ private:
       {
       }
 #if 1
-      constexpr_nobug CMessage(nodeId_t id, EFunctionCode functionCode, EObject object, EUnit unit)
+      constexpr_nobug CMessage(nodeId_t id, EFunctionCode functionCode, EObject object, Tdt::EUnit unit)
          :CCanMessage( id | ( (unsigned int)functionCode << FUNCTIONCODE_BITSHIFT ))
       {
          assert( id <= NODEID_BITMASK );

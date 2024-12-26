@@ -1,9 +1,9 @@
-#if ! defined TDT_TDTGEN_SOURCE_FILE_PRINTER_HPP
-#define TDT_TDTGEN_SOURCE_FILE_PRINTER_HPP
+#if ! defined TDT_TDTGEN_SOURCE_FILE_UNITS_HPP
+#define TDT_TDTGEN_SOURCE_FILE_UNITS_HPP
 //----------------------------------------------------------------------------
 ///
-///   \file    sourceFilePrinter.hpp
-///   \brief   Source file generator for printer header
+///   \file    sourceFileUnits.hpp
+///   \brief   Source file generator for unit header
 ///
 ///            Print the object-to-string map
 /// 
@@ -25,25 +25,23 @@
 //--- Implementation----------------------------------------------------------
 
 
-class CSourceFilePrinter: public CSourceFile
+class CSourceFileUnits: public CSourceFile
 {
       
    public:
-      CSourceFilePrinter( QString fileName )
+      CSourceFileUnits( QString fileName )
          :CSourceFile( fileName )
       {
          start();
       };
-      ~CSourceFilePrinter( )
+      ~CSourceFileUnits()
       {
          close();
       }
       virtual void writeTop( ) override;
-      void endObjects( );
-      void startUnits( );
       virtual void writeBottom( ) override;
 };
 
 
 //--- Fin. -------------------------------------------------------------------
-#endif //   ? ! TDT_TDTGEN_SOURCE_FILE_PRINTER_HPP
+#endif //   ? ! TDT_TDTGEN_SOURCE_FILE_UNITS_HPP

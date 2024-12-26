@@ -8,7 +8,6 @@
 
 
 #include <tdt/message.hpp>
-#include <tdt/topic.hpp>
 #include <tdt/gen/objects.hpp>
 #include <tdt/gen/printerBase.hpp>
 #include <stdio.h>               // snprintf
@@ -28,103 +27,9 @@
 
 class CCanTdtPrinter: public Tdt::CPrinterBase /* CPrinterBase */
 {
-   friend class CTopic;
       const Tdt::CMessage &m_message;
-#if 0
-      static QMap<Tdt::EObject, const char *> m_objectMap;
-      const QMap<Tdt::EObject, const char *> m_objectMap__{
-         ENUM_MAP( Tdt::EObject, error ),
-          
-         ENUM_MAP( Tdt::EObject, none ),
-         ENUM_MAP_TEXT( Tdt::EObject, startSwitches, "disabled" ),
-         ENUM_MAP( Tdt::EObject, ambientLightAll ),
-         ENUM_MAP( Tdt::EObject, ambientLightLivingRoom ),
-         ENUM_MAP( Tdt::EObject, ambientLightSleepingRoom ),
-         ENUM_MAP( Tdt::EObject, ambientLightKitchen ),
-         ENUM_MAP( Tdt::EObject, ambientLightOffice ),
-         ENUM_MAP( Tdt::EObject, ambientLightBath1 ),
-         ENUM_MAP( Tdt::EObject, ambientLightBath2 ),
-         ENUM_MAP( Tdt::EObject, plantLight ),
-         ENUM_MAP( Tdt::EObject, multimediaSwitch ),
-         ENUM_MAP( Tdt::EObject, mainSwitch ),
-         ENUM_MAP_TEXT( Tdt::EObject, endSwitches, "disabled" ),
-         ENUM_MAP( Tdt::EObject, date ),
-         ENUM_MAP( Tdt::EObject, time ),
-         ENUM_MAP( Tdt::EObject, dummy ),
-#if 0
-         ENUM_MAP( Tdt::EObject, plantSensor ),
-         ENUM_MAP_TEXT( Tdt::EObject, plantSensor0, "plantSensor[0]" ),
-         ENUM_MAP_TEXT( Tdt::EObject, plantSensor1, "plantSensor[1]" ),
-         ENUM_MAP_TEXT( Tdt::EObject, plantSensor2, "plantSensor[2]" ),
-         ENUM_MAP_TEXT( Tdt::EObject, plantSensor3, "plantSensor[3]" ),
-         ENUM_MAP_TEXT( Tdt::EObject, plantSensor4, "plantSensor[4]" ),
-#endif
-         ENUM_MAP( Tdt::EObject, firmwareVersion ),
-         ENUM_MAP( Tdt::EObject, firmwareDate ),
-         ENUM_MAP( Tdt::EObject, hardwareRevision ),
-         ENUM_MAP( Tdt::EObject, hardwareDate ),
-         ENUM_MAP( Tdt::EObject, humidity ),
-         ENUM_MAP( Tdt::EObject, voc ),
-         ENUM_MAP( Tdt::EObject, pressure ),
 
-         ENUM_MAP( Tdt::EObject, temperature ),
-         ENUM_MAP_TEXT( Tdt::EObject, temperature0, "temperature[0]" ),
-         ENUM_MAP_TEXT( Tdt::EObject, temperature1, "temperature[1]" ),
-         ENUM_MAP_TEXT( Tdt::EObject, temperature2, "temperature[2]" ),
-         ENUM_MAP_TEXT( Tdt::EObject, temperature3, "temperature[3]" ),
-         ENUM_MAP_TEXT( Tdt::EObject, temperature4, "temperature[4]" ),
-
-         ENUM_MAP( Tdt::EObject, batteryLevel ),
-         ENUM_MAP( Tdt::EObject, rtcDrift ),
-
-         ENUM_MAP( Tdt::EObject, nodeId ),
-         ENUM_MAP( Tdt::EObject, uidLow ),
-         ENUM_MAP( Tdt::EObject, uidHigh ),
-         ENUM_MAP( Tdt::EObject, iaq ),
-         ENUM_MAP( Tdt::EObject, current ),
-         ENUM_MAP( Tdt::EObject, currentAvg ),
-         ENUM_MAP( Tdt::EObject, SupplyVoltage ),
-         ENUM_MAP( Tdt::EObject, batteryLevel ),
-         ENUM_MAP( Tdt::EObject, articleId ),
-         ENUM_MAP( Tdt::EObject, serialNumber ),
-         ENUM_MAP( Tdt::EObject, systemState ),
-          
-         ENUM_MAP( Tdt::EObject, timeStamp ),
-         ENUM_MAP( Tdt::EObject, timeStampDrift ),
-          
-         ENUM_MAP( Tdt::EObject, foodTemperature ),
-          
-         ENUM_MAP_TEXT( Tdt::EObject, displayNode0, "displayNode[0]" ),
-         ENUM_MAP_TEXT( Tdt::EObject, displayNode1, "displayNode[1]" ),
-         ENUM_MAP_TEXT( Tdt::EObject, displayNode2, "displayNode[2]" ),
-         ENUM_MAP_TEXT( Tdt::EObject, displayNode3, "displayNode[3]" ),
-         ENUM_MAP_TEXT( Tdt::EObject, displayNode0ObjectOffset, "displayNode[0].objectOffset" ),
-         ENUM_MAP_TEXT( Tdt::EObject, displayNode1ObjectOffset, "displayNode[1].objectOffset" ),
-         ENUM_MAP_TEXT( Tdt::EObject, displayNode2ObjectOffset, "displayNode[2].objectOffset" ),
-         ENUM_MAP_TEXT( Tdt::EObject, displayNode3ObjectOffset, "displayNode[3].objectOffset" ),
-         
-         ENUM_MAP_TEXT( Tdt::EObject, switchObjectOffset0, "switchObjectOffset[0]" ),
-         ENUM_MAP_TEXT( Tdt::EObject, switchObjectOffset1, "switchObjectOffset[1]" ),
-         ENUM_MAP_TEXT( Tdt::EObject, switchObjectOffset2, "switchObjectOffset[2]" ),
-         ENUM_MAP_TEXT( Tdt::EObject, switchObjectOffset3, "switchObjectOffset[3]" ),
-          
-         ENUM_MAP_TEXT( Tdt::EObject, deviceStatus, "Device status" ),
-         ENUM_MAP( Tdt::EObject, errorCode ),
-         ENUM_MAP_TEXT( Tdt::EObject, eventCode, "Event code" ),
-         ENUM_MAP( Tdt::EObject, flags ),
-         ENUM_MAP( Tdt::EObject, bootCounter ),
-         ENUM_MAP( Tdt::EObject, operatingTime ),
-         ENUM_MAP( Tdt::EObject, shutdownTime ),
-         ENUM_MAP( Tdt::EObject, releaseState ),
-         ENUM_MAP( Tdt::EObject, fadeTime ),
-         ENUM_MAP( Tdt::EObject, room ),
-         ENUM_MAP_TEXT( Tdt::EObject, flashSize, "Flash" ),
-         ENUM_MAP_TEXT( Tdt::EObject, chipId, "MCU ID" ),
-         ENUM_MAP_TEXT( Tdt::EObject, eventCodeRepeated, "Log code R" ),
-         ENUM_MAP_TEXT( Tdt::EObject, logCode, "log code" ),
-      };
-#endif
-      const QMap<Tdt::EUnit, const char *> m_unitMap{
+      const QMap<Tdt::EUnit, const char *> m_unitMap_Obsolete{
          ENUM_MAP( Tdt::EUnit, none ),
          ENUM_MAP( Tdt::EUnit, hz ),
          ENUM_MAP( Tdt::EUnit, time ),
@@ -406,7 +311,7 @@ class CCanTdtPrinter: public Tdt::CPrinterBase /* CPrinterBase */
             {
                switch( m_message.getTdtValue()->_uint )
                {
-                  // Brrr, There should not be a depency to biwak;
+                  // Brrr, There   friend class CTopic; should not be a depency to biwak;
                   // CHeartBeats "DeviceStatus" should be moved to lepto
                   case 0:
                      QTextStream( &s ) << "Good";
@@ -490,10 +395,10 @@ class CCanTdtPrinter: public Tdt::CPrinterBase /* CPrinterBase */
                ts << (int)m_message.getTdtValueUInt() << " ‰";
                break;
             }
-            case Tdt::EUnit::capacityKB:
+            case Tdt::EUnit::capacity:
             {
                QTextStream ts( &s );
-               ts << (int)m_message.getTdtValueUInt() << " KB";
+               ts << (int)m_message.getTdtValueUInt() / 1000 << " KB";
                break;
             }
             case Tdt::EUnit::systemState:
@@ -531,7 +436,7 @@ class CCanTdtPrinter: public Tdt::CPrinterBase /* CPrinterBase */
       {
 			if( m_unitMap.contains( m_message.getTdtUnit() ) )
 			{
-				return( m_unitMap[ m_message.getTdtUnit() ] );
+				return( m_unitMap[ m_message.getTdtUnit() ].name );
 			}
 			return("-");
       }

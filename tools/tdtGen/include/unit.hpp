@@ -1,9 +1,9 @@
-#if ! defined TDT_TDTGEN_OBJECT_HPP
-#define TDT_TDTGEN_OBJECT_HPP
+#if ! defined TDT_TDTGEN_UNIT_HPP
+#define TDT_TDTGEN_UNIT_HPP
 //----------------------------------------------------------------------------
 ///
-///   \file    object.hpp
-///   \brief   Carries description for TDT-Object
+///   \file    unit.hpp
+///   \brief   Carries description for TDT-Unit
 ///
 ///            Print the enums
 /// 
@@ -24,19 +24,20 @@
 
 class CProfile;
 
-class CObject
+class CUnit
 {
    const CProfile& m_profile;
-   int m_object;
+   int m_unit;
    const QString m_name;
    const QString m_desc;
-   int m_size=0;
+   QString m_postfix;
+   int m_decimalPower=1;
       
    public:
        
-   CObject(CProfile& profile, int object, const QString& name, const QString& desc )
+   CUnit(CProfile& profile, int unit, const QString& name, const QString& desc )
            :m_profile( profile )
-           ,m_object( object )
+           ,m_unit( unit )
            ,m_name( name )
            ,m_desc( desc )
        {
@@ -47,16 +48,12 @@ class CObject
    void appendObjectNumber( QString& str, int objectNumber ) const;
    QString nameToEnum();
    QString printerString();
-   void setSize( int size )
-   {
-      m_size=size;
-   }
    const QString nsPrefix() const
    {
-      return( "Tdt::EObject::" );
+      return( "Tdt::EUnit::" );
    }
 };
 
 
 //--- Fin. -------------------------------------------------------------------
-#endif //   ? ! TDT_TDTGEN_OBJECT_HPP
+#endif //   ? ! TDT_TDTGEN_UNIT_HPP

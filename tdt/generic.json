@@ -1,0 +1,191 @@
+{
+   "profiles": [
+      {
+         "name": "Generic",
+         "description": "Generic values",
+         "base": "0x0400",
+         "size": "0x10",
+         "objects": [
+            {
+               "offset": "0x0008",
+               "name": "Sensor",
+               "size": "0x8"
+            },
+            {
+               "offset": "0x8008",
+               "name": "SensorRaw",
+               "size": "0x8"
+            }
+         ]
+      },
+      {
+         "name": "generic units",
+         "base": "0x10",
+         "size": "0x30",
+         "units":
+         [
+            {
+               "name": "null",
+               "offset": "0x00"
+            },
+            {
+               "name": "none",
+               "offset": "0x00"
+            },
+            {
+               "name": "hz",
+               "offset": "0x01",
+               "postfix": "Hz"
+            },
+            {
+               "name": "time",
+               "offset": "0x02"
+            },
+            {
+               "name": "date",
+               "offset": "0x03"
+            },
+            {
+               "name": "centiCelsius",
+               "offset": "0x04",
+               "postfix": "°",
+               "decimalPower": "-2"
+            },
+            {
+               "name": "percentHumidity",
+               "offset": "0x05"
+            },
+            {
+               "name": "voc",
+               "offset": "0x06"
+            },
+            {
+               "name": "permilPwm",
+               "offset": "0x07"
+            },
+            {
+               "name": "_switch",
+               "offset": "0x08"
+            },
+            {
+               "name": "version",
+               "offset": "0x09"
+            },
+            {
+               "name": "softwareVersion",
+               "offset": "0x09"
+            },
+            {
+               "name": "hardwareRevision",
+               "offset": "0x0A"
+            },
+            {
+               "name": "milliVolt",
+               "offset": "0x0B"
+            },
+            {
+               "name": "durationSeconds",
+               "offset": "0x0C"
+            },
+            {
+               "name": "pressure",
+               "offset": "0x0D"
+            },
+            {
+               "name": "command",
+               "offset": "0x0E"
+            },
+            {
+               "name": "timeStamp",
+               "offset": "0x0F"
+            },
+            {
+               "name": "milliAmpere",
+               "offset": "0x10"
+            },
+            {
+               "name": "address",
+               "offset": "0x11"
+            },
+            {
+               "name": "nodeId",
+               "offset": "0x12"
+            },
+            {
+               "name": "tdtObject",
+               "offset": "0x13"
+            },
+            {
+               "name": "number",
+               "offset": "0x14"
+            },
+            {
+               "name": "numberHex",
+               "offset": "0x15"
+            },
+            {
+               "name": "percentQuality",
+               "offset": "0x16"
+            },
+            {
+               "name": "timeStampDelta",
+               "offset": "0x17"
+            },
+            {
+               "name": "article",
+               "offset": "0x18"
+            },
+            {
+               "name": "powerSwitchFunction",
+               "offset": "0x19"
+            },
+            {
+               "name": "index",
+               "offset": "0x1A"
+            },
+            {
+               "name": "deviceStatus",
+               "offset": "0x1B"
+            },
+            {
+               "name": "errorCode",
+               "offset": "0x1C"
+            },
+            {
+               "name": "eventCode",
+               "offset": "0x1D"
+            },
+            {
+               "name": "flags",
+               "offset": "0x1E"
+            },
+            {
+               "name": "room",
+               "offset": "0x1F"
+            },
+            {
+               "name": "permilHumidity",
+               "offset": "0x20"
+            },
+            {
+               "name": "logCode",
+               "offset": "0x21"
+            },
+            {
+               "name": "capacity",
+               "offset": "0x22",
+               "postfix": "KB",
+               "decimalPower": "-3"
+            },
+            {
+               "name": "durationDays",
+               "offset": "0x23"
+            },
+            {
+               "name": "systemState",
+               "offset": "0x24"
+            }
+         ]
+      }
+   ]
+}

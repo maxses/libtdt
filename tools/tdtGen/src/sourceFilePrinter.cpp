@@ -31,13 +31,37 @@ void CSourceFilePrinter::writeTop( )
    m_stream << "//---------------------------------------\n";
    m_stream << "\n";
    m_stream << "\n";
+   m_stream << "#include <QMap>\n";
+   m_stream << "#include <tdt/gen/objects.hpp>\n";
+   m_stream << "#include <tdt/gen/units.hpp>\n";
+   m_stream << "\n";
+   m_stream << "\n";
    m_stream << "namespace Tdt\n";
    m_stream << "{\n";
    m_stream << "\n";
    m_stream << "class CPrinterBase\n";
    m_stream << "{\n";
-   m_stream << "   protected:";
+   m_stream << "   protected:\n";
    m_stream << "   const QMap<Tdt::EObject, const char *> m_objectMap\n";
+   m_stream << "   {\n";
+};
+
+
+void CSourceFilePrinter::endObjects( )
+{
+   m_stream << "   };\n";
+   m_stream << "\n";
+};
+
+void CSourceFilePrinter::startUnits( )
+{
+   m_stream << "   struct SUnitDesc {\n";
+   m_stream << "      const char* name;\n";
+   m_stream << "      const char* postfix;\n";
+   m_stream << "      int decimalPower;\n";
+   m_stream << "   };\n";
+   m_stream << "\n";
+   m_stream << "   const QMap<Tdt::EUnit, SUnitDesc> m_unitMap\n";
    m_stream << "   {\n";
 };
 

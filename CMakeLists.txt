@@ -41,6 +41,8 @@ list( APPEND
     ${CMAKE_CURRENT_SOURCE_DIR}/tdt/power.json
     ${CMAKE_CURRENT_SOURCE_DIR}/tdt/mmp.json
     ${CMAKE_CURRENT_SOURCE_DIR}/tdt/log.json
+    ${CMAKE_CURRENT_SOURCE_DIR}/tdt/plants.json
+    ${CMAKE_CURRENT_SOURCE_DIR}/tdt/generic.json
 )
 
 include(ExternalProject)
@@ -79,7 +81,6 @@ add_custom_command(
 set( headers
    include/tdt/message.hpp
    include/tdt/mmp.hpp
-   include/tdt/topics/plants.hpp
    ${TDT_GEN_HEADER}
 )
 
@@ -87,6 +88,8 @@ set( sources
    src/message.cpp
    src/mmpTransfer.cpp
    src/mmpNode.cpp
+   
+   ${tdtProfiles}
 )
 
 if ( NOT MCU_REV OR "${MCU_REV}" MATCHES "x86" )
@@ -95,14 +98,11 @@ if ( NOT MCU_REV OR "${MCU_REV}" MATCHES "x86" )
       # src/ansiparser.cpp
       src/printer.cpp
       src/db.cpp
-      src/topics/plants.cpp
-      src/topic.cpp
 	)
    set(headers
       ${headers}
       include/tdt/printer.hpp
       include/tdt/db.hpp
-      include/tdt/topics/plants.hpp
    )
 else()
    set(sources

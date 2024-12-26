@@ -29,6 +29,7 @@ void CProfile::parseProfile( const QJsonObject& obj )
    }
 
    parseObjects( obj["objects"].toArray() );
+   parseUnits( obj["units"].toArray() );
 }
 
 
@@ -41,12 +42,26 @@ int CProfile::parseObjects( const QJsonArray& array )
          CObject( *this, o["offset"].toString().toInt( nullptr, 0 ),
                   o["name"].toString(),
                   o["description"].toString() ) );
-      if( o.contains("size") )
-      {
-         object->setSize( o["size"].toString().toInt(nullptr, 0) );
-      }
-      qDebug() << "   Object: " << obj.toObject()["offset"].toString().toInt( nullptr, 0 );
+      object->parse( o );
+      qDebug() << "   Object: " << o["offset"].toString().toInt( nullptr, 0 );
       m_objects+=object;
+   }
+   return(0);
+}
+
+
+int CProfile::parseUnits( const QJsonArray& array )
+{
+   for( auto obj : array )
+   {
+      QJsonObject o=obj.toObject();
+      QSharedPointer<CUnit> unit=QSharedPointer<CUnit>(new 
+                                                               CUnit( *this, o["offset"].toString().toInt( nullptr, 0 ),
+                                                                       o["name"].toString(),
+                                                                       o["description"].toString() ) );
+      unit->parse( o );
+      qDebug() << "   Unit: " << o["offset"].toString().toInt( nullptr, 0 );
+      m_units+=unit;
    }
    return(0);
 }
@@ -76,7 +91,7 @@ int CProfile::getBase() const
 }
 
 
-void CProfile::writeEnums( QTextStream& s )
+void CProfile::writeObjectsEnums( QTextStream& s )
 {
    s << "\n";
    s << "      // Profile: " << m_name << "; " << m_desc << "\n";
@@ -88,11 +103,35 @@ void CProfile::writeEnums( QTextStream& s )
 }
 
 
-void CProfile::writePrinters( QTextStream& s )
+void CProfile::writeUnitsEnums( QTextStream& s )
+{
+   s << "\n";
+   s << "      // Profile: " << m_name << "; " << m_desc << "\n";
+   for( const auto& unit : m_units )
+   {
+      s << unit->enumString() << "\n";
+   }
+   return;
+}
+
+
+void CProfile::writeObjectsPrinters( QTextStream& s )
 {
    s << "\n";
    s << "      // Profile: " << m_name << "; " << m_desc << "\n";
    for( const auto& object : m_objects )
+   {
+      s << object->printerString() << "\n";
+   }
+   return;
+}
+
+
+void CProfile::writeUnitsPrinters( QTextStream& s )
+{
+   s << "\n";
+   s << "      // Profile: " << m_name << "; " << m_desc << "\n";
+   for( const auto& object : m_units )
    {
       s << object->printerString() << "\n";
    }

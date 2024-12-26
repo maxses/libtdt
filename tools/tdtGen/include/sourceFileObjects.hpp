@@ -18,40 +18,26 @@
 #include <QString>
 #include <QFile>
 #include <object.hpp>
+#include <sourceFile.hpp>
 
 
 //--- Implementation----------------------------------------------------------
 
 
-class CSourceFileObjects
+class CSourceFileObjects: public CSourceFile
 {
-      QString m_fileName;
-      QFile m_file;
-      QTextStream m_stream;
-      
    public:
       CSourceFileObjects( QString fileName )
-         :m_fileName( fileName )
-         ,m_file( fileName )
-         , m_stream( &m_file )
+         :CSourceFile( fileName )
       {
-         if( !m_file.open( QIODevice::WriteOnly | QIODevice::Text ) )
-         {
-            qFatal("Could not open output file");
-         }
-         writeTop( );
+         start();
       };
       ~CSourceFileObjects( )
       {
-         writeBottom( );
-         m_file.close( );
+         close();
       }
-      void writeTop( );
-      void writeBottom( );
-      QTextStream& getStream()
-      {
-         return( m_stream );
-      }
+      virtual void writeTop( ) override;
+      virtual void writeBottom( ) override;
 };
 
 

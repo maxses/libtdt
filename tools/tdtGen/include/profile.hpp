@@ -19,6 +19,7 @@
 #include <QSharedPointer>
 #include <QList>
 #include <object.hpp>
+#include <unit.hpp>
 
 
 //--- Implementation----------------------------------------------------------
@@ -30,6 +31,7 @@ class CProfile
    const QString m_desc;
    int m_base=0;
    QList <QSharedPointer<CObject>> m_objects;
+   QList <QSharedPointer<CUnit>> m_units;
    
 public:
    
@@ -41,6 +43,7 @@ public:
    }
    void parseProfile( const QJsonObject& obj );
    int parseObjects( const QJsonArray& array );
+   int parseUnits( const QJsonArray& array );
    const QString& getName() const;
    int generate();
    void setBase( int base )
@@ -48,8 +51,10 @@ public:
       m_base=base;
    }
    int getBase() const;
-   void writeEnums( QTextStream& s );
-   void writePrinters( QTextStream& s );
+   void writeObjectsEnums( QTextStream& s );
+   void writeUnitsEnums( QTextStream& s );
+   void writeObjectsPrinters( QTextStream& s );
+   void writeUnitsPrinters( QTextStream& s );
 };
 
 
