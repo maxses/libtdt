@@ -93,7 +93,7 @@ TEST_CASE( "CAN TDT", "[default]" )
           {0x32,
            Tdt::EFunctionCode::sendObject,
                                 // ELogCategory::Critical does not exist without lepto
-                                Tdt::EObject::logCode, Tdt::EUnit::logCode, Tdt::SValue{ .logCode=(ELogCode)0 }};
+                                Tdt::EObject::logBlended, Tdt::EUnit::logBlended, Tdt::SValue{ .logBlended=(ELogBlended)0 }};
       REQUIRE ( sendMessage.getLen() == 8 );
       
       // Enhanced 
@@ -101,7 +101,7 @@ TEST_CASE( "CAN TDT", "[default]" )
           {0x32,
            Tdt::EFunctionCode::sendObject,
            // ELogCategory::Critical does not exist without lepto
-           +Tdt::EObjectBath::bathWaterLevel, Tdt::EUnit::logCode, Tdt::SValue{ .logCode=(ELogCode)0 }};
+           +Tdt::EObjectBath::bathWaterLevel, Tdt::EUnit::logBlended, Tdt::SValue{ .logBlended=(ELogBlended)0 }};
       REQUIRE ( sendMessage.getLen() == 8 );
    }
 }

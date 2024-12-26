@@ -16,7 +16,7 @@
    // #include <lepto/can_message.h>
 #else
    #include <tdt/compat.hpp>
-   enum class ELogCode: int32_t;
+   enum class ELogBlended: int32_t;
    enum class ELogCategory: int32_t;
 #endif
 
@@ -101,17 +101,6 @@ enum class ENmtObject: uint16_t
    nmtEnableApplicationBoot   = 0x0A + NMT_OBJECT_OFFSET,
 };
 
-
-#if 0
-static_assert ( ( (int)EObject::plantSensor & NO_SUBID_OBJECT_MASK )
-                                       == (int)EObject::plantSensor,"" );
-#endif
-
-#if 0
-static_assert ( ( (int)EObject::temperature & NO_SUBID_OBJECT_MASK )
-                                       == (int)EObject::temperature,"" );
-#endif
-
 constexpr bool matchesSubIndexedObject( const Tdt::EObject object, const Tdt::EObject base )
 {
    return( ( (uint32_t)object & MASK_SUBINDEX_OBJECT ) == (uint32_t)base );
@@ -121,16 +110,9 @@ constexpr bool matchesSubIndexedObject( const Tdt::EObject object, const Tdt::EO
 typedef int32_t nodeId_t;
 
 
-enum class ECommandObslete: uint32_t
-{
-   null                    = 0x0,
-   replay                  = 0x1 + COMMAND_OFFSET,
-   destroy                 = 0x2 + COMMAND_OFFSET,
-   measureLoop             = 0x20 + COMMAND_OFFSET,
-};
-
 enum class EEvent: uint32_t
 {
+   #if 0
    null              = 0x0,
 
    // CAUTION: lower nibble must be 0 because log category is mangled in
@@ -143,6 +125,7 @@ enum class EEvent: uint32_t
    wannaSleepEnd        = 0x1F + EVENT_OFFSET,
    noRelease_OBS        = 0x20 + EVENT_OFFSET,
    shutdown             = 0x21 + EVENT_OFFSET,
+   #endif
 };
 
 
@@ -159,17 +142,17 @@ inline constexpr Tdt::EEvent operator+ ( Tdt::EEvent e1, int i1 )
    return( (Tdt::EEvent)( (int)e1 + i1 ) );
 }
 
-inline constexpr ELogCode operator+ (ELogCategory c, Tdt::EEvent e)
+inline constexpr ELogBlended operator+ (ELogCategory c, Tdt::EEvent e)
 {
-   return( (ELogCode)( (int)c | ( (int)e << 4 ) ) );
+   return( (ELogBlended)( (int)c | ( (int)e << 4 ) ) );
 }
 
-inline constexpr ELogCode operator| (ELogCategory c, Tdt::EEvent e)
+inline constexpr ELogBlended operator| (ELogCategory c, Tdt::EEvent e)
 {
-   return( (ELogCode)( (int)c | ( (int)e << 4 ) ) );
+   return( (ELogBlended)( (int)c | ( (int)e << 4 ) ) );
 }
 
-inline constexpr Tdt::EEvent toEvent( ELogCode c )
+inline constexpr Tdt::EEvent toEvent( ELogBlended c )
 {
    return( (Tdt::EEvent)((int)c >> 4 ) );
 }
@@ -220,7 +203,7 @@ union SValue
 
       ECommand command;
       nodeId_t  nodeId;
-      ELogCode logCode;
+      ELogBlended logBlended;
       EEvent event;
       ESystemState systemState;
 };
@@ -280,7 +263,7 @@ class CCanMessage
            :m_id{0}
            ,m_len{0}
            ,m_data{0}
-       {}
+      {}
       constexpr CCanMessage(nodeId_t id)
          :m_id{id}
          ,m_len{0}
@@ -338,8 +321,6 @@ private:
       static constexpr int EID_SUBID_MASK=0xFF;
 
       static_assert ( sizeof(SMessage) == 4 + 4, "Size missmatch" );
-      //SMessage &m_tdtMessage=*static_cast<SMessage *>(getData());
-      //SMessage *m_tdtMessage=(SMessage *)(getData());
 
    public:
 

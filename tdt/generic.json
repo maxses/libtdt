@@ -182,7 +182,7 @@
                "postfix": "‰"
             },
             {
-               "name": "logCode",
+               "name": "logBlended",
                "offset": "0x21"
             },
             {

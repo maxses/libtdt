@@ -40,7 +40,8 @@ class CCanTdtPrinter: public Tdt::CPrinterBase
          //ENUM_MAP( Tdt::EFunctionCode, log ),
          ENUM_MAP( Tdt::EFunctionCode, max ),
       };
-      
+
+      #if 0
       const QMap< int, const char *> m_eventMap{
           ENUM_MAP( (int)Tdt::EEvent, wannaSleepStart ),
           ENUM_MAP( (int)Tdt::EEvent, wannaSleepAll ),
@@ -48,6 +49,7 @@ class CCanTdtPrinter: public Tdt::CPrinterBase
           ENUM_MAP( (int)Tdt::EEvent, wannaSleepRoom1 ),
           ENUM_MAP( (int)Tdt::EEvent, wannaSleepEnd ),
       };
+      #endif
       
       const QMap<int, const char*>m_roomMap{
           { 0x0, "none"},
