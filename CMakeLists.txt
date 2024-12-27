@@ -51,6 +51,7 @@ list( APPEND
     ${CMAKE_CURRENT_SOURCE_DIR}/tdt/global.json
     ${CMAKE_CURRENT_SOURCE_DIR}/tdt/infoDisplay.json
     ${CMAKE_CURRENT_SOURCE_DIR}/tdt/facility.json
+    ${CMAKE_CURRENT_SOURCE_DIR}/tdt/nmt.json
 )
 
 include(ExternalProject)

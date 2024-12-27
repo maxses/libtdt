@@ -44,7 +44,8 @@
                "description": "Main supply voltage"
             },
             {
-               "name": "node Id",
+               "name": "id",
+               "comment": "Its 'nodeId' but 'node' does get injected automatically by the profile",
                "offset": "0x36",
                "description": "Node id"
             },
@@ -112,6 +113,16 @@
                "offset": "0x0089",
                "name": "event code repeated",
                "description": ""
+            },
+            {
+               "offset": "0x008B",
+               "name": "last error",
+               "description": ""
+            },
+            {
+               "name": "system state",
+               "offset": "0x008C",
+               "description": ""
             }
          ]
       },
@@ -148,7 +159,7 @@
                "offset": "0x20"
             },
             {
-               "name": "enableBootAplpication",
+               "name": "enable application boot",
                "offset": "0x21"
             },
             {
