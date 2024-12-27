@@ -234,14 +234,14 @@ bool CMmpTransfer::handleTx( const Tdt::CMessage& msg )
 
 void CMmpTransfer::sendShred()
 {
-   writeMMP( Tdt::EObject::deviceFirmwareDate, m_data.pos(), m_data.data32() );
+   writeMMP( Tdt::EObject::nodeFirmwareDate, m_data.pos(), m_data.data32() );
    //m_timeoutTimer.start( m_shredTimeout );
 }
 
 
 void CMmpTransfer::sendAbort()
 {
-   writeMMP( Tdt::EObject::deviceFirmwareDate, -1, 0 );
+   writeMMP( Tdt::EObject::nodeFirmwareDate, -1, 0 );
    //m_timeoutTimer.stop( );
 }
 

@@ -11,6 +11,21 @@
                "name": "switch",
                "example": "-",
                "size": "0x10"
+            },
+            {
+               "offset": "0x0002",
+               "name": "switchAmbientLightLivingRoom",
+               "example": "-"
+            },
+            {
+               "offset": "0x0010",
+               "name": "switchPlantLight",
+               "example": "-"
+            },
+            {
+               "offset": "0x0011",
+               "name": "switchMultimedia",
+               "example": "-"
             }
          ]
       }

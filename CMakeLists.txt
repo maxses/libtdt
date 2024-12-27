@@ -40,7 +40,7 @@ set (
 
 list( APPEND
     tdtProfiles
-    ${CMAKE_CURRENT_SOURCE_DIR}/tdt/device.json
+    ${CMAKE_CURRENT_SOURCE_DIR}/tdt/node.json
     ${CMAKE_CURRENT_SOURCE_DIR}/tdt/environment.json
     ${CMAKE_CURRENT_SOURCE_DIR}/tdt/power.json
     ${CMAKE_CURRENT_SOURCE_DIR}/tdt/mmp.json
@@ -48,6 +48,7 @@ list( APPEND
     ${CMAKE_CURRENT_SOURCE_DIR}/tdt/plants.json
     ${CMAKE_CURRENT_SOURCE_DIR}/tdt/generic.json
     ${CMAKE_CURRENT_SOURCE_DIR}/tdt/recorder.json
+    ${CMAKE_CURRENT_SOURCE_DIR}/tdt/global.json
 )
 
 include(ExternalProject)
@@ -176,10 +177,12 @@ if( NOT TDT_CONFIGURED )
             "'TDT_CONFIGURED' cmake variable")
 endif()
 
-target_link_libraries(
-   ${PROJECT_NAME}
-   # lepto
-)
+if( USE_LEPTO )
+   target_link_libraries(
+      ${PROJECT_NAME}
+      lepto
+   )
+endif( USE_LEPTO )
 
 target_include_directories( ${PROJECT_NAME}
    PRIVATE

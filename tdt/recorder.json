@@ -4,7 +4,19 @@
          "name": "Recorder",
          "description": "Stores tdt traffic on medium",
          "base": "0x400",
-         "size": "0x20"
+         "size": "0x20",
+         "objects": [
+            {
+               "offset": "0x0011",
+               "name": "timeStamp",
+               "description": "When were replayed messages recorded"
+            },
+            {
+               "offset": "0x5001",
+               "name": "timeStampDrift",
+               "description": "Cordyceps is using this for some reson. TBD."
+            }
+         ]
       },
       {
          "name": "Recorder commands",

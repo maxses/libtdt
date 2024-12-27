@@ -17,6 +17,7 @@
 #if defined USE_LEPTO
    #include <lepto/events.h>
    #include <lepto/log.h>
+   #include <lepto/time.h>        // SEC_PER_DAY
 #endif
 
 #define ENUM_MAP( a, e ) { a::e, "" #e }

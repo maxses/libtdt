@@ -1,7 +1,7 @@
 {
    "profiles": [
       {
-         "name": "Global",
+         "name": "",
          "description": "Global information like time/date",
          "base": "0x420",
          "size": "0x10",

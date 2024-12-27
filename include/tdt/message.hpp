@@ -12,8 +12,9 @@
 #include <memory.h>     // memcpy
 
 #if defined USE_LEPTO
-   // #include <lepto/log.h>
-   // #include <lepto/can_message.h>
+   #include <lepto/log.h>
+   #include <lepto/can_message.h>
+   enum class ELogBlended: int32_t;
 #else
    #include <tdt/compat.hpp>
    enum class ELogBlended: int32_t;
@@ -23,6 +24,7 @@
 #include <tdt/gen/objects.hpp>
 #include <tdt/gen/units.hpp>
 #include <tdt/gen/commands.hpp>
+//#include <tdt/gen/log.hpp>
 
 #define CAN_TDT_PROTOCOL_VERSION    3
 
@@ -248,6 +250,8 @@ static_assert( sizeof( SMessageNmtIntro ) == 8, "Message (NMT Intro) size not pl
 
 #define constexpr_nobug constexpr
 
+#if 1 // ! defined USE_LEPTO
+
 class CCanMessage
 {
       nodeId_t m_id;
@@ -302,6 +306,8 @@ class CCanMessage
       }
 };
 
+#endif
+
 #if 0
 struct
 {
@@ -321,13 +327,18 @@ private:
       static constexpr int EID_SUBID_MASK=0xFF;
 
       static_assert ( sizeof(SMessage) == 4 + 4, "Size missmatch" );
-
+      #if defined USE_LEPTO
+         //SMessage& m_tdtMessage=*(SMessage*)&m_data;
+      // SMessage& m_tdtMessage; //=*(SMessage*)&m_data;
+      #endif
    public:
 
       constexpr_nobug CMessage()
          :CCanMessage{ (nodeId_t)0ul }
+         //,m_tdtMessage{ *(SMessage*)&m_data }
       {
       }
+
 #if 1
       constexpr_nobug CMessage(nodeId_t id, EFunctionCode functionCode, EObject object, Tdt::EUnit unit)
          :CCanMessage( id | ( (unsigned int)functionCode << FUNCTIONCODE_BITSHIFT ))
@@ -338,6 +349,7 @@ private:
          setLen( sizeof(SMessage) );
       }
 #endif
+      
       constexpr_nobug CMessage(nodeId_t id, EFunctionCode functionCode, EObject object
                      , EUnit unit, const SValue value)
          :CMessage(id, functionCode, object, unit )
@@ -363,6 +375,13 @@ private:
       {
          
       };
+      
+      // For compatibility in cordyceps: construct with leptos CanMessage
+      CMessage( const ::CCanMessage &msg )
+      {
+         setId(msg.getId());
+         setData(msg.getLen(), msg.getData());
+      }
       
       // Needed in unit tests
       CMessage& operator=(const CMessage& msg)
@@ -457,6 +476,10 @@ private:
       uint16_t getMmpPos() const
       {
          return( m_tdtMessage.mmpPos );
+      }
+      CCanMessage &canMessage()
+      {
+         return *(dynamic_cast<CCanMessage*>(this));
       }
 };
 

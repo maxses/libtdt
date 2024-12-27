@@ -1,0 +1,106 @@
+{
+   "profiles": [
+      {
+         "name": "Node",
+         "description": "Generic device node",
+         "base": "0x400",
+         "size": "0x40",
+         "objects": [
+            {
+               "offset": "0x0001",
+               "name": "Firmware version",
+               "example": "v0.1.10-12+"
+            },
+            {
+               "offset": "0x0002",
+               "name": "Device Temperature",
+               "description": "The generic device temperature which can be an I2C sensor or the MCU temperature.",
+               "example": "22.00°C"
+            },
+            {
+               "offset": "0x0011",
+               "name": "Firmware Date",
+               "description": "Release date. Probably not used anywhere"
+            },
+            {
+               "name": "batteryLevel",
+               "offset": "0x21",
+               "description": "Voltage of main battery"
+            },
+            {
+               "offset": "0x0030",
+               "name": "Command",
+               "description": "Let a node do something"
+            },
+            {
+               "offset": "0x0039",
+               "name": "uidLow",
+               "description": "UID of node, low 32bit of 64bit"
+            },
+            {
+               "offset": "0x003A",
+               "name": "uidHigh",
+               "description": "UID of node, high 32bit of 64bit"
+            },
+            {
+               "offset": "0x0080",
+               "name": "status",
+               "description": ""
+            },
+            {
+               "offset": "0x0081",
+               "name": "errorCode",
+               "description": ""
+            },
+            {
+               "offset": "0x0082",
+               "name": "eventCode",
+               "description": ""
+            }
+         ]
+      },
+      {
+         "name": "Node commands",
+         "description": "Generic device node commands",
+         "base": "0x600",
+         "size": "0x20",
+         "commands": [
+            {
+               "name": "ident",
+               "offset": "0x5"
+            },
+            {
+               "name": "bootToRecovery",
+               "offset": "0x8"
+            },
+            {
+               "name": "bootToProductive",
+               "offset": "0x9"
+            },
+            {
+               "name": "keepAwake",
+               "offset": "0x10",
+               "size": "0x10"
+            },
+            {
+               "name": "keepAwakeAll",
+               "offset": "0x11"
+            },
+            {
+               "name": "measureLoop",
+               "description": "Can be set in cordyceps for sensemux. Obsolete?",
+               "offset": "0x20"
+            },
+            {
+               "name": "enableBootAplpication",
+               "offset": "0x21"
+            },
+            {
+               "name": "unknown",
+               "offset": "0x1000",
+               "description": "For tests?"
+            }
+         ]
+      }
+   ]
+}

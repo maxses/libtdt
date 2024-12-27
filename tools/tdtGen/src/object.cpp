@@ -70,10 +70,10 @@ void CObject::appendObjectNumber( QString& str, int objectNumber ) const
 QString CObject::nameToEnum()
 {
    #if 0    // like "ePowerLine"
-      QString enumName="e" + m_name;
+      QString enumName="e" + m_name.toLower();
       enumName.replace( 1, 1, enumName.at(1).toUpper() );
    #else    // like "powerLine"
-      QString enumName=m_name;
+      QString enumName=m_name.toLower();
       enumName.replace( 0, 1, enumName.at(0).toLower() );
    #endif
    

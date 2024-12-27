@@ -10,7 +10,7 @@
                "offset": "0x0000",
                "name": "Temperature",
                "example": "22.35°C",
-               "subRange": "8",
+               "size": "8",
                "unit": "centi degree"
             },
             {
@@ -22,7 +22,7 @@
             },
             {
                "offset": "0x0009",
-               "name": "VOC RAW",
+               "name": "VOC Raw",
                "description": "Raw VOC air restistance value in ohm",
                "example": "1000 Ohm"
             },

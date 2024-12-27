@@ -113,7 +113,7 @@ class CMmpTransferData
       int m_pos;
       
   public:
-      Tdt::EObject m_object=Tdt::EObject::deviceFirmwareDate;
+      Tdt::EObject m_object=Tdt::EObject::nodeFirmwareDate;
 
    public:
       CMmpTransferData()
