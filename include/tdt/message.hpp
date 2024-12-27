@@ -239,15 +239,6 @@ static_assert ( matchesSubIndexedObject(
 
 static_assert( sizeof( SMessage ) == 8 );
 
-
-struct SMessageNmtIntro
-{
-   uint32_t uid_low;
-   uint32_t uid_high;
-} PACKED;
-
-static_assert( sizeof( SMessageNmtIntro ) == 8, "Message (NMT Intro) size not plausible" );
-
 #define constexpr_nobug constexpr
 
 #if 1 // ! defined USE_LEPTO
