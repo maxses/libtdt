@@ -9,7 +9,6 @@
 
 #if defined USE_LEPTO
    //#include <lepto/can_message.h>
-   #include <lepto/log.h>
 #endif
 
 #include <stdio.h>               // snprintf
