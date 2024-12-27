@@ -110,6 +110,18 @@ QString CObject::printerString()
    str=str.leftJustified( 60, ' ' );
    str+=QString( "// %1").arg(m_desc);
    
+   if( m_size )
+   {
+      for(int i1=0; i1<m_size; i1++)
+      {
+         str+="\n";
+         str+=QString("      { %1%2%3,  ")
+                  .arg( nsPrefix() ).arg( nameToEnum() ).arg(i1);
+         str=str.leftJustified( 20, ' ' );
+         str+=QString(" \"%1[%2]\" }," ).arg( m_name).arg(i1);
+      }
+   }
+   
    return( str );
 }
 
