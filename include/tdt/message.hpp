@@ -8,8 +8,9 @@
 
 
 #include <tdt/message.hpp>
-#include <lepto/log.h>
+//#include <lepto/log.h>
 #include <lepto/can_message.h>
+#include <cassert>
 
 
 #define CAN_TDT_PROTOCOL_VERSION    3
@@ -456,7 +457,7 @@ private:
       constexpr_nobug CMessage(nodeId_t id, EFunctionCode functionCode, EObject object, EUnit unit)
          :CCanMessage( id | ( (unsigned int)functionCode << FUNCTIONCODE_BITSHIFT ))
       {
-         lDebugAssert( id <= NODEID_BITMASK );
+         assert( id <= NODEID_BITMASK );
          m_tdtMessage.object=object;
          m_tdtMessage.unit=unit;
          setLen( sizeof(SMessage) );
