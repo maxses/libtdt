@@ -10,6 +10,7 @@
 #include <stdint.h>
 #include <cassert>      // assert
 #include <memory.h>     // memcpy
+#include <cassert>
 
 #if defined USE_LEPTO
    //#include <lepto/can_message.h>
