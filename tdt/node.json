@@ -13,18 +13,18 @@
             },
             {
                "offset": "0x0002",
-               "name": "Device Temperature",
+               "name": "Device temperature",
                "description": "The generic device temperature which can be an I2C sensor or the MCU temperature.",
                "example": "22.00°C"
             },
             {
                "offset": "0x0011",
-               "name": "Firmware Date",
+               "name": "Firmware date",
                "description": "Release date. Probably not used anywhere"
             },
             {
-               "name": "batteryLevel",
-               "offset": "0x21",
+               "name": "battery level",
+               "offset": "0x20",
                "description": "Voltage of main battery"
             },
             {
@@ -33,13 +33,23 @@
                "description": "Let a node do something"
             },
             {
+               "name": "current",
+               "offset": "0x32",
+               "description": "How much current does the device draw"
+            },
+            {
+               "name": "supply voltage",
+               "offset": "0x34",
+               "description": "Main supply voltage"
+            },
+            {
                "offset": "0x0039",
-               "name": "uidLow",
+               "name": "uid low",
                "description": "UID of node, low 32bit of 64bit"
             },
             {
                "offset": "0x003A",
-               "name": "uidHigh",
+               "name": "uid high",
                "description": "UID of node, high 32bit of 64bit"
             },
             {
@@ -49,12 +59,17 @@
             },
             {
                "offset": "0x0081",
-               "name": "errorCode",
+               "name": "error code",
                "description": ""
             },
             {
                "offset": "0x0082",
-               "name": "eventCode",
+               "name": "event code",
+               "description": ""
+            },
+            {
+               "offset": "0x0089",
+               "name": "event code repeated",
                "description": ""
             }
          ]
@@ -78,16 +93,16 @@
                "offset": "0x9"
             },
             {
-               "name": "keepAwake",
+               "name": "keep awake",
                "offset": "0x10",
                "size": "0x10"
             },
             {
-               "name": "keepAwakeAll",
+               "name": "keep awake all",
                "offset": "0x11"
             },
             {
-               "name": "measureLoop",
+               "name": "measure loop",
                "description": "Can be set in cordyceps for sensemux. Obsolete?",
                "offset": "0x20"
             },

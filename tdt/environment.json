@@ -3,46 +3,46 @@
       {
          "name": "Environment",
          "description": "Environment sensors like temperatures, VOC, humidity",
-         "base": "0x430",
+         "base": "0x400",
          "size": "0x10",
          "objects": [
             {
-               "offset": "0x0000",
-               "name": "Temperature",
-               "example": "22.35°C",
-               "size": "8",
-               "unit": "centi degree"
+               "offset": "0x0014",
+               "name": "Air humidity",
+               "description": "Air humidity",
+               "example": "40 %"
             },
             {
-               "offset": "0x0008",
+               "offset": "0x0015",
                "name": "VOC",
                "description": "VOC n promil; other factors taken into evaluation. No use at the moment. See air quality.",
                "example": "1000 ‰",
                "unit": "promil"
             },
             {
-               "offset": "0x0009",
+               "offset": "0x0016",
+               "name": "Air quality",
+               "description": "Air quality, several factors are taken into account",
+               "example": "40 %"
+            },
+            {
+               "offset": "0x0017",
                "name": "VOC Raw",
                "description": "Raw VOC air restistance value in ohm",
                "example": "1000 Ohm"
             },
             {
-               "offset": "0x000A",
+               "offset": "0x0018",
+               "name": "Temperature",
+               "example": "22.35°C",
+               "size": "8",
+               "unit": "centi degree"
+            },
+            {
+               "offset": "0x0021",
                "name": "Air pressure",
                "description": "Air pressure",
                "example": "1.001 hPa"
-            },
-            {
-               "offset": "0x000B",
-               "name": "Air humidity",
-               "description": "Air humidity",
-               "example": "40 %"
-            },
-            {
-               "offset": "0x000C",
-               "name": "Air quality",
-               "description": "Air quality, several factors are taken into account",
-               "example": "40 %"
             }
          ]
       },
@@ -53,19 +53,19 @@
          "size": "0x20",
          "commands": [
             {
-               "name": "burnIn",
+               "name": "burn in",
                "offset": "0x3"
             },
             {
-               "name": "forceMeasure",
+               "name": "force measure",
                "offset": "0x4"
             },
             {
-               "name": "burnInShort",
+               "name": "burn in short",
                "offset": "0x6"
             },
             {
-               "name": "burnInLong",
+               "name": "burn in long",
                "offset": "0x7"
             }
          ]

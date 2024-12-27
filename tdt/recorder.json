@@ -8,12 +8,12 @@
          "objects": [
             {
                "offset": "0x0011",
-               "name": "timeStamp",
+               "name": "time stamp",
                "description": "When were replayed messages recorded"
             },
             {
                "offset": "0x5001",
-               "name": "timeStampDrift",
+               "name": "time stamp drift",
                "description": "Cordyceps is using this for some reson. TBD."
             }
          ]
