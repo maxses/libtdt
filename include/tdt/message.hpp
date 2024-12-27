@@ -14,11 +14,16 @@
 
 #if defined USE_LEPTO
    //#include <lepto/can_message.h>
-   enum class ELogBlended: int32_t;
+   #include <lepto/log.h>     // ELogCategory
+   enum class ELogBlended: int;
 #else
    #include <tdt/compat.hpp>
    enum class ELogBlended: int32_t;
    enum class ELogCategory: int32_t;
+#endif
+
+#if defined USE_BIWAK
+   #include <biwak/canMessage.hpp>
 #endif
 
 #include <tdt/gen/objects.hpp>
@@ -80,7 +85,7 @@ enum class ENmtObject: uint16_t
 };
 
 
-typedef int32_t nodeId_t;
+typedef uint32_t nodeId_t;
 
 
 enum class EEvent: uint32_t
@@ -99,6 +104,13 @@ enum class EEvent: uint32_t
    noRelease_OBS        = 0x20 + EVENT_OFFSET,
    shutdown             = 0x21 + EVENT_OFFSET,
    #endif
+   couldNotReadEeprom,
+   noRelease,
+};
+
+enum class ELogCode2: uint32_t
+{
+   couldNotReadEeprom
 };
 
 

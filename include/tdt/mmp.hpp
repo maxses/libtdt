@@ -27,6 +27,7 @@
 #if defined USE_LEPTO
    #include <lepto/crc32.h>
    #include <lepto/signal.h>
+   #include <lepto/mockQt.hpp>
 #else
    typedef uint32_t address_t;
 #endif
@@ -50,7 +51,7 @@ namespace Tdt
 
 #if defined( STM32 )
    void cbSendTdtMessage( const Tdt::CMessage& );
-   int cbGetNodeId();
+   Tdt::nodeId_t cbGetNodeId();
    int cbHandleMmpTransfer( const Tdt::CMmpTransferData& );
 #endif
 
@@ -70,13 +71,14 @@ enum class EMmpCommand: uint32_t
    reset,
    sendEeprom,
    sendFirmware,
-   eeprom,
+   receiveEeprom,
+   receiveFirmware,
 };
 
 struct SMmpHeader
 {
    uint32_t magic;
-   uint32_t dataLength;
+   int32_t  dataLength;
    uint32_t sourceNodeId;
    uint32_t crc32Data;
    EMmpCommand mmpCommand;
@@ -143,7 +145,7 @@ class CMmpTransferData
       uint32_t &data32()
       {
          static_assert( sizeof(SMmpHeader) % sizeof(uint32_t) == 0 );
-         if( m_pos < sizeof(SMmpHeader) / 4 )
+         if( m_pos < (int)sizeof(SMmpHeader) / 4 )
             return( ( (uint32_t*)&m_header ) [ m_pos ] );
          if(!m_data)
          {
@@ -185,7 +187,7 @@ class CMmpTransferData
       {
          m_header={
              .magic=0x1234,
-             .dataLength=(uint32_t)size,
+             .dataLength=(int32_t)size,
              .sourceNodeId=0,
              .mmpCommand=command,
              .flashAddress=0
