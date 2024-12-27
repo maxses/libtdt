@@ -339,7 +339,11 @@ class CCanTdtPrinter: public Tdt::CPrinterBase
          {
             return( m_objectMap[ m_message.getTdtObject() ] ); 
          }
-         return("-");
+         // Temporary solution
+         static QString s;
+         s=QString("? [0x%1]")
+                 .arg((int)m_message.getTdtObject(),0,16);
+         return(qPrintable( s ) );
       }
       const char *getFunctionCodeString() const
       {
