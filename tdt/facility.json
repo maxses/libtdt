@@ -1,0 +1,17 @@
+{
+   "profiles": [
+      {
+         "name": "Facility",
+         "description": "A building",
+         "base": "0x4C0",
+         "size": "0x20",
+         "objects": [
+            {
+               "offset": "0x0000",
+               "name": "room",
+               "example": "-"
+            }
+         ]
+      }
+   ]
+}

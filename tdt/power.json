@@ -28,6 +28,20 @@
                "example": "-"
             }
          ]
+      },
+      {
+         "name": "power",
+         "description": "Power switches",
+         "base": "0x470",
+         "size": "0x20",
+         "objects": [
+            {
+               "offset": "0x0000",
+               "name": "Switch object offset",
+               "example": "-",
+               "size": "0x4"
+            }
+         ]
       }
    ]
 }

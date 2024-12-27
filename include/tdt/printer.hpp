@@ -298,7 +298,7 @@ class CCanTdtPrinter: public Tdt::CPrinterBase
                   if( desc.format == 'x' )
                   {
                      ts.setIntegerBase(16);
-                     ts << "0x" << (int)m_message.getTdtValueUInt();
+                     ts << "0x" << (unsigned int)m_message.getTdtValueUInt();
                   }
                   else
                   {
