@@ -10,11 +10,8 @@
 
 #include <tdt/db.hpp>
 #include <QFile>
-#include <QStandardPaths>
-//#include <QXmlStreamReader>
-#include <QDebug>
-#include <QDir>
-#include <QtXml/QDomDocument>
+#include <QDomDocument>
+#include <QDir>            // home()
 
 
 //-----------------------------------------------------------------------------
@@ -44,8 +41,7 @@ CDb::CDb()
    {
       qWarning() << "Schema wrong. Unexpercted '" << root.tagName() << "'";
       qWarning() << "Install a proper device info XML file to $HOME/.lepto/tdt.xml";
-      return;
-	exit(22);
+      qFatal( "exiting..." );
    }
    
    QDomElement node=root.firstChild().toElement();
@@ -63,11 +59,6 @@ CDb::CDb()
          {
             if( subNode.tagName() == "sub" )
             {
-               QString nodeSubId=subNode.attribute("nodeSubId","0");
-               int nodeSubId_int=nodeSubId.toInt(nullptr,0);
-               qWarning() << "   nodeSubId: " << nodeSubId_int << "; " << subNode.attribute("name","");
-               m_nodeSubIdNames[ combinedId(nodeId_int, nodeSubId_int ) ] = subNode.attribute("name","");
-               
                QString objectString=subNode.attribute("object","0");
                int objectInt=objectString.toInt(nullptr,0);
                if(objectInt)

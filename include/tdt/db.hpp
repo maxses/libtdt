@@ -7,9 +7,6 @@
 //-----------------------------------------------------------------------------
 
 
-//#include <stdio.h>               // snprintf
-//#include <tdt/message.hpp>
-//#include <QTextStream>
 #include <QMap>
 
 
@@ -21,9 +18,7 @@ class CDb
 {
    private:
       QMap<int, QString> m_nodeNames;
-      QMap<int, QString> m_nodeSubIdNames;
       QMap<int, QString> m_nodeObjectNames;
-      
       
       /// \brief Combine Node-Id with e.g. Object number to have a single map
       constexpr int combinedId( int id, int subId ) const
@@ -46,16 +41,6 @@ class CDb
          }
          return( QString("#%1").arg( nodeId ) );
       }
-      #if 0
-      QString getSubIdName( int nodeId, int subNodeId ) const
-      {
-         if( m_nodeSubIdNames.contains( EID( nodeId, subNodeId ) ) )
-         {
-            return( m_nodeSubIdNames[ EID( nodeId, subNodeId )  ] );
-         }
-         return( QString("?%1[%2]").arg( nodeId ).arg( subNodeId ) );
-      }
-      #endif
       QString getObjectName( int nodeId, int object ) const
       {
          if( m_nodeObjectNames.contains( combinedId( nodeId, object ) ) )
