@@ -25,10 +25,12 @@
 // #define EID( id, subId ) ( ( id << 4 ) | subId )
 
 
-class CCanTdtPrinter: public Tdt::CPrinterBase
+namespace Tdt
 {
-      Tdt::CMessage m_message;
 
+
+class CPrinter: public CPrinterBase
+{
       const QMap<Tdt::EFunctionCode, const char *> m_functionCodeMap{
          ENUM_MAP( Tdt::EFunctionCode, nmt ),
          ENUM_MAP( Tdt::EFunctionCode, alert ),
@@ -65,20 +67,15 @@ class CCanTdtPrinter: public Tdt::CPrinterBase
       
    public:
       
-      CCanTdtPrinter( )
+      CPrinter( )
       {
       };
        
-      void setMessage( const Tdt::CMessage &message )
-      {
-         m_message=message;
-      };
-      
-      QString printValue( ) const
+      QString printValue( const Tdt::CMessage& msg ) const
       {
          QString s;
          QTextStream ts( &s );
-         switch( m_message.getFunctionCode() )
+         switch( msg.getFunctionCode() )
          {
             case Tdt::EFunctionCode::alert:
                s="Alert:";
@@ -87,12 +84,12 @@ class CCanTdtPrinter: public Tdt::CPrinterBase
                break;
          }
 
-         switch( m_message.getTdtUnit() )
+         switch( msg.getTdtUnit() )
          {
             case Tdt::EUnit::version:
             {
                Tdt::SValue::SSoftwareVersion sw
-                        =m_message.getTdtValue()->softwareVersion;
+                        =msg.getTdtValue()->softwareVersion;
                ts       << ( sw.drift.bootloader ? "BL " : "")
                         << "v"
                         << sw.major << "." << sw.minor << "." << sw.patch
@@ -102,10 +99,10 @@ class CCanTdtPrinter: public Tdt::CPrinterBase
             }
             case Tdt::EUnit::durationSeconds:
             {
-               int secs = (int)m_message.getTdtValueUInt();
+               int secs = (int)msg.getTdtValueUInt();
                if ( secs < 100 )
                {
-                  ts << m_message.getTdtValue()->_int << " s";
+                  ts << msg.getTdtValue()->_int << " s";
                }
                else
                {
@@ -126,18 +123,18 @@ class CCanTdtPrinter: public Tdt::CPrinterBase
             }
             case Tdt::EUnit::time:
             {
-               Tdt::SValue::STime t=m_message.getTdtValue()->time;
+               Tdt::SValue::STime t=msg.getTdtValue()->time;
                ts << t.hour << ":" << t.min << ":" << t.sec;
                break;
             }
             case Tdt::EUnit::percentHumidity:
             {
-               ts << ( ( m_message.getTdtValue()->_int / 10 ) / 100.0) << " %";
+               ts << ( ( msg.getTdtValue()->_int / 10 ) / 100.0) << " %";
                break;
             }
             case Tdt::EUnit::_switch:
             {
-               ts << (m_message.getTdtValue()->_bool ? "ON" : "OFF");
+               ts << ( msg.getTdtValue()->_bool ? "ON" : "OFF" );
                break;
             }
             case Tdt::EUnit::percentQuality:
@@ -151,7 +148,7 @@ class CCanTdtPrinter: public Tdt::CPrinterBase
                   { 40, "Very Unhealthy" },
                   {  0, "Hazardous" },
                };
-               unsigned int value=m_message.getTdtValue()->_uint;
+               unsigned int value=msg.getTdtValue()->_uint;
                ts << value << " %; ";
                for(int i1=0; i1<sizeof(ranges)/sizeof(ranges[0]); i1++)
                {
@@ -176,20 +173,20 @@ class CCanTdtPrinter: public Tdt::CPrinterBase
                   { 0xB0, "CANSwitch"},
                   { 0xD0, "Main-Switch"},
                };
-               if( map.contains(m_message.getTdtValue()->_uint) )
+               if( map.contains(msg.getTdtValue()->_uint) )
                {
-                  ts << map[m_message.getTdtValue()->_uint];
+                  ts << map[msg.getTdtValue()->_uint];
                }
                else
                {
-                  ts << "UK Article: " << m_message.getTdtValue()->_uint;
+                  ts << "UK Article: " << msg.getTdtValue()->_uint;
                }
                break;
             }
             case Tdt::EUnit::powerSwitchFunction:
             {
                Tdt::EObject object=
-                   (Tdt::EObject)(m_message.getTdtValue()->_uint
+                   (Tdt::EObject)(msg.getTdtValue()->_uint
                                        + (int)Tdt::EObject::powerSwitchStart);
                if( m_objectMap.contains(object) )
                {
@@ -203,12 +200,12 @@ class CCanTdtPrinter: public Tdt::CPrinterBase
             }
             case Tdt::EUnit::index:
             {
-               ts << "[" << m_message.getTdtValue()->_uint << "]";
+               ts << "[" << msg.getTdtValue()->_uint << "]";
                break;
             }
             case Tdt::EUnit::deviceStatus:
             {
-               switch( m_message.getTdtValue()->_uint )
+               switch( msg.getTdtValue()->_uint )
                {
                   // Brrr, There   friend class CTopic; should not be a depency to biwak;
                   // CHeartBeats "DeviceStatus" should be moved to lepto
@@ -219,7 +216,7 @@ class CCanTdtPrinter: public Tdt::CPrinterBase
                      ts << "Warning";
                      break;
                   case 2 ... 3:
-                     ts << "Error(" << m_message.getTdtValue()->_uint << ")";
+                     ts << "Error(" << msg.getTdtValue()->_uint << ")";
                      break;
                   case 5:
                      ts << "Calm";
@@ -228,7 +225,7 @@ class CCanTdtPrinter: public Tdt::CPrinterBase
                      ts << "Resetting";
                      break;
                   default:
-                     ts << "UK:" << m_message.getTdtValue()->_uint;
+                     ts << "UK:" << msg.getTdtValue()->_uint;
                      break;
                }
                break;
@@ -257,24 +254,24 @@ class CCanTdtPrinter: public Tdt::CPrinterBase
             #endif
             case Tdt::EUnit::room:
             {
-               if( m_roomMap.contains(m_message.getTdtValue()->_uint) )
+               if( m_roomMap.contains( msg.getTdtValue()->_uint ) )
                {
-                  ts << m_roomMap[m_message.getTdtValue()->_uint];
+                  ts << m_roomMap[ msg.getTdtValue()->_uint ];
                }
                else
                {
-                  ts << "UK Article: " << m_message.getTdtValue()->_uint;
+                  ts << "UK Article: " << msg.getTdtValue()->_uint;
                }
                break;
             }
             case Tdt::EUnit::capacity:
             {
-               ts << (int)m_message.getTdtValueUInt() / 1000 << " KB";
+               ts << (int)msg.getTdtValueUInt() / 1000 << " KB";
                break;
             }
             case Tdt::EUnit::systemState:
             {
-               switch( m_message.getTdtValue()->systemState )
+               switch( msg.getTdtValue()->systemState )
                {
                   case Tdt::ESystemState::application:
                      ts << "Application";
@@ -284,7 +281,7 @@ class CCanTdtPrinter: public Tdt::CPrinterBase
                      break;
                   default:
                      ts << "Unknown ("
-                        << (uint32_t)m_message.getTdtValue()->systemState
+                        << (uint32_t)msg.getTdtValue()->systemState
                         << ")";
                      break;
                }
@@ -292,24 +289,24 @@ class CCanTdtPrinter: public Tdt::CPrinterBase
             }
             default:
             {
-               if( m_unitMap.contains( m_message.getTdtUnit() ) )
+               if( m_unitMap.contains( msg.getTdtUnit() ) )
                {
-                  SUnitDesc desc=m_unitMap[ m_message.getTdtUnit() ];
+                  SUnitDesc desc=m_unitMap[ msg.getTdtUnit() ];
                   if( desc.format == 'x' )
                   {
                      ts.setIntegerBase(16);
-                     ts << "0x" << (unsigned int)m_message.getTdtValueUInt();
+                     ts << "0x" << (unsigned int)msg.getTdtValueUInt();
                   }
                   else
                   {
                      if( desc.decimalPower != 1 )
                      {
-                        float t = m_message.getTdtValue()->_int * ( pow(10.0, desc.decimalPower ) );
+                        float t = msg.getTdtValue()->_int * ( pow(10.0, desc.decimalPower ) );
                         ts << t;
                      }
                      else
                      {
-                        ts << (int)m_message.getTdtValueUInt();
+                        ts << (int)msg.getTdtValueUInt();
                      }
                   }
                   if( desc.postfix[0] )
@@ -320,7 +317,7 @@ class CCanTdtPrinter: public Tdt::CPrinterBase
                else
                {
                   ts.setIntegerBase(16);
-                  ts << "UK: Unit=0x" << (int)m_message.getTdtUnit();
+                  ts << "UK: Unit=0x" << (int)msg.getTdtUnit();
                }
                break;
             }
@@ -329,31 +326,31 @@ class CCanTdtPrinter: public Tdt::CPrinterBase
          return(s);
       };
 
-      const char *getUnitString() const
+      const char *getUnitString( const Tdt::CMessage& msg ) const
       {
-         if( m_unitMap.contains( m_message.getTdtUnit() ) )
+         if( m_unitMap.contains( msg.getTdtUnit() ) )
          {
-            return( m_unitMap[ m_message.getTdtUnit() ].name );
+            return( m_unitMap[ msg.getTdtUnit() ].name );
          }
          return("-");
       }
-      const char *getObjectString() const
+      const char *getObjectString( const Tdt::CMessage& msg ) const
       {
-         if( m_objectMap.contains(m_message.getTdtObject()) )
+         if( m_objectMap.contains( msg.getTdtObject() ) )
          {
-            return( m_objectMap[ m_message.getTdtObject() ] ); 
+            return( m_objectMap[ msg.getTdtObject() ] ); 
          }
          // Temporary solution
          static QString s;
          s=QString("? [0x%1]")
-                 .arg((int)m_message.getTdtObject(),0,16);
+                 .arg((int)msg.getTdtObject(),0,16);
          return(qPrintable( s ) );
       }
-      const char *getFunctionCodeString() const
+      const char *getFunctionCodeString( const Tdt::CMessage& msg ) const
       {
-         if( m_functionCodeMap.contains(m_message.getFunctionCode()) )
+         if( m_functionCodeMap.contains( msg.getFunctionCode() ) )
          {
-            return( m_functionCodeMap[ m_message.getFunctionCode() ] );
+            return( m_functionCodeMap[ msg.getFunctionCode() ] );
          }
          return("-");
       }
@@ -367,6 +364,9 @@ class CCanTdtPrinter: public Tdt::CPrinterBase
          return(m_roomMap);
       }
 };
+
+
+} // namespace Tdt
 
 
 //---fin-----------------------------------------------------------------------
