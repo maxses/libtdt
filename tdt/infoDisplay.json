@@ -1,0 +1,18 @@
+{
+   "profiles": [
+      {
+         "name": "display",
+         "description": "Super small terminal",
+         "base": "0x400",
+         "size": "0x20",
+         "objects": [
+            {
+               "name": "Fade time",
+               "offset": "0x0088",
+               "example": "-",
+               "description": "After which time shoud the display fade out"
+            }
+         ]
+      }
+   ]
+}

@@ -12,7 +12,6 @@
 #include <memory.h>     // memcpy
 
 #if defined USE_LEPTO
-   #include <lepto/log.h>
    //#include <lepto/can_message.h>
    enum class ELogBlended: int32_t;
 #else
@@ -24,42 +23,18 @@
 #include <tdt/gen/objects.hpp>
 #include <tdt/gen/units.hpp>
 #include <tdt/gen/commands.hpp>
-//#include <tdt/gen/log.hpp>
 
-#define CAN_TDT_PROTOCOL_VERSION    3
+#define CAN_TDT_PROTOCOL_VERSION    4
 
 namespace Tdt
 {
 
-static constexpr int OBJECT_OFFSET=0x400;
-static constexpr int NMT_OBJECT_OFFSET=0x1000;
-static constexpr int MMP_OBJECT_OFFSET=0x6000;
-static constexpr int UNIT_OFFSET=0x10;
-static constexpr int TYPE_OFFSET=0x20;
-static constexpr int COMMAND_OFFSET=0x600;
-static constexpr int EVENT_OFFSET=0x700;
+static constexpr unsigned int NODEID_BITMASK  =0x7F;
+static constexpr uint32_t NMT_OBJECT_OFFSET=0x1000;
+static constexpr unsigned int FUNCTIONCODE_BITSHIFT =7;
+static constexpr unsigned int FUNCTIONCODE_BITMASK  =0x780;
+static constexpr unsigned int FUNCTIONCODE_RSHIFTED_BITMASK  =0xF;
 
-static constexpr int NO_SUBID_OBJECT_MASK = 0xFFF8;
-static constexpr int NODEID_BITMASK  =0x7F;
-
-static constexpr int FUNCTIONCODE_BITSHIFT =7;
-// https://www.microcontrol.net/wp-content/uploads/2021/10/canopen_intro.pdf
-// https://www.waycon.de/fileadmin/seilzugsensoren/CANopen-Handbuch.pdf
-// CANOpen has 4 Bits function code + 7 bits Node ID
-static constexpr int FUNCTIONCODE_BITMASK  =0x780;
-static constexpr int FUNCTIONCODE_RSHIFTED_BITMASK  =0xF;
-static constexpr int SUBID_MASK = 0x7;
-// 0x00 .. 0xF can be regular SUB-Ids
-static constexpr int OBJECT_NO_SUBID_BITMASK=0xFFF8;
-static constexpr int OBJECT_SUBID_BITMASK=0x7;
-
-static constexpr int BORADCAST_NODE_ID_LP = 120;
-static constexpr int BORADCAST_NODE_ID_HP = 2;
-
-static constexpr uint32_t MASK_SUBINDEX        = 0xF;
-static constexpr uint32_t SUBINDEX_COUNT       = 0x10;
-static constexpr uint32_t MASK_SUBINDEX_OBJECT = ~MASK_SUBINDEX;
-static constexpr uint32_t LAST_SUBINDEX        = 0xF;
 
 /*
  * The NMT-Introduce is speccial because Node-ID and UID/MAC have to be within
@@ -102,11 +77,6 @@ enum class ENmtObject: uint16_t
    nmtJumpApplication         = 0x09 + NMT_OBJECT_OFFSET,
    nmtEnableApplicationBoot   = 0x0A + NMT_OBJECT_OFFSET,
 };
-
-constexpr bool matchesSubIndexedObject( const Tdt::EObject object, const Tdt::EObject base )
-{
-   return( ( (uint32_t)object & MASK_SUBINDEX_OBJECT ) == (uint32_t)base );
-}
 
 
 typedef int32_t nodeId_t;
@@ -230,10 +200,6 @@ struct SMessage
       } PACKED;
    };
    SValue value __attribute ( ( aligned(4) ) );
-   /*
-static_assert ( matchesSubIndexedObject(
-                  Tdt::EObject::ambientLight, Tdt::EObject::ambientLight) == true);
-*/
    static_assert( sizeof(value) == 4, "Message size not plausible" );
 } PACKED;
 
@@ -313,20 +279,14 @@ class CMessage : public CCanMessage
 {
       friend class CMessageRef;
 
-private:
-      static constexpr int EID_MULTIPLIER=0x100;
-      static constexpr int EID_SUBID_MASK=0xFF;
+   private:
 
       static_assert ( sizeof(SMessage) == 4 + 4, "Size missmatch" );
-      #if defined USE_LEPTO
-         //SMessage& m_tdtMessage=*(SMessage*)&m_data;
-      // SMessage& m_tdtMessage; //=*(SMessage*)&m_data;
-      #endif
+       
    public:
 
       constexpr_nobug CMessage()
          :CCanMessage{ (nodeId_t)0ul }
-         //,m_tdtMessage{ *(SMessage*)&m_data }
       {
       }
 
@@ -366,15 +326,6 @@ private:
       {
          
       };
-
-      #if 0
-      // For compatibility in cordyceps: construct with leptos CanMessage
-      CMessage( const ::CCanMessage &msg )
-      {
-         setId(msg.getId());
-         setData(msg.getLen(), msg.getData());
-      }
-      #endif
       
       // Needed in unit tests
       CMessage& operator=(const CMessage& msg)
@@ -478,7 +429,8 @@ private:
 
 
 EObject operator+(const EObject &a, int value);
-int operator-(const EObject &a, EObject b);
+//int operator-(const EObject &a, EObject b);
+
 
 };  // namespace Tdt
 
