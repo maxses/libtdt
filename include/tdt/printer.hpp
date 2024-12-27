@@ -27,7 +27,7 @@
 
 class CCanTdtPrinter: public Tdt::CPrinterBase
 {
-      const Tdt::CMessage &m_message;
+      Tdt::CMessage m_message;
 
       const QMap<Tdt::EFunctionCode, const char *> m_functionCodeMap{
          ENUM_MAP( Tdt::EFunctionCode, nmt ),
@@ -65,11 +65,15 @@ class CCanTdtPrinter: public Tdt::CPrinterBase
       
    public:
       
-      CCanTdtPrinter( const Tdt::CMessage &message )
-         :m_message( message )
+      CCanTdtPrinter( )
       {
       };
-
+       
+      void setMessage( const Tdt::CMessage &message )
+      {
+         m_message=message;
+      };
+      
       QString printValue( ) const
       {
          QString s;
