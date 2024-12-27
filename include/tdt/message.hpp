@@ -220,63 +220,33 @@ static_assert( sizeof( SMessage ) == 8 );
 
 #define constexpr_nobug constexpr
 
-#if 1 // ! defined USE_LEPTO
 
-class CCanMessage
+class SCanMessageTdt
 {
-      nodeId_t m_id;
-      size_t m_len;
-  protected:
+   protected: 
       union{
-         uint8_t m_data[8];
-         SMessage m_tdtMessage;
+         SCanMessage m;
+         struct
+         {
+            uint32_t reserved1;
+            uint32_t reserved2;
+            SMessage m_tdtMessage;
+         };
       };
-      
+   
    public:
-      constexpr CCanMessage()
-           :m_id{0}
-           ,m_len{0}
-           ,m_data{0}
-      {}
-      constexpr CCanMessage(nodeId_t id)
-         :m_id{id}
-         ,m_len{0}
-         ,m_data{0}
-      {}
-      constexpr CCanMessage(nodeId_t id, size_t len, const unsigned char* data)
-          :m_id{id}
-          ,m_len{len}
-          ,m_data{ data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7] }
+      constexpr SCanMessageTdt()
+      {};
+      constexpr SCanMessageTdt( nodeId_t id )
       {
-      }
-      void setId( nodeId_t id )
+         m.setId( id );
+      };
+      constexpr SCanMessageTdt( const SCanMessage& msg)
+          :m{msg}
       {
-         m_id = id;
-      }
-      constexpr nodeId_t getId() const
-      {
-         return( m_id );
-      }
-      constexpr void setLen(size_t len)
-      {
-         m_len = (len>8) ? 8 : len;
-      }
-      size_t getLen() const
-      {
-         return( m_len );
-      }
-      void setData( size_t len, const void* data )
-      {
-         m_len = (len>8) ? 8 : len;
-         memcpy(m_data, data, m_len);
-      }
-      const uint8_t* getData() const
-      {
-         return( m_data );
+         
       }
 };
-
-#endif
 
 #if 0
 struct
@@ -288,7 +258,7 @@ struct
 }EAnyObject;
 #endif
 
-class CMessage : public CCanMessage
+class CMessage : public SCanMessageTdt
 {
       friend class CMessageRef;
 
@@ -299,20 +269,19 @@ class CMessage : public CCanMessage
    public:
 
       constexpr_nobug CMessage()
-         :CCanMessage{ (nodeId_t)0ul }
       {
       }
 
-#if 1
+   #if 1
       constexpr_nobug CMessage(nodeId_t id, EFunctionCode functionCode, EObject object, Tdt::EUnit unit)
-         :CCanMessage( id | ( (unsigned int)functionCode << FUNCTIONCODE_BITSHIFT ))
+         :SCanMessageTdt( id | ( (unsigned int)functionCode << FUNCTIONCODE_BITSHIFT ))
       {
          assert( id <= NODEID_BITMASK );
          m_tdtMessage.object=object;
          m_tdtMessage.unit=unit;
-         setLen( sizeof(SMessage) );
+         m.setLen( sizeof(SMessage) );
       }
-#endif
+   #endif
       
       constexpr_nobug CMessage(nodeId_t id, EFunctionCode functionCode, EObject object
                      , EUnit unit, const SValue value)
@@ -322,24 +291,23 @@ class CMessage : public CCanMessage
       }
       constexpr_nobug CMessage(nodeId_t id, EFunctionCode functionCode, EObject object
                , uint16_t mmpPos, uint32_t value)
-          :CCanMessage(id | ( (unsigned int)functionCode << FUNCTIONCODE_BITSHIFT ))
+          :SCanMessageTdt(id | ( (unsigned int)functionCode << FUNCTIONCODE_BITSHIFT ))
       {
          m_tdtMessage.object=object;
          m_tdtMessage.mmpPos=mmpPos;
          m_tdtMessage.value._uint=value;
-         setLen( sizeof(SMessage) );
+         m.setLen( sizeof(SMessage) );
       }
-      constexpr_nobug CMessage( const CCanMessage& msg)
-         :CCanMessage(msg)
+      constexpr_nobug CMessage( const SCanMessage& msg)
+         :SCanMessageTdt(msg)
       {
       }
       // Needed to create valid copy.
       CMessage( const CMessage &msg )
-          :CCanMessage(msg)
+          :SCanMessageTdt(msg)
       {
-         
       };
-      
+   #if 0
       // Needed in unit tests
       CMessage& operator=(const CMessage& msg)
       {
@@ -347,6 +315,7 @@ class CMessage : public CCanMessage
          setData(msg.getLen(), msg.getData());
          return(*this);
       }
+   #endif
       EUnit getTdtUnit() const
       {
          return(m_tdtMessage.unit);
@@ -397,22 +366,22 @@ class CMessage : public CCanMessage
 
       constexpr unsigned int getNodeId() const
       {
-         return( getId() & NODEID_BITMASK );
+         return( m.getId() & NODEID_BITMASK );
       }
       void setNodeId( unsigned int id )
       {
-         return( setId( id ) );
+         return( m.setId( id ) );
       }
-      EFunctionCode getFunctionCode() const
+      constexpr EFunctionCode getFunctionCode() const
       {
          return( (EFunctionCode)
-                 ( ( getId() >> FUNCTIONCODE_BITSHIFT )
+                 ( ( m.getId() >> FUNCTIONCODE_BITSHIFT )
                         & FUNCTIONCODE_RSHIFTED_BITMASK )
                  );
       }
       void setFunctionCode(EFunctionCode functionCode)
       {
-         setId( ( getId() & NODEID_BITMASK )
+         m.setId( ( m.getId() & NODEID_BITMASK )
                         | ( (int)functionCode << FUNCTIONCODE_BITSHIFT ) );
          return;
       }
@@ -434,10 +403,20 @@ class CMessage : public CCanMessage
       {
          return( m_tdtMessage.mmpPos );
       }
-      CCanMessage &canMessage()
+      bool isMultiCast() const
       {
-         return *(dynamic_cast<CCanMessage*>(this));
+         return( getFunctionCode() == EFunctionCode::writeObjectBroadCast );
       }
+      operator const SCanMessage& () const
+      {
+         return( m );
+      }
+   #if 0
+      SCanMessage &canMessage()
+      {
+         return *(dynamic_cast<SCanMessage*>(this));
+      }
+   #endif
 };
 
 
