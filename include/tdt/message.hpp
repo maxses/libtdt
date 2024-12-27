@@ -13,7 +13,7 @@
 
 #if defined USE_LEPTO
    #include <lepto/log.h>
-   #include <lepto/can_message.h>
+   //#include <lepto/can_message.h>
    enum class ELogBlended: int32_t;
 #else
    #include <tdt/compat.hpp>
@@ -375,13 +375,15 @@ private:
       {
          
       };
-      
+
+      #if 0
       // For compatibility in cordyceps: construct with leptos CanMessage
       CMessage( const ::CCanMessage &msg )
       {
          setId(msg.getId());
          setData(msg.getLen(), msg.getData());
       }
+      #endif
       
       // Needed in unit tests
       CMessage& operator=(const CMessage& msg)
