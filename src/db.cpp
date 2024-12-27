@@ -23,7 +23,8 @@
 namespace Tdt
 {
 
-CCanTdtDb::CCanTdtDb()
+
+CDb::CDb()
 {
    QFile file( QDir::home().path() + "/.lepto/tdt.xml" );
    QDomDocument xmlBOM;
@@ -65,13 +66,13 @@ CCanTdtDb::CCanTdtDb()
                QString nodeSubId=subNode.attribute("nodeSubId","0");
                int nodeSubId_int=nodeSubId.toInt(nullptr,0);
                qWarning() << "   nodeSubId: " << nodeSubId_int << "; " << subNode.attribute("name","");
-               m_nodeSubIdNames[ EID(nodeId_int, nodeSubId_int ) ] = subNode.attribute("name","");
+               m_nodeSubIdNames[ combinedId(nodeId_int, nodeSubId_int ) ] = subNode.attribute("name","");
                
                QString objectString=subNode.attribute("object","0");
                int objectInt=objectString.toInt(nullptr,0);
                if(objectInt)
                {
-                  m_nodeObjectNames[ EID(nodeId_int, objectInt) ] = subNode.attribute("name","");
+                  m_nodeObjectNames[ combinedId(nodeId_int, objectInt) ] = subNode.attribute("name","");
                   qWarning( "   object: 0x%X; %s", objectInt
                             , qPrintable(subNode.attribute("name","") ) );
                }
@@ -84,6 +85,7 @@ CCanTdtDb::CCanTdtDb()
    
    return;
 }
+
 
 } // namespace Tdt
 

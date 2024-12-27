@@ -1,5 +1,5 @@
-#ifndef LEPTO_CAN_TDT_DB_HPP
-#define LEPTO_CAN_TDT_DB_HPP
+#ifndef TDT_DB_HPP
+#define TDT_DB_HPP
 //-----------------------------------------------------------------------------
 //
 //
@@ -7,43 +7,46 @@
 //-----------------------------------------------------------------------------
 
 
-#if defined USE_LEPTO
-   //#include <lepto/can_message.h>
-#endif
-
-#include <stdio.h>               // snprintf
-#include <tdt/message.hpp>
-#include <QTextStream>
+//#include <stdio.h>               // snprintf
+//#include <tdt/message.hpp>
+//#include <QTextStream>
 #include <QMap>
 
-#define ENUM_MAP( a, e ) { a::e, "" #e }
-#define EID( id, subId ) ( ( id << 16 ) | subId )
 
 namespace Tdt
 {
 
-class CCanTdtDb
+
+class CDb
 {
    private:
       QMap<int, QString> m_nodeNames;
       QMap<int, QString> m_nodeSubIdNames;
       QMap<int, QString> m_nodeObjectNames;
+      
+      
+      /// \brief Combine Node-Id with e.g. Object number to have a single map
+      constexpr int combinedId( int id, int subId ) const
+      {
+         return ( ( id << 16 ) | subId );
+      }
 
    public:
       
-      CCanTdtDb( );
+      CDb( );
        bool hasNodeId( int nodeId )
       {
           return( m_nodeNames.contains( nodeId ) );
       }
       QString getNodeName(int nodeId) const
-		{
-			if( m_nodeNames.contains( nodeId ) )
-			{
-				return( m_nodeNames[ nodeId ] );
-			}
+      {
+         if( m_nodeNames.contains( nodeId ) )
+         {
+            return( m_nodeNames[ nodeId ] );
+         }
          return( QString("#%1").arg( nodeId ) );
-		}
+      }
+      #if 0
       QString getSubIdName( int nodeId, int subNodeId ) const
       {
          if( m_nodeSubIdNames.contains( EID( nodeId, subNodeId ) ) )
@@ -52,18 +55,21 @@ class CCanTdtDb
          }
          return( QString("?%1[%2]").arg( nodeId ).arg( subNodeId ) );
       }
+      #endif
       QString getObjectName( int nodeId, int object ) const
       {
-         if( m_nodeObjectNames.contains( EID( nodeId, object ) ) )
+         if( m_nodeObjectNames.contains( combinedId( nodeId, object ) ) )
          {
-            return( m_nodeObjectNames[ EID( nodeId, object )  ] );
+            return( m_nodeObjectNames[ combinedId( nodeId, object )  ] );
          }
          //return( QString("%1 [0x%2]").arg( nodeId ).arg( object, 1, 16 ) );
          return( QString{} );
       }
 };
 
+
 } // namespace Tdt;
 
+
 //---fin-----------------------------------------------------------------------
-#endif // ? ! LEPTO_CAN_TDT_DB_HPP
+#endif // ? ! TDT_DB_HPP
