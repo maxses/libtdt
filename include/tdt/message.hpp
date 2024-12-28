@@ -12,6 +12,7 @@
 #include <memory.h>     // memcpy
 #include <cassert>
 
+
 #if defined USE_LEPTO
    //#include <lepto/can_message.h>
    #include <lepto/log.h>     // ELogCategory
@@ -246,7 +247,7 @@ class SCanMessageTdt
       {
          
       }
-};
+};include/tdt/message.hpp
 
 #if 0
 struct
@@ -268,12 +269,13 @@ class CMessage : public SCanMessageTdt
        
    public:
 
-      constexpr_nobug CMessage()
+
+         constexpr CMessage()
+         :CCanMessage(0)
       {
       }
-
-   #if 1
-      constexpr_nobug CMessage(nodeId_t id, EFunctionCode functionCode, EObject object, Tdt::EUnit unit)
+      
+      constexpr CMessage(nodeId_t id, EFunctionCode functionCode, EObject object, Tdt::EUnit unit)
          :SCanMessageTdt( id | ( (unsigned int)functionCode << FUNCTIONCODE_BITSHIFT ))
       {
          assert( id <= NODEID_BITMASK );
@@ -281,15 +283,14 @@ class CMessage : public SCanMessageTdt
          m_tdtMessage.unit=unit;
          m.setLen( sizeof(SMessage) );
       }
-   #endif
-      
-      constexpr_nobug CMessage(nodeId_t id, EFunctionCode functionCode, EObject object
+
+      constexpr CMessage(nodeId_t id, EFunctionCode functionCode, EObject object
                      , EUnit unit, const SValue value)
          :CMessage(id, functionCode, object, unit )
       {
          m_tdtMessage.value=value;
       }
-      constexpr_nobug CMessage(nodeId_t id, EFunctionCode functionCode, EObject object
+      constexpr CMessage(nodeId_t id, EFunctionCode functionCode, EObject object
                , uint16_t mmpPos, uint32_t value)
           :SCanMessageTdt(id | ( (unsigned int)functionCode << FUNCTIONCODE_BITSHIFT ))
       {
@@ -298,7 +299,7 @@ class CMessage : public SCanMessageTdt
          m_tdtMessage.value._uint=value;
          m.setLen( sizeof(SMessage) );
       }
-      constexpr_nobug CMessage( const SCanMessage& msg)
+      constexpr CMessage( const SCanMessage& msg)
          :SCanMessageTdt(msg)
       {
       }
