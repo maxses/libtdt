@@ -10,6 +10,7 @@
 #include <tdt/message.hpp>
 #include <lepto/log.h>
 #include <lepto/can_message.h>
+#include <stdint.h>
 
 
 #define CAN_TDT_PROTOCOL_VERSION    3
@@ -448,12 +449,12 @@ private:
 
    public:
 
-      constexpr_nobug CMessage()
+      constexpr CMessage()
          :CCanMessage(0)
       {
       }
-#if 1
-      constexpr_nobug CMessage(nodeId_t id, EFunctionCode functionCode, EObject object, EUnit unit)
+      
+      constexpr CMessage(nodeId_t id, EFunctionCode functionCode, EObject object, EUnit unit)
          :CCanMessage( id | ( (unsigned int)functionCode << FUNCTIONCODE_BITSHIFT ))
       {
          lDebugAssert( id <= NODEID_BITMASK );
@@ -461,14 +462,14 @@ private:
          m_tdtMessage.unit=unit;
          setLen( sizeof(SMessage) );
       }
-#endif
-      constexpr_nobug CMessage(nodeId_t id, EFunctionCode functionCode, EObject object
+      
+      constexpr CMessage(nodeId_t id, EFunctionCode functionCode, EObject object
                      , EUnit unit, const SValue value)
          :CMessage(id, functionCode, object, unit )
       {
          m_tdtMessage.value=value;
       }
-      constexpr_nobug CMessage(nodeId_t id, EFunctionCode functionCode, EObject object
+      constexpr CMessage(nodeId_t id, EFunctionCode functionCode, EObject object
                , uint16_t mmpPos, uint32_t value)
           :CCanMessage(id | ( (unsigned int)functionCode << FUNCTIONCODE_BITSHIFT ))
       {
@@ -477,7 +478,7 @@ private:
          m_tdtMessage.value._uint=value;
          setLen( sizeof(SMessage) );
       }
-      constexpr_nobug CMessage( const CCanMessage& msg)
+      constexpr CMessage( const CCanMessage& msg)
          :CCanMessage(msg)
       {
       }
