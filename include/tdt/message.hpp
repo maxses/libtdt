@@ -287,22 +287,12 @@ class CMessage : public CCanMessage
        
    public:
 
-<<<<<<< HEAD
-      constexpr_nobug CMessage()
-         :CCanMessage{ (nodeId_t)0ul }
-      {
-      }
-
-#if 1
-      constexpr_nobug CMessage(nodeId_t id, EFunctionCode functionCode, EObject object, Tdt::EUnit unit)
-=======
       constexpr CMessage()
          :CCanMessage(0)
       {
       }
       
       constexpr CMessage(nodeId_t id, EFunctionCode functionCode, EObject object, EUnit unit)
->>>>>>> mmp
          :CCanMessage( id | ( (unsigned int)functionCode << FUNCTIONCODE_BITSHIFT ))
       {
          assert( id <= NODEID_BITMASK );
@@ -310,14 +300,8 @@ class CMessage : public CCanMessage
          m_tdtMessage.unit=unit;
          setLen( sizeof(SMessage) );
       }
-<<<<<<< HEAD
-#endif
-      
-      constexpr_nobug CMessage(nodeId_t id, EFunctionCode functionCode, EObject object
-=======
       
       constexpr CMessage(nodeId_t id, EFunctionCode functionCode, EObject object
->>>>>>> mmp
                      , EUnit unit, const SValue value)
          :CMessage(id, functionCode, object, unit )
       {
