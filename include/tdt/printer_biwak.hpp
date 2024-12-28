@@ -7,10 +7,10 @@
 //-----------------------------------------------------------------------------
 
 
-#include <lepto/can_message.h>
+#include <biwak/canMessage.hpp>
 #include <lepto/log.h>
 #include <stdio.h>               // snprintf
-#include <lepto/can_message_tdt.h>
+#include <tdt/message.hpp>
 //#include <QMap>
 
 #define ENUM_MAP( a, e ) { a::e, "" #e }
@@ -118,6 +118,7 @@ class CCanTdtPrinter
 };
 
 struct SPrinterObject CCanTdtPrinter::m_objectMap[]{
+   /*
    ENUM_MAP( Tdt::EObject, none ),
    ENUM_MAP( Tdt::EObject, ambientLightAll ),
    ENUM_MAP( Tdt::EObject, ambientLightLivingRoom ),
@@ -157,6 +158,7 @@ struct SPrinterObject CCanTdtPrinter::m_objectMap[]{
 
    ENUM_MAP( Tdt::EObject, batteryLevel ),
    ENUM_MAP( Tdt::EObject, rtcDrift ),
+    */
 };
 
 
