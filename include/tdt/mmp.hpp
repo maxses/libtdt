@@ -220,19 +220,19 @@ class CMmpTransfer
    #endif
    
    private:
-      int m_counterNodeId=0;
-       int m_nodeId=0;
+      nodeId_t m_counterNodeId=0;
+      nodeId_t m_nodeId=0;
 
    #if ! defined( STM32 )
    signals:
          void sendTdtMessage( const Tdt::CMessage& msg );
          int handleMmpTransfer( Tdt::CMmpTransferData& data );
-         int getNodeId();
+         uint32_t getNodeId();
    #else
       //public:
       // CSignal< void, const Tdt::CMessage& > sendMessage;
       // void cbSendMessage( const Tdt::CMessage& );
-      // int cbGetNodeId();
+      // nodeId_t cbGetNodeId();
    #endif
          
    //signals:

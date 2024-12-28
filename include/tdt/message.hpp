@@ -25,6 +25,8 @@
 
 #if defined USE_BIWAK
    #include <biwak/canMessage.hpp>
+#else
+   #include <tdt/canMessage.hpp>
 #endif
 
 #include <tdt/gen/objects.hpp>
@@ -247,7 +249,15 @@ class SCanMessageTdt
       {
          
       }
-};include/tdt/message.hpp
+      int getLen()
+      {
+         return( m.getLen() );
+      }
+      canId_t getId()
+      {
+         return( m.getId() );
+      }
+};
 
 #if 0
 struct
@@ -270,8 +280,7 @@ class CMessage : public SCanMessageTdt
    public:
 
 
-         constexpr CMessage()
-         :CCanMessage(0)
+      constexpr CMessage()
       {
       }
       
@@ -412,12 +421,16 @@ class CMessage : public SCanMessageTdt
       {
          return( m );
       }
-   #if 0
+      // needed in cordyceps
       SCanMessage &canMessage()
       {
-         return *(dynamic_cast<SCanMessage*>(this));
+         //return *(dynamic_cast<SCanMessage*>(this));
+         return(m);
       }
-   #endif
+      const uint8_t* getData() const
+      {
+         return( m.getData() );
+      }
 };
 
 

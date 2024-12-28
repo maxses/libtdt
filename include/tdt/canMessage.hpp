@@ -10,6 +10,7 @@
 //---Includes-----------------------------------------------------------------
 
 
+#include <cstring>      // memcpy
 #include <stdint.h>
 
 
@@ -18,24 +19,37 @@
 
 typedef uint32_t canId_t;
 
-class CCanMessage
+struct SCanMessage
 {
+   private:
       canId_t  m_id;
       int      m_len;
       uint8_t  m_data[8];
       
    public:
-      constexpr CCanMessage()
+      constexpr SCanMessage( canId_t id )
+          :m_id{ id }
+      {
+      }
+      constexpr SCanMessage()
          :m_id{0}
          ,m_len{0}
       {
          //
       }
-      canId_t getId() const
+      constexpr SCanMessage( canId_t id, int len, const uint8_t* data )
+          :m_id{id}
+          ,m_len{ len > 8 ? 8 : len }
+          ,m_data{   data[0], data[1], data[2], data[3],
+                     data[4], data[5], data[6], data[7] }
+      {
+         //
+      }
+      constexpr canId_t getId() const
       {
          return( m_id );
       }
-      void setId(canId_t id)
+      constexpr void setId(canId_t id)
       {
          m_id = id;
       }
@@ -43,7 +57,7 @@ class CCanMessage
       {
          return( m_len );
       }
-      void setLen( int len )
+      constexpr void setLen( int len )
       {
          m_len = len;
       }
@@ -61,6 +75,9 @@ class CCanMessage
          memcpy(m_data, data, m_len);
       }
 };
+
+
+static_assert( sizeof( SCanMessage ) == 16, "Wron CAN message size" );
 
 
 //---fin-----------------------------------------------------------------------

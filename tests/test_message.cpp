@@ -64,7 +64,7 @@ TEST_CASE( "CAN TDT", "[default]" )
          0x00, 0x00,
       };
 
-      Tdt::CCanMessage msg(
+      SCanMessage msg(
          ( (int)Tdt::EFunctionCode::sendObject
                   << Tdt::FUNCTIONCODE_BITSHIFT )
                | 0x10
