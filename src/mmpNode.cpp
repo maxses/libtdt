@@ -51,11 +51,11 @@ CMmpNode::CMmpNode()
 
 void CMmpNode::receive( const Tdt::CMessage& msg )
 {
-   lDebug("MMP in");
+   qDebug("MMP in");
    switch( msg.getFunctionCode() )
    {
       case ( Tdt::EFunctionCode::dataBlob ):
-         lDebug("   MMP Data");
+         qDebug("   MMP Data");
          if ( m_rx.handleRx( msg ) )
          {
             //signalHandleMmpTransfer.emitSignal( m_rx.m_data );
@@ -69,7 +69,7 @@ void CMmpNode::receive( const Tdt::CMessage& msg )
          }
          break;
       case ( Tdt::EFunctionCode::ackDataBlob ):
-         lDebug("   MMP Ack");
+         qDebug("   MMP Ack");
          m_tx.handleTx( msg );
          break;
       default:

@@ -113,7 +113,7 @@ endif()
 
 target_link_libraries(
    ${PROJECT_NAME}
-   lepto
+   # lepto
 )
 
 if( "${MCU_PLATFORM}" MATCHES "linux" )

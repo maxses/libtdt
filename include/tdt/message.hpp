@@ -7,10 +7,18 @@
 //-----------------------------------------------------------------------------
 
 
-#include <tdt/message.hpp>
-//#include <lepto/log.h>
-#include <lepto/can_message.h>
-#include <cassert>
+#include <stdint.h>
+#include <cassert>      // assert
+#include <memory.h>     // memcpy
+
+#if defined USE_LEPTO
+   // #include <lepto/log.h>
+   // #include <lepto/can_message.h>
+#else
+   #include <tdt/compat.hpp>
+   enum class ELogCode: int32_t;
+   enum class ELogCategory: int32_t;
+#endif
 
 
 #define CAN_TDT_PROTOCOL_VERSION    3
@@ -220,7 +228,7 @@ static_assert ( matchesSubIndexedObject(
                   Tdt::EObject::ambientLight, Tdt::EObject::ambientLight) == true);
 */
 
-typedef uint32_t nodeId_t;
+typedef int32_t nodeId_t;
 
 enum class EUnit: uint8_t
 {
@@ -435,6 +443,65 @@ struct SMessageNmtIntro
 
 static_assert( sizeof( SMessageNmtIntro ) == 8, "Message (NMT Intro) size not plausible" );
 
+#define constexpr_nobug constexpr
+
+//typedef uint32_t id_t;
+//typedef int id_t;
+
+class CCanMessage
+{
+      nodeId_t m_id;
+      size_t m_len;
+  protected:
+      union{
+         uint8_t m_data[8];
+         SMessage m_tdtMessage;
+      };
+      
+   public:
+      constexpr CCanMessage()
+           :m_id{0}
+           ,m_len{0}
+           ,m_data{0}
+       {}
+      constexpr CCanMessage(nodeId_t id)
+         :m_id{id}
+         ,m_len{0}
+         ,m_data{0}
+      {}
+      constexpr CCanMessage(nodeId_t id, size_t len, const unsigned char* data)
+          :m_id{id}
+          ,m_len{len}
+          ,m_data{ data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7] }
+      {
+      }
+      void setId( nodeId_t id )
+      {
+         m_id = id;
+      }
+      constexpr nodeId_t getId() const
+      {
+         return( m_id );
+      }
+      constexpr void setLen(size_t len)
+      {
+         m_len = (len>8) ? 8 : len;
+      }
+      size_t getLen() const
+      {
+         return( m_len );
+      }
+      void setData( size_t len, const void* data )
+      {
+         m_len = (len>8) ? 8 : len;
+         memcpy(m_data, data, m_len);
+      }
+      const uint8_t* getData() const
+      {
+         return( m_data );
+      }
+};
+
 
 class CMessage : public CCanMessage
 {
@@ -445,12 +512,13 @@ private:
       static constexpr int EID_SUBID_MASK=0xFF;
 
       static_assert ( sizeof(SMessage) == 4 + 4, "Size missmatch" );
-      SMessage &m_tdtMessage=*(SMessage *)&m_data;
+      //SMessage &m_tdtMessage=*static_cast<SMessage *>(getData());
+      //SMessage *m_tdtMessage=(SMessage *)(getData());
 
    public:
 
       constexpr_nobug CMessage()
-         :CCanMessage(0)
+         :CCanMessage{ (nodeId_t)0ul }
       {
       }
 #if 1
