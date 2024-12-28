@@ -29,13 +29,17 @@ struct SCanMessage
    public:
       constexpr SCanMessage( canId_t id )
           :m_id{ id }
+          ,m_len{ 0 }
+          ,m_data{ 0, 0, 0, 0,
+                   0, 0, 0, 0 }
       {
       }
       constexpr SCanMessage()
          :m_id{0}
          ,m_len{0}
+         ,m_data{ 0, 0, 0, 0,
+                  0, 0, 0, 0 }
       {
-         //
       }
       constexpr SCanMessage( canId_t id, int len, const uint8_t* data )
           :m_id{id}
