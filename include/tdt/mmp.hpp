@@ -126,7 +126,11 @@ class CMmpTransferData
       };
       void alloc()
       {
+         #if ! defined STM32
+         m_maxReceiveSize=0x10000;
+         #else
          m_maxReceiveSize=0x200;
+         #endif
          m_data=(char*)malloc( m_maxReceiveSize );
          reset();
       };
