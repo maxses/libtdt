@@ -243,10 +243,12 @@ class SCanMessageTdt
    
    public:
       constexpr SCanMessageTdt()
+         :m{}
       {};
       constexpr SCanMessageTdt( nodeId_t id )
+         :m{ id }
       {
-         m.setId( id );
+         //m.setId( id );
       };
       constexpr SCanMessageTdt( const SCanMessage& msg)
           :m{msg}
