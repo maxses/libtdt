@@ -60,10 +60,15 @@ quidem non admodum indoctis, totum hoc displicet philosophari. quidam autem non
 tam id reprehendunt, si remissius agatur, sed tantum studium tamque multam
 operam ponendam in eo non arbitrantur.)" };
 
+// This test is disfunctional at the moment.
+//
+// Need to prepare smoe helper functions to route CAN messages to the correct
+// methods.
+
+#if 0
 
 void handleQueues(Tdt::CMmpNode& n1, Tdt::CMmpNode& n2)
 {
-   /*
    while( n1.m_rx.m_txList.count() )
    {
       n2.receive( n1.m_rx.m_txList.last() );
@@ -74,7 +79,6 @@ void handleQueues(Tdt::CMmpNode& n1, Tdt::CMmpNode& n2)
       n1.receive( n2.m_tx.m_txList.last() );
       n2.m_tx.m_txList.removeLast();
    }
-   */
 };
 
 
@@ -136,5 +140,6 @@ TEST_CASE( "MMP full duplex", "[default]" )
    }
 }
 
+#endif
 
 //---fin-----------------------------------------------------------------------
