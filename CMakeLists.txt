@@ -56,6 +56,8 @@ list( APPEND
 
 include(ExternalProject)
 
+file( MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/tools/bin )
+
 ExternalProject_Add (
    tdtGen
       SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/tools/tdtGen

@@ -43,6 +43,12 @@
                "name": "Air pressure",
                "description": "Air pressure",
                "example": "1.001 hPa"
+            },
+            {
+               "offset": "0x0050",
+               "name": "Food temperature",
+               "description": "supposed to be in the oven",
+               "example": "25°C"
             }
          ]
       },

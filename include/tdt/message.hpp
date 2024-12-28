@@ -40,6 +40,7 @@ namespace Tdt
 
 static constexpr unsigned int NODEID_BITMASK  =0x7F;
 static constexpr uint32_t NMT_OBJECT_OFFSET=0x1000;
+static constexpr uint32_t LOG_CODE_OFFSET=0x3000;
 static constexpr unsigned int FUNCTIONCODE_BITSHIFT =7;
 static constexpr unsigned int FUNCTIONCODE_BITMASK  =0x780;
 static constexpr unsigned int FUNCTIONCODE_RSHIFTED_BITMASK  =0xF;
@@ -93,19 +94,22 @@ typedef uint32_t nodeId_t;
 
 enum class EEvent: uint32_t
 {
-   #if 0
    null              = 0x0,
+   #if 1
 
    // CAUTION: lower nibble must be 0 because log category is mangled in
 
    // routine control
-   wannaSleepStart      = 0x10 + EVENT_OFFSET,
-   wannaSleepAll        = 0x11 + EVENT_OFFSET,
-   wannaSleepRoom0      = 0x12 + EVENT_OFFSET,
-   wannaSleepRoom1      = 0x13 + EVENT_OFFSET,
-   wannaSleepEnd        = 0x1F + EVENT_OFFSET,
-   noRelease_OBS        = 0x20 + EVENT_OFFSET,
-   shutdown             = 0x21 + EVENT_OFFSET,
+   wannaSleepStart      = 0x10 + LOG_CODE_OFFSET,
+   wannaSleepAll        = 0x11 + LOG_CODE_OFFSET,
+   wannaSleepRoom0      = 0x12 + LOG_CODE_OFFSET,
+   wannaSleepRoom1      = 0x13 + LOG_CODE_OFFSET,
+   wannaSleepEnd        = 0x1F + LOG_CODE_OFFSET,
+   noRelease_OBS        = 0x20 + LOG_CODE_OFFSET,
+   shutdown             = 0x21 + LOG_CODE_OFFSET,
+   batteryLow           = 0x22 + LOG_CODE_OFFSET,
+   vbusLow              = 0x23 + LOG_CODE_OFFSET,
+   
    #endif
    couldNotReadEeprom,
    noRelease,

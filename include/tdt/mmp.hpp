@@ -27,7 +27,9 @@
 #if defined USE_LEPTO
    #include <lepto/crc32.h>
    #include <lepto/signal.h>
-   #include <lepto/mockQt.hpp>
+   #if defined( STM32 )
+      #include <lepto/mockQt.hpp>
+   #endif
 #else
    typedef uint32_t address_t;
 #endif
