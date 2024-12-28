@@ -26,6 +26,11 @@
                "offset": "0x0011",
                "name": "switch multimedia",
                "example": "-"
+            },
+            {
+               "offset": "0x0011",
+               "name": "switch main",
+               "example": "-"
             }
          ]
       },

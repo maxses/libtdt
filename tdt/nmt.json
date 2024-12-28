@@ -1,0 +1,58 @@
+{
+   "profiles": [
+      {
+         "name": "nmt",
+         "description": "Network management",
+         "base": "0x1000",
+         "size": "0x10",
+         "objects": [
+            {
+               "name": "scan",
+               "offset": "0x0000"
+            },
+            {
+               "name": "scan config",
+               "offset": "0x0001"
+            },
+            {
+               "name": "recipient low ID",
+               "offset": "0x0002"
+            },
+            {
+               "name": "recipient high ID",
+               "offset": "0x0003"
+            },
+            {
+               "name": "set node Id",
+               "offset": "0x0004"
+            },
+            {
+               "name": "beckon",
+               "offset": "0x0005"
+            },
+            {
+               "name": "reset",
+               "offset": "0x0006"
+            },
+            {
+               "name": "calm",
+               "offset": "0x0007"
+            },
+            {
+               "name": "jump boot loader",
+               "offset": "0x0008"
+            },
+            {
+               "name": "jump application",
+               "offset": "0x0009",
+               "comment": "This is in NMT, does it make sense? TBD"
+            },
+            {
+               "name": "enable application boot",
+               "offset": "0x0009",
+               "comment": "This is in NMT, does it make sense? TBD"
+            }
+         ]
+      }
+   ]
+}

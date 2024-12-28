@@ -51,6 +51,7 @@ list( APPEND
     ${CMAKE_CURRENT_SOURCE_DIR}/tdt/global.json
     ${CMAKE_CURRENT_SOURCE_DIR}/tdt/infoDisplay.json
     ${CMAKE_CURRENT_SOURCE_DIR}/tdt/facility.json
+    ${CMAKE_CURRENT_SOURCE_DIR}/tdt/nmt.json
 )
 
 include(ExternalProject)
@@ -179,12 +180,20 @@ if( NOT TDT_CONFIGURED )
             "'TDT_CONFIGURED' cmake variable")
 endif()
 
+# message( FATAL_ERROR "### use lepto: ${USE_LEPTO}" )
+   
 if( USE_LEPTO )
-   target_link_libraries(
-      ${PROJECT_NAME}
-      lepto
-   )
+   set( LIBS ${LIBS} lepto )
 endif( USE_LEPTO )
+
+if( USE_BIWAK )
+   set( LIBS ${LIBS} biwak )
+endif( USE_BIWAK )
+
+target_link_libraries(
+   ${PROJECT_NAME}
+   ${LIBS}
+)
 
 target_include_directories( ${PROJECT_NAME}
    PRIVATE

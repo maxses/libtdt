@@ -124,9 +124,9 @@ bool CMmpTransfer::handleRx( const Tdt::CMessage& msg )
       }
    }
    
-   if( ( m_data.pos() * 4 >= sizeof( Tdt::SMmpHeader ) )
+   if( ( m_data.pos() * 4 >= (int)sizeof( Tdt::SMmpHeader ) )
        && ( m_data.pos() * 4
-           >= sizeof( Tdt::SMmpHeader ) + m_data.header().dataLength )
+           >= (int)sizeof( Tdt::SMmpHeader ) + m_data.header().dataLength )
        )
    {
       qDebug(LDS("TRFI p=%d", "Transfer finished; pos=%d"), m_data.pos());
