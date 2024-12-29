@@ -4,7 +4,7 @@
          "comment": "lowercase; tdtGen is not converting it automatically yet",
          "name": "mmp",
          "description": "Multi message package",
-         "base": "0x6000",
+         "base": "0x6400",
          "size": "0x10",
          "objects": [
             {

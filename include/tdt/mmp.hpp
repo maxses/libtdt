@@ -303,7 +303,7 @@ class CMmpNode
       #if ! defined( STM32 )
          signals:
          void sendTdtMessage( const Tdt::CMessage& msg );
-         int handleMmpTransfer( CMmpTransferData &data );
+         int handleMmpTransfer( Tdt::CMmpTransferData& data );
       #elif 0
          CSignal< void, const Tdt::CMessage& > signalSendMessage;
          CSignal< int, const Tdt::CMmpTransferData& > signalHandleMmpTransfer;
@@ -313,9 +313,9 @@ class CMmpNode
       #endif
       
    public slots:
-      void receive(const CMessage &msg);
+      void receive(const CMessage& msg);
       void slotSendTdtMessage( const Tdt::CMessage& msg );
-      int slotHandleMmpTransfer( Tdt::CMmpTransferData &data );
+      int slotHandleMmpTransfer( Tdt::CMmpTransferData& data );
           
    public:
       CMmpNode();
