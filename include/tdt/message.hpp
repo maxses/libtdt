@@ -259,7 +259,7 @@ class SCanMessageTdt
       {
          return( m.getLen() );
       }
-      canId_t getId()
+      constexpr canId_t getId() const
       {
          return( m.getId() );
       }
@@ -441,7 +441,12 @@ class CMessage : public SCanMessageTdt
 
 
 EObject operator+(const EObject &a, int value);
-//int operator-(const EObject &a, EObject b);
+
+// Needed e.g. for storing relativ object-offsets
+inline constexpr int operator-(const EObject &a, EObject b)
+{
+   return( (int)a - (int)b );
+}
 
 
 };  // namespace Tdt

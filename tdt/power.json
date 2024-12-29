@@ -13,6 +13,11 @@
                "size": "0x10"
             },
             {
+               "offset": "0x0001",
+               "name": "switch ambient light all",
+               "description": "Used in candis. Should probably be changed to something mor generic."
+            },
+            {
                "offset": "0x0002",
                "name": "switch ambient light living room",
                "example": "-"
