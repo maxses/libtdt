@@ -181,6 +181,7 @@ bool CMmpTransfer::handleTx( const Tdt::CMessage& msg )
    
    if( msg.getTdtObject() != Tdt::EObject::mmpAcknowledgeShred )
    {
+      qDebug( "Got: 0x%X Exp: 0x%X", msg.getTdtObject(), Tdt::EObject::mmpAcknowledgeShred );
       qFatal( LDS( "ONSA", "TDT-Object was not a shred acknowledge" ) );
    };
    

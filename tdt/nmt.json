@@ -49,7 +49,7 @@
             },
             {
                "name": "enable application boot",
-               "offset": "0x0009",
+               "offset": "0x000A",
                "comment": "This is in NMT, does it make sense? TBD"
             }
          ]
