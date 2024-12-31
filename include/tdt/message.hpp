@@ -34,6 +34,9 @@
 #include <tdt/gen/commands.hpp>
 
 #define CAN_TDT_PROTOCOL_VERSION    4
+   
+#define TdtMatchesSubIndexedObject( objectIndex , objectEnum ) \
+   (( objectIndex >= objectEnum ## Start ) && ( objectIndex <= objectEnum ## Max )  )
 
 namespace Tdt
 {

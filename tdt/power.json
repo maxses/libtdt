@@ -23,6 +23,21 @@
                "example": "-"
             },
             {
+               "offset": "0x0003",
+               "name": "switch ambient light sleeping room",
+               "example": "-"
+            },
+            {
+               "offset": "0x0004",
+               "name": "switch ambient light kitchen",
+               "example": "-"
+            },
+            {
+               "offset": "0x0005",
+               "name": "switch ambient light office",
+               "example": "-"
+            },
+            {
                "offset": "0x0010",
                "name": "switch plant light",
                "example": "-"
