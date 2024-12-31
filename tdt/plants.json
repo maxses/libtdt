@@ -14,7 +14,7 @@
             },
             {
                "offset": "0x8008",
-               "name": "SensorRaw",
+               "name": "Sensor raw",
                "size": "0x8"
             }
          ]
