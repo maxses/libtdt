@@ -75,6 +75,7 @@ enum class EMmpCommand: uint32_t
    sendFirmware,
    receiveEeprom,
    receiveFirmware,
+   writeEeprom,
 };
 
 struct SMmpHeader
