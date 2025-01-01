@@ -51,7 +51,7 @@ void CMmpTransferData::updateCrc()
    else
    {
       #if defined USE_LEPTO
-         m_header.crc32Data = crc32DefaultInit( );
+         m_header.crc32Data = crc32Init( );
          m_header.crc32Data = crc32Update( m_header.crc32Data
                                           , m_data, m_header.dataLength );
          m_header.crc32Data = crc32Finalize( m_header.crc32Data );
