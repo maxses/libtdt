@@ -88,7 +88,7 @@ enum class ENmtObject: uint16_t
    nmtCalm                    = 0x07 + NMT_OBJECT_OFFSET,
    nmtJumpBootLoader          = 0x08 + NMT_OBJECT_OFFSET,
    nmtJumpApplication         = 0x09 + NMT_OBJECT_OFFSET,
-   nmtEnableApplicationBoot   = 0x0A + NMT_OBJECT_OFFSET,
+   //nmtEnableApplicationBoot   = 0x0A + NMT_OBJECT_OFFSET,
 };
 
 
