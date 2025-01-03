@@ -260,9 +260,6 @@ class CMmpTransfer
       void startTx()
       {
          m_data.reset();
-         #if defined STM32
-            m_counterNodeId=0x14;
-         #endif
          writeMMP( m_data.m_object, 0, m_data.data32() );
          //m_timeoutTimer.start( m_shredTimeout );
       }
@@ -369,7 +366,7 @@ class CMmpNode
          m_tx.startTx();
       }
       */
-      void setDestinationNodeId( int nodeId )
+      void setTargetNodeId( nodeId_t nodeId )
       {
          m_tx.setCounterNodeId( nodeId );
       }
