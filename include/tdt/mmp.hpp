@@ -210,6 +210,10 @@ class CMmpTransferData
       {
          m_header.flashAddress=addr;
       }
+      void setSourceNodeId( nodeId_t nodeId )
+      {
+         m_header.sourceNodeId = nodeId;
+      }
 };
 
 class CSocketCan;
@@ -231,7 +235,7 @@ class CMmpTransfer
    signals:
          void sendTdtMessage( const Tdt::CMessage& msg );
          int handleMmpTransfer( Tdt::CMmpTransferData& data );
-         uint32_t getNodeId();
+         //uint32_t getNodeId();
    #else
       //public:
       // CSignal< void, const Tdt::CMessage& > sendMessage;
@@ -281,6 +285,14 @@ class CMmpTransfer
       void setCounterNodeId( int nodeId )
       {
          m_counterNodeId=nodeId;
+      }
+      void setNodeId( int nodeId )
+      {
+         m_nodeId=nodeId;
+      }
+      nodeId_t getTargetNodeId( )
+      {
+         return( m_counterNodeId );
       }
 };
 
@@ -350,11 +362,13 @@ class CMmpNode
       {
          return( m_tx.m_data.header().mmpCommand != EMmpCommand::null );
       }
+      /*
       void startTx(EMmpCommand command, const char* data, uint32_t length)
       {
          m_tx.m_data.setData(command, data, length);
          m_tx.startTx();
       }
+      */
       void setDestinationNodeId( int nodeId )
       {
          m_tx.setCounterNodeId( nodeId );
@@ -365,6 +379,10 @@ class CMmpNode
          m_tx.m_data.setData( command, data, length );
          m_tx.m_data.setFlashAddress( flashPos );
          m_tx.startTx( );
+      }
+      void setSourceNodeId( nodeId_t id )
+      {
+         m_tx.m_data.setSourceNodeId( id );
       }
 };
 
