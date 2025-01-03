@@ -168,6 +168,12 @@ bool CMmpTransfer::handleRx( const Tdt::CMessage& msg )
 
 bool CMmpTransfer::handleTx( const Tdt::CMessage& msg )
 {
+   if( msg.getNodeId() != m_counterNodeId )
+   {
+      // Just some ack, not for me
+      return(false);
+   }
+   
    qDebug( "   handle Transceiver [%d]", m_nodeId );
    qDebug( "   RCV ACK pos %d %s", msg.getTdtValue()->_uint,
           (msg.getTdtObject() == Tdt::EObject::mmpAcknowledgeTransfer)
