@@ -30,9 +30,7 @@ namespace Tdt
 
 CMmpTransfer::CMmpTransfer()
 {
-   static int counter=0;
-   m_nodeId=counter;
-   counter++;
+   m_nodeId=0x70;
 }
 
 
@@ -168,6 +166,12 @@ bool CMmpTransfer::handleRx( const Tdt::CMessage& msg )
 
 bool CMmpTransfer::handleTx( const Tdt::CMessage& msg )
 {
+   if( msg.getNodeId() != m_counterNodeId )
+   {
+      // Just some ack, not for me
+      return(false);
+   }
+   
    qDebug( "   handle Transceiver [%d]", m_nodeId );
    qDebug( "   RCV ACK pos %d %s", msg.getTdtValue()->_uint,
           (msg.getTdtObject() == Tdt::EObject::mmpAcknowledgeTransfer)
@@ -254,7 +258,8 @@ void CMmpTransfer::sendAck( uint32_t pos )
       #if defined STM32
       cbGetNodeId(),
       #else
-      emit getNodeId(),
+      //emit getNodeId(),
+       m_nodeId,
       #endif
       Tdt::EFunctionCode::ackDataBlob,
       Tdt::EObject::mmpAcknowledgeShred,
@@ -275,7 +280,8 @@ void CMmpTransfer::sendTransferAck(int sta)
       #if defined STM32
       cbGetNodeId(),
       #else
-      emit getNodeId(),
+      // emit getNodeId(),
+      m_nodeId,
       #endif
       Tdt::EFunctionCode::ackDataBlob,
       Tdt::EObject::mmpAcknowledgeTransfer,

@@ -76,6 +76,7 @@ enum class EMmpCommand: uint32_t
    receiveEeprom,
    receiveFirmware,
    writeEeprom,
+   dummyCommand
 };
 
 struct SMmpHeader
@@ -209,6 +210,10 @@ class CMmpTransferData
       {
          m_header.flashAddress=addr;
       }
+      void setSourceNodeId( nodeId_t nodeId )
+      {
+         m_header.sourceNodeId = nodeId;
+      }
 };
 
 class CSocketCan;
@@ -230,7 +235,7 @@ class CMmpTransfer
    signals:
          void sendTdtMessage( const Tdt::CMessage& msg );
          int handleMmpTransfer( Tdt::CMmpTransferData& data );
-         uint32_t getNodeId();
+         //uint32_t getNodeId();
    #else
       //public:
       // CSignal< void, const Tdt::CMessage& > sendMessage;
@@ -255,9 +260,6 @@ class CMmpTransfer
       void startTx()
       {
          m_data.reset();
-         #if defined STM32
-            m_counterNodeId=0x14;
-         #endif
          writeMMP( m_data.m_object, 0, m_data.data32() );
          //m_timeoutTimer.start( m_shredTimeout );
       }
@@ -280,6 +282,14 @@ class CMmpTransfer
       void setCounterNodeId( int nodeId )
       {
          m_counterNodeId=nodeId;
+      }
+      void setNodeId( int nodeId )
+      {
+         m_nodeId=nodeId;
+      }
+      nodeId_t getTargetNodeId( )
+      {
+         return( m_counterNodeId );
       }
 };
 
@@ -349,21 +359,27 @@ class CMmpNode
       {
          return( m_tx.m_data.header().mmpCommand != EMmpCommand::null );
       }
+      /*
       void startTx(EMmpCommand command, const char* data, uint32_t length)
       {
          m_tx.m_data.setData(command, data, length);
          m_tx.startTx();
       }
-      void setDestinationNodeId( int nodeId )
+      */
+      void setTargetNodeId( nodeId_t nodeId )
       {
          m_tx.setCounterNodeId( nodeId );
       }
-      void sendTransfer(Tdt::EMmpCommand command, const char *data=0
+      void startTransfer(Tdt::EMmpCommand command, const char *data=0
                      , int length=0, int flashPos=0)
       {
          m_tx.m_data.setData( command, data, length );
          m_tx.m_data.setFlashAddress( flashPos );
          m_tx.startTx( );
+      }
+      void setSourceNodeId( nodeId_t id )
+      {
+         m_tx.m_data.setSourceNodeId( id );
       }
 };
 
