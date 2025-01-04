@@ -370,7 +370,7 @@ class CMmpNode
       {
          m_tx.setCounterNodeId( nodeId );
       }
-      void sendTransfer(Tdt::EMmpCommand command, const char *data=0
+      void startTransfer(Tdt::EMmpCommand command, const char *data=0
                      , int length=0, int flashPos=0)
       {
          m_tx.m_data.setData( command, data, length );
