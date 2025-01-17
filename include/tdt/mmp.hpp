@@ -76,7 +76,10 @@ enum class EMmpCommand: uint32_t
    receiveEeprom,
    receiveFirmware,
    writeEeprom,
-   dummyCommand
+   dummyCommand,
+
+   eraseBootloaderFlash,
+   writeBootloaderFlash,
 };
 
 struct SMmpHeader
