@@ -127,7 +127,7 @@ enum class ESystemState: uint32_t
    invalid,
    bootloader,
    application,
-   reverseBootLoader,
+   reverseBootloader,
 };
 
 
