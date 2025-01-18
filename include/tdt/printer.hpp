@@ -279,6 +279,9 @@ class CPrinter: public CPrinterBase
                   case Tdt::ESystemState::bootLoader:
                      ts << "Bootloader";
                      break;
+                  case Tdt::ESystemState::bootLoaderReverse:
+                     ts << "Reverse Bootloader";
+                     break;
                   default:
                      ts << "Unknown ("
                         << (uint32_t)msg.getTdtValue()->systemState
