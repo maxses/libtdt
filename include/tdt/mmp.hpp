@@ -148,6 +148,10 @@ class CMmpTransferData
       {
          return(m_pos);
       };
+      bool dataLeft()
+      {
+         return( m_pos < ( ( (int)sizeof(SMmpHeader) + m_header.dataLength ) / 4 ) );
+      }
       
       /** \brief  Returns reference to current data
        * 
