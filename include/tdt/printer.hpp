@@ -277,7 +277,7 @@ class CPrinter: public CPrinterBase
                   case Tdt::ESystemState::application:
                      ts << "Application";
                      break;
-                  case Tdt::ESystemState::bootLoader:
+                  case Tdt::ESystemState::bootloader:
                      ts << "Bootloader";
                      break;
                   case Tdt::ESystemState::reverseBootLoader:

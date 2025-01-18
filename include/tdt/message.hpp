@@ -125,7 +125,7 @@ enum class ELogCode2: uint32_t
 enum class ESystemState: uint32_t
 {
    invalid,
-   bootLoader,
+   bootloader,
    application,
    reverseBootLoader,
 };
