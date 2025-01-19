@@ -280,7 +280,7 @@ class CPrinter: public CPrinterBase
                   case Tdt::ESystemState::bootloader:
                      ts << "Bootloader";
                      break;
-                  case Tdt::ESystemState::reverseBootLoader:
+                  case Tdt::ESystemState::reverseBootloader:
                      ts << "Reverse Bootloader";
                      break;
                   default:
