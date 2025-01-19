@@ -212,8 +212,7 @@ bool CMmpTransfer::handleTx( const Tdt::CMessage& msg )
       }
    }
    m_data.inc();
-   if( ( m_data.pos() * sizeof(uint32_t) )
-       >= sizeof(Tdt::SMmpHeader) + m_data.header().dataLength )
+   if( ! m_data.dataLeft() )
    {
       // The transmission finished. But still waiting for Transfer Ack.
       // "Reboot" and "Jump to application" wont send an transfer ack.
