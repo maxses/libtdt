@@ -258,7 +258,7 @@ class SCanMessageTdt
       {
          
       }
-      int getLen()
+      constexpr int getLen() const
       {
          return( m.getLen() );
       }

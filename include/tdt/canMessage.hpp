@@ -57,7 +57,7 @@ struct SCanMessage
       {
          m_id = id;
       }
-      int getLen() const
+      constexpr int getLen() const
       {
          return( m_len );
       }
