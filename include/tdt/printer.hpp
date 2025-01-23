@@ -40,6 +40,7 @@ class CPrinter: public CPrinterBase
          ENUM_MAP( Tdt::EFunctionCode, sendObject ),
          ENUM_MAP( Tdt::EFunctionCode, dataBlob ),
          ENUM_MAP( Tdt::EFunctionCode, reSendObject ),
+         ENUM_MAP( Tdt::EFunctionCode, ackDataBlob ),
          //ENUM_MAP( Tdt::EFunctionCode, log ),
          ENUM_MAP( Tdt::EFunctionCode, max ),
       };
