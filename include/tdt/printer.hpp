@@ -13,6 +13,7 @@
 #include <stdio.h>               // snprintf
 #include <QTextStream>
 #include <QMap>
+#include <math.h>
 
 #if defined USE_LEPTO
    #include <lepto/events.h>
@@ -277,8 +278,11 @@ class CPrinter: public CPrinterBase
                   case Tdt::ESystemState::application:
                      ts << "Application";
                      break;
-                  case Tdt::ESystemState::bootLoader:
+                  case Tdt::ESystemState::bootloader:
                      ts << "Bootloader";
+                     break;
+                  case Tdt::ESystemState::reverseBootloader:
+                     ts << "Reverse Bootloader";
                      break;
                   default:
                      ts << "Unknown ("

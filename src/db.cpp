@@ -11,6 +11,7 @@
 #include <tdt/db.hpp>
 #include <QFile>
 #include <QDomDocument>
+#include <QDebug>
 #include <QDir>            // home()
 
 

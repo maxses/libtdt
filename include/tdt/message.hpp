@@ -10,11 +10,9 @@
 #include <stdint.h>
 #include <cassert>      // assert
 #include <memory.h>     // memcpy
-#include <cassert>
 
 
 #if defined USE_LEPTO
-   //#include <lepto/can_message.h>
    #include <lepto/log.h>     // ELogCategory
    enum class ELogBlended: int;
 #else
@@ -127,8 +125,9 @@ enum class ELogCode2: uint32_t
 enum class ESystemState: uint32_t
 {
    invalid,
-   bootLoader,
-   application
+   bootloader,
+   application,
+   reverseBootloader,
 };
 
 
@@ -296,7 +295,9 @@ class CMessage : public SCanMessageTdt
       constexpr CMessage(nodeId_t id, EFunctionCode functionCode, EObject object, Tdt::EUnit unit)
          :SCanMessageTdt( id | ( (unsigned int)functionCode << FUNCTIONCODE_BITSHIFT ))
       {
-         assert( id <= NODEID_BITMASK );
+         #if ! defined STM32
+            assert( id <= NODEID_BITMASK );
+         #endif
          m_tdtMessage.object=object;
          m_tdtMessage.unit=unit;
          m.setLen( sizeof(SMessage) );

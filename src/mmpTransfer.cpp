@@ -30,9 +30,7 @@ namespace Tdt
 
 CMmpTransfer::CMmpTransfer()
 {
-   static int counter=0;
-   m_nodeId=counter;
-   counter++;
+   m_nodeId=0x70;
 }
 
 
@@ -168,6 +166,12 @@ bool CMmpTransfer::handleRx( const Tdt::CMessage& msg )
 
 bool CMmpTransfer::handleTx( const Tdt::CMessage& msg )
 {
+   if( msg.getNodeId() != m_counterNodeId )
+   {
+      // Just some ack, not for me
+      return(false);
+   }
+   
    qDebug( "   handle Transceiver [%d]", m_nodeId );
    qDebug( "   RCV ACK pos %d %s", msg.getTdtValue()->_uint,
           (msg.getTdtObject() == Tdt::EObject::mmpAcknowledgeTransfer)
@@ -181,7 +185,7 @@ bool CMmpTransfer::handleTx( const Tdt::CMessage& msg )
    
    if( msg.getTdtObject() != Tdt::EObject::mmpAcknowledgeShred )
    {
-      qDebug( "Got: 0x%X Exp: 0x%X", msg.getTdtObject(), Tdt::EObject::mmpAcknowledgeShred );
+      qDebug( "Got: 0x%X Exp: 0x%X", (int)msg.getTdtObject(), (int)Tdt::EObject::mmpAcknowledgeShred );
       qFatal( LDS( "ONSA", "TDT-Object was not a shred acknowledge" ) );
    };
    
@@ -208,8 +212,7 @@ bool CMmpTransfer::handleTx( const Tdt::CMessage& msg )
       }
    }
    m_data.inc();
-   if( ( m_data.pos() * sizeof(uint32_t) )
-       >= sizeof(Tdt::SMmpHeader) + m_data.header().dataLength )
+   if( ! m_data.dataLeft() )
    {
       // The transmission finished. But still waiting for Transfer Ack.
       // "Reboot" and "Jump to application" wont send an transfer ack.
@@ -254,7 +257,8 @@ void CMmpTransfer::sendAck( uint32_t pos )
       #if defined STM32
       cbGetNodeId(),
       #else
-      emit getNodeId(),
+      //emit getNodeId(),
+       m_nodeId,
       #endif
       Tdt::EFunctionCode::ackDataBlob,
       Tdt::EObject::mmpAcknowledgeShred,
@@ -275,7 +279,8 @@ void CMmpTransfer::sendTransferAck(int sta)
       #if defined STM32
       cbGetNodeId(),
       #else
-      emit getNodeId(),
+      // emit getNodeId(),
+      m_nodeId,
       #endif
       Tdt::EFunctionCode::ackDataBlob,
       Tdt::EObject::mmpAcknowledgeTransfer,

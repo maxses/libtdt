@@ -72,21 +72,17 @@ STRING (JOIN ":" tdtProfilesJoined ${tdtProfiles} )
 
 file( MAKE_DIRECTORY ${TDT_OUTPUT_DIR}/tdt/gen )
 
-add_custom_target( tdtGenerate
+# add_custom_target is always created
+add_custom_command(
+   OUTPUT
+         ${TDT_GEN_HEADER}
     COMMAND
         SOURCE_DIR=${CMAKE_SOURCE_DIR} 
-        OUTPUT_DIR=${CMAKE_BINARY_DIR}/git_version 
+        OUTPUT_DIR=${TDT_OUTPUT_DIR}/tdt
         PROJECT=${CMAKE_PROJECT_NAME} 
         ${CMAKE_BINARY_DIR}/tools/bin/tdtGen -i ${tdtProfilesJoined}
                -o ${TDT_OUTPUT_DIR}/tdt/gen
     DEPENDS tdtGen ${tdtProfiles}
-)
-
-add_custom_command(
-    OUTPUT
-         ${TDT_GEN_HEADER}
-    DEPENDS
-         tdtGen tdtGenerate
 )
 
 
