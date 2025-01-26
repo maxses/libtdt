@@ -199,7 +199,10 @@ bool CMmpTransfer::handleTx( const Tdt::CMessage& msg )
    {
       if( msg.getTdtValue()->_int == m_data.pos()-1 )
       {
-         qCritical( LDS( "IOA", "Ignoring old ACK" ) );
+         // An STM32F103 in the bus forced an STM32L4 to unnecessary retransmits.
+         // This could also be seen in cordyceps by scanning devices.
+         qCritical( LDS( "IOA", "Ignoring old/previous ACK; MSG:%d" ),
+                  msg.getTdtValue()->_int );
          return(false);
       }
       if( msg.getTdtValue()->_int != m_data.pos() )
