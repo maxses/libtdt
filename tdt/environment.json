@@ -49,6 +49,12 @@
                "name": "Food temperature",
                "description": "supposed to be in the oven",
                "example": "25°C"
+            },
+            {
+               "offset": "0x0051",
+               "name": "Connected sensors",
+               "description": "Bitmask of detected sensors",
+               "example": "0x00003"
             }
          ]
       },
