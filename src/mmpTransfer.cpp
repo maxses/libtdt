@@ -67,8 +67,9 @@ void CMmpTransfer::writeMMP( Tdt::EObject object, int pos, uint32_t value )
       qDebug("MMP out: pos %d; length=%d", pos, m_data.header().dataLength);
    }
    Tdt::CMessage message( m_counterNodeId,
-                         Tdt::EFunctionCode::dataBlob, 
-                         object, pos, value);
+                         Tdt::EFunctionCode::dataBlob,
+                         (uint16_t)object, // TBD: Its me, the source
+                         pos, value );
    //m_socketCan << message;
    #if ! defined ( STM32 )
       emit sendTdtMessage(message);
