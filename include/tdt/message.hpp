@@ -125,8 +125,9 @@ enum class ELogCode2: uint32_t
 enum class ESystemState: uint32_t
 {
    invalid,
-   bootLoader,
-   application
+   bootloader,
+   application,
+   reverseBootloader,
 };
 
 
@@ -150,8 +151,9 @@ inline constexpr Tdt::EEvent toEvent( ELogBlended c )
    return( (Tdt::EEvent)((int)c >> 4 ) );
 }
 
+#undef PHONY_PACKED
 //#define PACKED __attribute ((packed))
-#define PACKED
+#define PHONY_PACKED
 
 union SValue
 {
@@ -169,7 +171,7 @@ union SValue
          uint8_t patch;
          uint8_t minor;
          uint8_t major;
-      } PACKED softwareVersion;
+      } PHONY_PACKED softwareVersion;
       static_assert( sizeof(softwareVersion) == 4 );
 
       uint32_t softwareVersionCode;
@@ -182,7 +184,7 @@ union SValue
          uint8_t day;
          uint8_t month;
          uint16_t year;
-      } PACKED date;
+      } PHONY_PACKED date;
       static_assert( sizeof( date ) == 4 );
 
       struct STime
@@ -191,7 +193,7 @@ union SValue
          uint8_t min;
          uint8_t hour;
          uint8_t reserved;
-      } PACKED time;
+      } PHONY_PACKED time;
       static_assert( sizeof( time ) == 4 );
 
       ECommand command;
@@ -203,60 +205,86 @@ union SValue
 
 static_assert( sizeof(SValue) == 4, "Size missmatch");
 
-struct SMessage
-{
-   union { // 4 Byte
-      struct {
-         union {
-            EObject object;      // 2 B
-            ENmtObject nmtObject;      // 2 B
-            //EMmpObject mmpObject;      // 2 B
-         };
-         EUnit unit;          // 1 Binclude/tdt/message.hpp
-         uint8_t reserved;    // 1 B
-      } PACKED;
-      struct {
-         uint16_t mmpSource;
-         uint16_t mmpPos;
-      } PACKED;
-   };
-   SValue value __attribute ( ( aligned(4) ) );
-   static_assert( sizeof(value) == 4, "Message size not plausible" );
-} PACKED;
 
-static_assert( sizeof( SMessage ) == 8 );
-
-#define constexpr_nobug constexpr
-
-
+// This is an "overloaded" class of the SCanMessage. It brings the Tdt payload
+// on top of the can message
 class SCanMessageTdt
 {
-   protected: 
-      union{
+   protected:
+      union
+      {
          SCanMessage m;
          struct
          {
-            uint32_t reserved1;
-            uint32_t reserved2;
-            SMessage m_tdtMessage;
+            canId_t  m_id;
+            int      m_len;
+            // This can not be outsourced to an struct partially.
+            union {  // 4 Byte
+               struct {
+                  union {
+                     EObject object;      // 2 B
+                     ENmtObject nmtObject;      // 2 B
+                     //EMmpObject mmpObject;      // 2 B
+                  };
+                  EUnit unit;          // 1 Binclude/tdt/message.hpp
+                  uint8_t reserved;    // 1 B
+               } PHONY_PACKED;
+               struct {
+                  uint16_t mmpSource;
+                  uint16_t mmpPos;
+               } PHONY_PACKED;
+            };
+            SValue value __attribute ( ( aligned(4) ) );
+            //STdtPayload m_tdtPayload;
          };
       };
    
    public:
-      constexpr SCanMessageTdt()
-         :m{}
+      #if defined CONFIG_TDT_CONSTEXPR_DEFAULT_CONSTRUCTOR
+      constexpr
+      #endif
+      SCanMessageTdt()
+         :m()
       {};
+
+      #if 0
       constexpr SCanMessageTdt( nodeId_t id )
-         :m{ id }
+         :m_id{ id }
       {
          //m.setId( id );
       };
+      #endif
       constexpr SCanMessageTdt( const SCanMessage& msg)
           :m{msg}
+          //,value{ ._uint=0 }
       {
          
+      };
+
+      constexpr SCanMessageTdt(nodeId_t id, EFunctionCode functionCode, EObject object
+                         , Tdt::EUnit unit, const SValue value = {._uint=0} )
+         :m_id( id | ( (unsigned int)functionCode << FUNCTIONCODE_BITSHIFT ) )
+         ,m_len( 8 ) // sizeof(m.m_data)
+         ,object( object )
+         ,unit( unit )
+         ,reserved( 0 )
+         ,value( value )
+
+      {
+
       }
-      int getLen()
+      constexpr SCanMessageTdt(nodeId_t id, EFunctionCode functionCode
+                           , uint16_t _mmpSource, uint16_t _mmpPos, uint32_t value)
+         :m_id( id | ( (unsigned int)functionCode << FUNCTIONCODE_BITSHIFT ) )
+         ,m_len( 8 ) // sizeof(m.m_data)
+         ,mmpSource( _mmpSource )
+         ,mmpPos( _mmpPos )
+         ,value( {._uint = value } )
+      {
+
+      }
+
+      constexpr int getLen() const
       {
          return( m.getLen() );
       }
@@ -266,15 +294,6 @@ class SCanMessageTdt
       }
 };
 
-#if 0
-struct
-{
-   union{
-      EObject object;
-      EMmpObject mmpObject;
-   };
-}EAnyObject;
-#endif
 
 class CMessage : public SCanMessageTdt
 {
@@ -282,40 +301,25 @@ class CMessage : public SCanMessageTdt
 
    private:
 
-      static_assert ( sizeof(SMessage) == 4 + 4, "Size missmatch" );
-       
+      static_assert ( sizeof(SCanMessageTdt) == sizeof(SCanMessage), "Size missmatch" );
+
    public:
-
-
-      constexpr CMessage()
+      #if defined CONFIG_TDT_CONSTEXPR_DEFAULT_CONSTRUCTOR
+      constexpr
+      #endif
+      CMessage()
       {
-      }
-      
-      constexpr CMessage(nodeId_t id, EFunctionCode functionCode, EObject object, Tdt::EUnit unit)
-         :SCanMessageTdt( id | ( (unsigned int)functionCode << FUNCTIONCODE_BITSHIFT ))
-      {
-         #if ! defined STM32
-            assert( id <= NODEID_BITMASK );
-         #endif
-         m_tdtMessage.object=object;
-         m_tdtMessage.unit=unit;
-         m.setLen( sizeof(SMessage) );
-      }
-
-      constexpr CMessage(nodeId_t id, EFunctionCode functionCode, EObject object
-                     , EUnit unit, const SValue value)
-         :CMessage(id, functionCode, object, unit )
-      {
-         m_tdtMessage.value=value;
       }
       constexpr CMessage(nodeId_t id, EFunctionCode functionCode, EObject object
-               , uint16_t mmpPos, uint32_t value)
-          :SCanMessageTdt(id | ( (unsigned int)functionCode << FUNCTIONCODE_BITSHIFT ))
+                         , Tdt::EUnit unit, const SValue value = {._uint=0} )
+         :SCanMessageTdt( id,
+            functionCode, object, unit, value)
       {
-         m_tdtMessage.object=object;
-         m_tdtMessage.mmpPos=mmpPos;
-         m_tdtMessage.value._uint=value;
-         m.setLen( sizeof(SMessage) );
+      }
+      constexpr CMessage(nodeId_t id, EFunctionCode functionCode
+               , uint16_t mmpSource, uint16_t mmpPos, uint32_t value)
+         :SCanMessageTdt(id, functionCode, mmpSource, mmpPos, value)
+      {
       }
       constexpr CMessage( const SCanMessage& msg)
          :SCanMessageTdt(msg)
@@ -326,22 +330,20 @@ class CMessage : public SCanMessageTdt
           :SCanMessageTdt(msg)
       {
       };
-   #if 0
       // Needed in unit tests
       CMessage& operator=(const CMessage& msg)
       {
-         setId(msg.getId());
-         setData(msg.getLen(), msg.getData());
+         m.setId(msg.getId());
+         m.setData(msg.getLen(), msg.getData());
          return(*this);
       }
-   #endif
       EUnit getTdtUnit() const
       {
-         return(m_tdtMessage.unit);
+         return( unit );
       }
       EObject getTdtObject() const
       {
-         return(m_tdtMessage.object);
+         return( object );
       }
       /*
       EMmpObject getTdtMmpObject() const
@@ -351,36 +353,36 @@ class CMessage : public SCanMessageTdt
       */
       int getTdtSubId() const
       {
-         return( (int)m_tdtMessage.object & 7 );
+         return( (int)object & 7 );
       }
       int32_t getTdtValueInt() const
       {
-         return(m_tdtMessage.value._int);
+         return( value._int );
       }
       uint32_t getTdtValueUInt() const
       {
-         return(m_tdtMessage.value._uint);
+         return( value._uint );
       }
       float getTdtValueFloat() const
       {
-         return(m_tdtMessage.value._float);
+         return( value._float );
       }
-      CMessage& operator << (float value)
+      CMessage& operator << (float fvalue)
       {
-         m_tdtMessage.value._float=value;
+         value._float=fvalue;
          return(*this);
       }
       const SValue *getTdtValue() const
       {
-         return( &m_tdtMessage.value );
+         return( &value );
       }
       SValue *getTdtValue()
       {
-         return( &m_tdtMessage.value );
+         return( &value );
       }
-      void setObject( EObject object)
+      void setObject( EObject _object)
       {
-         m_tdtMessage.object=object;
+         object=_object;
       }
 
       constexpr unsigned int getNodeId() const
@@ -404,23 +406,23 @@ class CMessage : public SCanMessageTdt
                         | ( (int)functionCode << FUNCTIONCODE_BITSHIFT ) );
          return;
       }
-      void setUnit(EUnit unit)
+      void setUnit(EUnit _unit)
       {
-         m_tdtMessage.unit=unit;
+         unit=_unit;
       }
-      void setObject(EObject object, EUnit unit, SValue value)
+      void setObject(EObject _object, EUnit _unit, SValue _value)
       {
-         m_tdtMessage.object=object;
-         m_tdtMessage.unit=unit;
-         m_tdtMessage.value=value;
+         object=_object;
+         unit=_unit;
+         value=_value;
       }
-      void setValue(SValue value)
+      void setValue(SValue _value)
       {
-         m_tdtMessage.value=value;
+         value=_value;
       }
       uint16_t getMmpPos() const
       {
-         return( m_tdtMessage.mmpPos );
+         return( mmpPos );
       }
       bool isMultiCast() const
       {

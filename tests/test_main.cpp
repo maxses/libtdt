@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 ///
-/// \file   main.cpp
+/// \file   test_main.cpp
 ///
-/// \brief  main file for pinmux
+/// \brief  main file unit tests
 ///
 /// \date   20220619
 /// \author Maximilian Seesslen <mes@seesslen.net>
@@ -18,7 +18,7 @@
 
 //---General--------------------------
 
-#define CATCH_CONFIG_MAIN     1
+#define CATCH_CONFIG_MAIN
 
 #if defined ( CATCH_V3 )
    #include <catch2/catch_test_macros.hpp>
@@ -29,15 +29,6 @@
 #else
    #error "Either 'catch' or 'catch2' has to be installed"
 #endif
-
-#include <tdt/message.hpp>
-
-//--- Own ----------------------------
-
-#define TEST_ALL
-#define STOP_ON_FAIL
-
-//---Implementation------------------------------------------------------------
 
 
 //---fin-----------------------------------------------------------------------

@@ -9,6 +9,8 @@ cmake_minimum_required(VERSION 3.11)
 project( tdt LANGUAGES CXX )
 
 
+# add_definitions( -DCONFIG_TDT_CONSTEXPR_DEFAULT_CONSTRUCTOR=1 )
+
 # if ( NOT MCU_REV OR "${MCU_REV}" MATCHES "^x86" )
 if( "${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86_64" )
    set(CMAKE_AUTOUIC ON)

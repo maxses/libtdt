@@ -1,0 +1,124 @@
+
+
+Example of MMP traffic (TDTDump):
+
+   TCP-C  4D5   [8]  11 04 00 00 34 12 00 00
+            Node ID: 0x55
+            Function code: dataBlob [0x9]
+            Object: time stamp [0x411]
+            Unit: - [0x0]
+            Value: UK: Unit=0x0 [0x1234]
+   TCP-C  5D5   [8]  01 64 10 00 00 00 00 00
+            Node ID: 0x55
+            Function code: - [0xB]
+            Object: Acknowledge Shred [0x6401]
+            Unit: none [0x10]
+            Value: 0 [0x0]
+   TCP-C  4D5   [8]  11 04 01 00 02 00 00 00
+            Node ID: 0x55
+            Function code: dataBlob [0x9]
+            Object: time stamp [0x411]
+            Unit: - [0x1]
+            Value: UK: Unit=0x1 [0x2]
+   TCP-C  5D5   [8]  01 64 10 00 01 00 00 00
+            Node ID: 0x55
+            Function code: - [0xB]
+            Object: Acknowledge Shred [0x6401]
+            Unit: none [0x10]
+            Value: 1 [0x1]
+   TCP-C  4D5   [8]  11 04 02 00 00 00 00 00
+            Node ID: 0x55
+            Function code: dataBlob [0x9]
+            Object: time stamp [0x411]
+            Unit: - [0x2]
+            Value: UK: Unit=0x2 [0x0]
+   TCP-C  5D5   [8]  01 64 10 00 02 00 00 00
+            Node ID: 0x55
+            Function code: - [0xB]
+            Object: Acknowledge Shred [0x6401]
+            Unit: none [0x10]
+            Value: 2 [0x2]
+   TCP-C  4D5   [8]  11 04 03 00 07 4C 69 30
+            Node ID: 0x55
+            Function code: dataBlob [0x9]
+            Object: time stamp [0x411]
+            Unit: - [0x3]
+            Value: UK: Unit=0x3 [0x30694C07]
+   TCP-C  5D5   [8]  01 64 10 00 03 00 00 00
+            Node ID: 0x55
+            Function code: - [0xB]
+            Object: Acknowledge Shred [0x6401]
+            Unit: none [0x10]
+            Value: 3 [0x3]
+   TCP-C  4D5   [8]  11 04 04 00 0C 00 00 00
+            Node ID: 0x55
+            Function code: dataBlob [0x9]
+            Object: time stamp [0x411]
+            Unit: - [0x4]
+            Value: UK: Unit=0x4 [0xC]
+   TCP-C  5D5   [8]  01 64 10 00 04 00 00 00
+            Node ID: 0x55
+            Function code: - [0xB]
+            Object: Acknowledge Shred [0x6401]
+            Unit: none [0x10]
+            Value: 4 [0x4]
+   TCP-C  4D5   [8]  11 04 05 00 00 00 00 00
+            Node ID: 0x55
+            Function code: dataBlob [0x9]
+            Object: time stamp [0x411]
+            Unit: - [0x5]
+            Value: UK: Unit=0x5 [0x0]
+   TCP-C  5D5   [8]  01 64 10 00 05 00 00 00
+            Node ID: 0x55
+            Function code: - [0xB]
+            Object: Acknowledge Shred [0x6401]
+            Unit: none [0x10]
+            Value: 5 [0x5]
+   TCP-C  4D5   [8]  11 04 06 00 00 00 00 00
+            Node ID: 0x55
+            Function code: dataBlob [0x9]
+            Object: time stamp [0x411]
+            Unit: - [0x6]
+            Value: UK: Unit=0x6 [0x0]
+   TCP-C  5D5   [8]  01 64 10 00 06 00 00 00
+            Node ID: 0x55
+            Function code: - [0xB]
+            Object: Acknowledge Shred [0x6401]
+            Unit: none [0x10]
+            Value: 6 [0x6]
+   TCP-C  4D5   [8]  11 04 07 00 00 00 00 00
+            Node ID: 0x55
+            Function code: dataBlob [0x9]
+            Object: time stamp [0x411]
+            Unit: - [0x7]
+            Value: UK: Unit=0x7 [0x0]
+   TCP-C  5D5   [8]  01 64 10 00 07 00 00 00
+            Node ID: 0x55
+            Function code: - [0xB]
+            Object: Acknowledge Shred [0x6401]
+            Unit: none [0x10]
+            Value: 7 [0x7]
+   TCP-C  4D5   [8]  11 04 08 00 41 42 00 55
+            Node ID: 0x55
+            Function code: dataBlob [0x9]
+            Object: time stamp [0x411]
+            Unit: - [0x8]
+            Value: UK: Unit=0x8 [0x55004241]
+   TCP-C  5D5   [8]  01 64 10 00 08 00 00 00
+            Node ID: 0x55
+            Function code: - [0xB]
+            Object: Acknowledge Shred [0x6401]
+            Unit: none [0x10]
+            Value: 8 [0x8]
+   TCP-C  5D5   [8]  02 64 10 00 00 00 00 00
+            Node ID: 0x55
+            Function code: - [0xB]
+            Object: Acknowledge Transfer [0x6402]
+            Unit: none [0x10]
+            Value: 0 [0x0]
+   TCP-C  455   [8]  8A 04 31 00 00 00 00 00
+            Node ID: 0x55
+            Function code: sendObject [0x8]
+            Object: Blended [0x48A]
+            Unit: logBlended [0x31]
+            Value: 0 [0x0]

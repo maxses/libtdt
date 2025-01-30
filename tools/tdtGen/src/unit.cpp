@@ -73,7 +73,6 @@ QString CUnit::nameToEnum()
    int pos;
    while( ( pos=enumName.indexOf(' ') ) >= 0 )
    {
-      //enumName.removeAt( pos );
       enumName.replace( pos, 2, enumName.at(pos+1).toUpper() );
    }
    

@@ -41,6 +41,7 @@ class CPrinter: public CPrinterBase
          ENUM_MAP( Tdt::EFunctionCode, sendObject ),
          ENUM_MAP( Tdt::EFunctionCode, dataBlob ),
          ENUM_MAP( Tdt::EFunctionCode, reSendObject ),
+         ENUM_MAP( Tdt::EFunctionCode, ackDataBlob ),
          //ENUM_MAP( Tdt::EFunctionCode, log ),
          ENUM_MAP( Tdt::EFunctionCode, max ),
       };
@@ -277,8 +278,11 @@ class CPrinter: public CPrinterBase
                   case Tdt::ESystemState::application:
                      ts << "Application";
                      break;
-                  case Tdt::ESystemState::bootLoader:
+                  case Tdt::ESystemState::bootloader:
                      ts << "Bootloader";
+                     break;
+                  case Tdt::ESystemState::reverseBootloader:
+                     ts << "Reverse Bootloader";
                      break;
                   default:
                      ts << "Unknown ("

@@ -34,11 +34,26 @@ struct SCanMessage
                    0, 0, 0, 0 }
       {
       }
+
+      #if defined CONFIG_TDT_CONSTEXPR_DEFAULT_CONSTRUCTOR
       constexpr SCanMessage()
+         // Must be initialized in constexpr
          :m_id{0}
          ,m_len{0}
          ,m_data{ 0, 0, 0, 0,
                   0, 0, 0, 0 }
+      {
+      }
+      #else
+      SCanMessage()
+      {};
+      #endif
+
+      constexpr SCanMessage( canId_t id, int len )
+          :m_id{id}
+          ,m_len{ len > 8 ? 8 : len }
+          ,m_data{ 0, 0, 0, 0,
+                   0, 0, 0, 0 }
       {
       }
       constexpr SCanMessage( canId_t id, int len, const uint8_t* data )
@@ -53,15 +68,17 @@ struct SCanMessage
       {
          return( m_id );
       }
-      constexpr void setId(canId_t id)
+      //constexpr does not work
+      void setId(canId_t id)
       {
          m_id = id;
       }
-      int getLen() const
+      constexpr int getLen() const
       {
          return( m_len );
       }
-      constexpr void setLen( int len )
+      //constexpr does not work on gcc 10
+      void setLen( int len )
       {
          m_len = len;
       }
@@ -81,7 +98,7 @@ struct SCanMessage
 };
 
 
-static_assert( sizeof( SCanMessage ) == 16, "Wron CAN message size" );
+static_assert( sizeof( SCanMessage ) == 16, "Wrong CAN message size" );
 
 
 //---fin-----------------------------------------------------------------------

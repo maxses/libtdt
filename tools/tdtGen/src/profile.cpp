@@ -17,6 +17,7 @@
 #include <QJsonArray>
 #include <QDebug>
 #include <profile.hpp>
+#include <QDebug>
 
 
 //--- Implementation----------------------------------------------------------

@@ -67,8 +67,9 @@ void CMmpTransfer::writeMMP( Tdt::EObject object, int pos, uint32_t value )
       qDebug("MMP out: pos %d; length=%d", pos, m_data.header().dataLength);
    }
    Tdt::CMessage message( m_counterNodeId,
-                         Tdt::EFunctionCode::dataBlob, 
-                         object, pos, value);
+                         Tdt::EFunctionCode::dataBlob,
+                         (uint16_t)object, // TBD: Its me, the source
+                         pos, value );
    //m_socketCan << message;
    #if ! defined ( STM32 )
       emit sendTdtMessage(message);
@@ -200,7 +201,10 @@ bool CMmpTransfer::handleTx( const Tdt::CMessage& msg )
    {
       if( msg.getTdtValue()->_int == m_data.pos()-1 )
       {
-         qCritical( LDS( "IOA", "Ignoring old ACK" ) );
+         // An STM32F103 in the bus forced an STM32L4 to unnecessary retransmits.
+         // This could also be seen in cordyceps by scanning devices.
+         qCritical( LDS( "IOA", "Ignoring old/previous ACK; MSG:%d" ),
+                  msg.getTdtValue()->_int );
          return(false);
       }
       if( msg.getTdtValue()->_int != m_data.pos() )
@@ -213,8 +217,7 @@ bool CMmpTransfer::handleTx( const Tdt::CMessage& msg )
       }
    }
    m_data.inc();
-   if( ( m_data.pos() * sizeof(uint32_t) )
-       >= sizeof(Tdt::SMmpHeader) + m_data.header().dataLength )
+   if( ! m_data.dataLeft() )
    {
       // The transmission finished. But still waiting for Transfer Ack.
       // "Reboot" and "Jump to application" wont send an transfer ack.
