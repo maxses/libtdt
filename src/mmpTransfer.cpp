@@ -185,7 +185,8 @@ bool CMmpTransfer::handleTx( const Tdt::CMessage& msg )
    
    if( msg.getTdtObject() != Tdt::EObject::mmpAcknowledgeShred )
    {
-      qDebug( "Got: 0x%X Exp: 0x%X", msg.getTdtObject(), Tdt::EObject::mmpAcknowledgeShred );
+      qDebug( "Got: 0x%X Exp: 0x%X", (unsigned int)msg.getTdtObject()
+              , (unsigned int)Tdt::EObject::mmpAcknowledgeShred );
       qFatal( LDS( "ONSA", "TDT-Object was not a shred acknowledge" ) );
    };
    
@@ -263,7 +264,8 @@ void CMmpTransfer::sendAck( uint32_t pos )
       #endif
       Tdt::EFunctionCode::ackDataBlob,
       Tdt::EObject::mmpAcknowledgeShred,
-      Tdt::EUnit::null, { ._uint = pos }
+      Tdt::EUnit::null,
+      { ._uint = pos }
    };
    #if ! defined ( STM32 )
       emit sendTdtMessage( message );
@@ -285,7 +287,8 @@ void CMmpTransfer::sendTransferAck(int sta)
       #endif
       Tdt::EFunctionCode::ackDataBlob,
       Tdt::EObject::mmpAcknowledgeTransfer,
-      Tdt::EUnit::null, { ._int = sta }
+      Tdt::EUnit::null,
+      { ._int = sta }
    };
    #if ! defined ( STM32 )
       sendTdtMessage( message );

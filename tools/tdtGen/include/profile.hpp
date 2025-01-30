@@ -17,6 +17,7 @@
 
 #include <QString>
 #include <QSharedPointer>
+#include <QTextStream>
 #include <QList>
 #include <object.hpp>
 #include <unit.hpp>

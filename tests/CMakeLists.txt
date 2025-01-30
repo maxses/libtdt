@@ -38,6 +38,7 @@ set(
 set(sources
    test_message.cpp
    test_mmp.cpp
+   test_main.cpp
 )
 
 add_executable(

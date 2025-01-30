@@ -205,7 +205,7 @@ static_assert( sizeof(SValue) == 4, "Size missmatch");
 
 struct SMessage
 {
-   union {
+   union { // 4 Byte
       struct {
          union {
             EObject object;      // 2 B

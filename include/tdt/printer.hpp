@@ -13,6 +13,7 @@
 #include <stdio.h>               // snprintf
 #include <QTextStream>
 #include <QMap>
+#include <math.h>
 
 #if defined USE_LEPTO
    #include <lepto/events.h>

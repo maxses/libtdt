@@ -12,6 +12,7 @@
 #include <QFile>
 #include <QDomDocument>
 #include <QDir>            // home()
+#include <QDebug>
 
 
 //-----------------------------------------------------------------------------
