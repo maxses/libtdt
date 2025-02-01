@@ -52,6 +52,10 @@ int CProfile::parseObjects( const QJsonArray& array )
                   o["description"].toString() ) );
       object->parse( o );
       qDebug() << "   Object: " << o["offset"].toString().toInt( nullptr, 0 );
+      if( m_objects.contains( object->numericalValue() ) )
+      {
+         qFatal("Object '%s' overlaps.", qPrintable( object->getName() ) );
+      }
       m_objects+=object;
    }
    return(0);
@@ -86,6 +90,10 @@ int CProfile::parseCommands( const QJsonArray& array )
                                                                o["description"].toString() ) );
       command->parse( o );
       qDebug() << "   Command: " << o["offset"].toString().toInt( nullptr, 0 );
+      if( m_commands.contains( command->numericalValue() ) )
+      {
+         qFatal("Cummand '%s' overlaps.", qPrintable( command->getName() ) );
+      }
       m_commands+=command;
    }
    return(0);
@@ -102,6 +110,10 @@ int CProfile::parseLogs( const QJsonArray& array )
                         o["name"].toString(), o["description"].toString() ) );
       log->parse( o );
       qDebug() << "   Log: " << o["offset"].toString().toInt( nullptr, 0 );
+      if( m_logs.contains( log->numericalValue() ) )
+      {
+         qFatal("Log '%s' overlaps.", qPrintable( log->getName() ) );
+      }
       m_logs+=log;
    }
    return(0);
