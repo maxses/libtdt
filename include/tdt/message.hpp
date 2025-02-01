@@ -157,6 +157,11 @@ inline constexpr Tdt::ELog toLog( ELogBlended c )
    return( (Tdt::ELog)((int)c >> 4 ) );
 }
 
+inline constexpr ELogCategory toCategory( ELogBlended c )
+{
+   return( (ELogCategory)((int)c & 0xF ) );
+}
+
 #undef PHONY_PACKED
 //#define PACKED __attribute ((packed))
 #define PHONY_PACKED
