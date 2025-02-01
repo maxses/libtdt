@@ -34,6 +34,7 @@ void CSourceFilePrinter::writeTop( )
    m_stream << "#include <QMap>\n";
    m_stream << "#include <tdt/gen/objects.hpp>\n";
    m_stream << "#include <tdt/gen/units.hpp>\n";
+   m_stream << "#include <tdt/gen/logs.hpp>\n";
    m_stream << "\n";
    m_stream << "\n";
    m_stream << "namespace Tdt\n";
