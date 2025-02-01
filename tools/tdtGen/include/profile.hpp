@@ -23,6 +23,7 @@
 #include <object.hpp>
 #include <unit.hpp>
 #include <command.hpp>
+#include <logs.hpp>
 
 
 //--- Implementation----------------------------------------------------------
@@ -37,6 +38,7 @@ class CProfile
    QList <QSharedPointer<CObject>> m_objects;
    QList <QSharedPointer<CUnit>> m_units;
    QList <QSharedPointer<CCommand>> m_commands;
+   QList <QSharedPointer<CCommand>> m_logs;
    
 public:
    
@@ -60,9 +62,11 @@ public:
    void writeObjectsEnums( QTextStream& s );
    void writeUnitsEnums( QTextStream& s );
    void writeCommandsEnums( QTextStream& s );
+   void writeLogsEnums( QTextStream& s );
    void writeInfo( QTextStream& s );
    void writeObjectsPrinters( QTextStream& s );
    void writeUnitsPrinters( QTextStream& s );
+   void writeLogsPrinters( QTextStream& s );
 };
 
 

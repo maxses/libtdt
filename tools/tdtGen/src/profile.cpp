@@ -37,6 +37,7 @@ void CProfile::parseProfile( const QJsonObject& obj )
    parseObjects( obj["objects"].toArray() );
    parseUnits( obj["units"].toArray() );
    parseCommands( obj["commands"].toArray() );
+   parseLogs( obj["logs"].toArray() );
 }
 
 
@@ -86,6 +87,22 @@ int CProfile::parseCommands( const QJsonArray& array )
       command->parse( o );
       qDebug() << "   Command: " << o["offset"].toString().toInt( nullptr, 0 );
       m_commands+=command;
+   }
+   return(0);
+}
+
+
+int CProfile::parseLogs( const QJsonArray& array )
+{
+   for( auto obj : array )
+   {
+      QJsonObject o=obj.toObject();
+      QSharedPointer<CLog> log=QSharedPointer<CLog>(
+               new CLog( *this, o["offset"].toString().toInt( nullptr, 0 ),
+                        o["name"].toString(), o["description"].toString() ) );
+      command->parse( o );
+      qDebug() << "   Log: " << o["offset"].toString().toInt( nullptr, 0 );
+      m_logs+=log;
    }
    return(0);
 }
@@ -151,6 +168,18 @@ void CProfile::writeCommandsEnums( QTextStream& s )
 }
 
 
+void CProfile::writeLogsEnums( QTextStream& s )
+{
+   s << "\n";
+   s << "      // Profile: " << m_name << "; " << m_desc << "\n";
+   for( const auto& log : m_logs )
+   {
+      s << log->enumString() << "\n";
+   }
+   return;
+}
+
+
 void CProfile::writeInfo( QTextStream& s )
 {
    s << "\n";
@@ -179,6 +208,18 @@ void CProfile::writeUnitsPrinters( QTextStream& s )
    s << "\n";
    s << "      // Profile: " << m_name << "; " << m_desc << "\n";
    for( const auto& object : m_units )
+   {
+      s << object->printerString() << "\n";
+   }
+   return;
+}
+
+
+void CProfile::writeLogsPrinters( QTextStream& s )
+{
+   s << "\n";
+   s << "      // Profile: " << m_name << "; " << m_desc << "\n";
+   for( const auto& object : m_logs )
    {
       s << object->printerString() << "\n";
    }
