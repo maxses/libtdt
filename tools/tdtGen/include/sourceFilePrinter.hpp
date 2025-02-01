@@ -41,6 +41,9 @@ class CSourceFilePrinter: public CSourceFile
       virtual void writeTop( ) override;
       void endObjects( );
       void startUnits( );
+      void endUnits( );
+      void startLogs( );
+      void endLogs( );
       virtual void writeBottom( ) override;
 };
 
