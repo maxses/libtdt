@@ -69,6 +69,10 @@ class CObject
    {
       return( m_name );
    }
+   const CProfile& getProfile()
+   {
+      return( m_profile );
+   }
 };
 
 
