@@ -147,6 +147,16 @@ inline constexpr ELogBlended operator| (ELogCategory c, Tdt::EEvent e)
    return( (ELogBlended)( (int)c | ( (int)e << 4 ) ) );
 }
 
+inline constexpr ELogBlended operator+ (ELogCategory c, Tdt::ELog l)
+{
+   return( (ELogBlended)( (int)c | ( (int)l << 4 ) ) );
+}
+
+inline constexpr ELogBlended operator| (ELogCategory c, Tdt::ELog l)
+{
+   return( (ELogBlended)( (int)c | ( (int)l << 4 ) ) );
+}
+
 inline constexpr Tdt::EEvent toEvent( ELogBlended c )
 {
    return( (Tdt::EEvent)((int)c >> 4 ) );
