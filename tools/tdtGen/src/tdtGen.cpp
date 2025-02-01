@@ -71,12 +71,12 @@ int CTdtGen::generate()
       profile->writeCommandsEnums( sc );
    }
    
-   CSourceFileHeader sfc( m_outDir + "/logs.hpp", "logs", "ELog" );
-   QTextStream& sc=sfc.getStream();
+   CSourceFileHeader sfl( m_outDir + "/logs.hpp", "logs", "ELog" );
+   QTextStream& sl=sfl.getStream();
    
    for( const auto& profile : m_profiles )
    {
-      profile->writeLogsEnums( sc );
+      profile->writeLogsEnums( sl );
    }
    
    CSourceFileText sft( m_outDir + "/info.txt" );

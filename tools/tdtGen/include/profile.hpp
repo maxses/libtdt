@@ -38,7 +38,7 @@ class CProfile
    QList <QSharedPointer<CObject>> m_objects;
    QList <QSharedPointer<CUnit>> m_units;
    QList <QSharedPointer<CCommand>> m_commands;
-   QList <QSharedPointer<CCommand>> m_logs;
+   QList <QSharedPointer<CLog>> m_logs;
    
 public:
    
@@ -52,6 +52,7 @@ public:
    int parseObjects( const QJsonArray& array );
    int parseUnits( const QJsonArray& array );
    int parseCommands( const QJsonArray& array );
+   int parseLogs( const QJsonArray& array );
    const QString& getName() const;
    int generate();
    void setBase( int base )

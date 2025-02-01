@@ -100,7 +100,7 @@ int CProfile::parseLogs( const QJsonArray& array )
       QSharedPointer<CLog> log=QSharedPointer<CLog>(
                new CLog( *this, o["offset"].toString().toInt( nullptr, 0 ),
                         o["name"].toString(), o["description"].toString() ) );
-      command->parse( o );
+      log->parse( o );
       qDebug() << "   Log: " << o["offset"].toString().toInt( nullptr, 0 );
       m_logs+=log;
    }
