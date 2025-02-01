@@ -292,6 +292,19 @@ class CPrinter: public CPrinterBase
                }
                break;
             }
+            case Tdt::EUnit::logBlended:
+            {
+               Tdt::ELog log=toLog( msg.getTdtValue()->logBlended );
+               if( m_logMap.contains( log ) )
+               {
+                  ts << m_logMap[ log ];
+               }
+               else
+               {
+                  ts << "UK" << msg.getTdtValueUInt();
+               }
+               break;
+            }
             default:
             {
                if( m_unitMap.contains( msg.getTdtUnit() ) )

@@ -30,6 +30,7 @@
 #include <tdt/gen/objects.hpp>
 #include <tdt/gen/units.hpp>
 #include <tdt/gen/commands.hpp>
+#include <tdt/gen/logs.hpp>
 
 #define CAN_TDT_PROTOCOL_VERSION    4
    
@@ -108,8 +109,8 @@ enum class EEvent: uint32_t
    wannaSleepEnd        = 0x1F + LOG_CODE_OFFSET,
    noRelease_OBS        = 0x20 + LOG_CODE_OFFSET,
    shutdown             = 0x21 + LOG_CODE_OFFSET,
-   batteryLow           = 0x22 + LOG_CODE_OFFSET,
-   vbusLow              = 0x23 + LOG_CODE_OFFSET,
+   //batteryLow           = 0x22 + LOG_CODE_OFFSET,
+   //vbusLow              = 0x23 + LOG_CODE_OFFSET,
    
    #endif
    couldNotReadEeprom,
@@ -149,6 +150,11 @@ inline constexpr ELogBlended operator| (ELogCategory c, Tdt::EEvent e)
 inline constexpr Tdt::EEvent toEvent( ELogBlended c )
 {
    return( (Tdt::EEvent)((int)c >> 4 ) );
+}
+
+inline constexpr Tdt::ELog toLog( ELogBlended c )
+{
+   return( (Tdt::ELog)((int)c >> 4 ) );
 }
 
 #undef PHONY_PACKED
