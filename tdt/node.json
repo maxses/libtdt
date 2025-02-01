@@ -123,6 +123,11 @@
                "name": "system state",
                "offset": "0x008C",
                "description": ""
+            },
+            {
+               "name": "debugValue",
+               "offset": "0x90",
+               "size": "0x10"
             }
          ]
       },
