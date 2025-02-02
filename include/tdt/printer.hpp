@@ -295,7 +295,7 @@ class CPrinter: public CPrinterBase
             case Tdt::EUnit::logBlended:
             {
                Tdt::ELog log=toLog( msg.getTdtValue()->logBlended );
-               ELogCategory cat=toCategory( msg.getTdtValue()->logBlended );
+               ELogCategory cat=Tdt::toCategory( msg.getTdtValue()->logBlended );
                
                // Inforunately lepto is not availabvle
                switch( (int)cat )

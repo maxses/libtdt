@@ -115,6 +115,7 @@ enum class EEvent: uint32_t
    #endif
    couldNotReadEeprom,
    noRelease,
+   test,                // Just for Catch2 tests
 };
 
 enum class ELogCode2: uint32_t
