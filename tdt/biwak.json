@@ -1,0 +1,16 @@
+{
+   "profiles": [
+      {
+         "name": "biwak",
+         "description": "Libbiwak brings some log codes",
+         "base": "0x00",
+         "size": "0x10",
+         "logs": [
+            {
+               "offset": "EC_BIWAK_CAN_TX_ERROR",
+               "name": "Can not transmit CAN message"
+            }
+         ]
+      }
+   ]
+}
