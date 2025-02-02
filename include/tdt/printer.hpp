@@ -170,8 +170,8 @@ class CPrinter: public CPrinterBase
                   { 0x52, "Rufa"},
                   { 0x60, "CANDis"},
                   { 0x80, "Sensemux"},
-                  { 0x90, "Minutnik-EInk"},
-                  { 0xA0, "CANRec"},
+                  { 0x90, "CANRec"},
+                  { 0xA0, "Minutnik-EInk"},
                   { 0xB0, "CANSwitch"},
                   { 0xD0, "Main-Switch"},
                };
