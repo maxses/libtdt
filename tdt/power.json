@@ -52,6 +52,17 @@
                "name": "switch main",
                "example": "-"
             }
+         ],
+         "logs": [
+            {
+               "offset": "0x22",
+               "name": "Battery low"
+            },
+            {
+               "offset": "0x23",
+               "name": "VBUS low",
+               "description": "The power on CANBus is low"
+            }
          ]
       },
       {

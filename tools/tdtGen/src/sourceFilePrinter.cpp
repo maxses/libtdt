@@ -34,6 +34,7 @@ void CSourceFilePrinter::writeTop( )
    m_stream << "#include <QMap>\n";
    m_stream << "#include <tdt/gen/objects.hpp>\n";
    m_stream << "#include <tdt/gen/units.hpp>\n";
+   m_stream << "#include <tdt/gen/logs.hpp>\n";
    m_stream << "\n";
    m_stream << "\n";
    m_stream << "namespace Tdt\n";
@@ -67,9 +68,29 @@ void CSourceFilePrinter::startUnits( )
 };
 
 
-void CSourceFilePrinter::writeBottom( )
+void CSourceFilePrinter::endUnits( )
 {
    m_stream << "   };\n";
+   m_stream << "\n";
+};
+
+
+void CSourceFilePrinter::startLogs( )
+{
+   m_stream << "   const QMap<Tdt::ELog, const char*> m_logMap\n";
+   m_stream << "   {\n";
+};
+
+
+void CSourceFilePrinter::endLogs( )
+{
+   m_stream << "   };\n";
+   m_stream << "\n";
+};
+
+
+void CSourceFilePrinter::writeBottom( )
+{
    m_stream << "};\n";
    m_stream << "\n";
    m_stream << "} // namespace Tdt\n";

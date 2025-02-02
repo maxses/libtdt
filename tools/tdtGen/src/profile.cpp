@@ -37,6 +37,7 @@ void CProfile::parseProfile( const QJsonObject& obj )
    parseObjects( obj["objects"].toArray() );
    parseUnits( obj["units"].toArray() );
    parseCommands( obj["commands"].toArray() );
+   parseLogs( obj["logs"].toArray() );
 }
 
 
@@ -51,6 +52,14 @@ int CProfile::parseObjects( const QJsonArray& array )
                   o["description"].toString() ) );
       object->parse( o );
       qDebug() << "   Object: " << o["offset"].toString().toInt( nullptr, 0 );
+      if( m_objects.contains( object->numericalValue() ) )
+      {
+         int index=m_objects.indexOf( object->numericalValue() );
+         if( &( m_objects[index]->getProfile() ) != this )
+         {
+            qFatal("Object '%s' overlaps.", qPrintable( object->getName() ) );
+         }
+      }
       m_objects+=object;
    }
    return(0);
@@ -85,7 +94,39 @@ int CProfile::parseCommands( const QJsonArray& array )
                                                                o["description"].toString() ) );
       command->parse( o );
       qDebug() << "   Command: " << o["offset"].toString().toInt( nullptr, 0 );
+      if( m_commands.contains( command->numericalValue() ) )
+      {
+         int index=m_commands.indexOf( command->numericalValue() );
+         if( &m_commands[ index ]->getProfile() != this )
+         {
+            qFatal("Cummand '%s' overlaps.", qPrintable( command->getName() ) );
+         }
+      }
       m_commands+=command;
+   }
+   return(0);
+}
+
+
+int CProfile::parseLogs( const QJsonArray& array )
+{
+   for( auto obj : array )
+   {
+      QJsonObject o=obj.toObject();
+      QSharedPointer<CLog> log=QSharedPointer<CLog>(
+               new CLog( *this, o["offset"].toString().toInt( nullptr, 0 ),
+                        o["name"].toString(), o["description"].toString() ) );
+      log->parse( o );
+      qDebug() << "   Log: " << o["offset"].toString().toInt( nullptr, 0 );
+      if( m_logs.contains( log->numericalValue() ) )
+      {
+         int index=m_logs.indexOf( log->numericalValue() );
+         if( &m_logs[ index ]->getProfile() != this )
+         {
+            qFatal("Log '%s' overlaps.", qPrintable( log->getName() ) );
+         }
+      }
+      m_logs+=log;
    }
    return(0);
 }
@@ -151,6 +192,18 @@ void CProfile::writeCommandsEnums( QTextStream& s )
 }
 
 
+void CProfile::writeLogsEnums( QTextStream& s )
+{
+   s << "\n";
+   s << "      // Profile: " << m_name << "; " << m_desc << "\n";
+   for( const auto& log : m_logs )
+   {
+      s << log->enumString() << "\n";
+   }
+   return;
+}
+
+
 void CProfile::writeInfo( QTextStream& s )
 {
    s << "\n";
@@ -179,6 +232,18 @@ void CProfile::writeUnitsPrinters( QTextStream& s )
    s << "\n";
    s << "      // Profile: " << m_name << "; " << m_desc << "\n";
    for( const auto& object : m_units )
+   {
+      s << object->printerString() << "\n";
+   }
+   return;
+}
+
+
+void CProfile::writeLogsPrinters( QTextStream& s )
+{
+   s << "\n";
+   s << "      // Profile: " << m_name << "; " << m_desc << "\n";
+   for( const auto& object : m_logs )
    {
       s << object->printerString() << "\n";
    }

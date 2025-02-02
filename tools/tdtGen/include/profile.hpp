@@ -17,11 +17,13 @@
 
 #include <QString>
 #include <QSharedPointer>
+#include <QTextStream>
 #include <QList>
 #include <QTextStream>
 #include <object.hpp>
 #include <unit.hpp>
 #include <command.hpp>
+#include <logs.hpp>
 
 
 //--- Implementation----------------------------------------------------------
@@ -36,6 +38,7 @@ class CProfile
    QList <QSharedPointer<CObject>> m_objects;
    QList <QSharedPointer<CUnit>> m_units;
    QList <QSharedPointer<CCommand>> m_commands;
+   QList <QSharedPointer<CLog>> m_logs;
    
 public:
    
@@ -49,6 +52,7 @@ public:
    int parseObjects( const QJsonArray& array );
    int parseUnits( const QJsonArray& array );
    int parseCommands( const QJsonArray& array );
+   int parseLogs( const QJsonArray& array );
    const QString& getName() const;
    int generate();
    void setBase( int base )
@@ -59,9 +63,11 @@ public:
    void writeObjectsEnums( QTextStream& s );
    void writeUnitsEnums( QTextStream& s );
    void writeCommandsEnums( QTextStream& s );
+   void writeLogsEnums( QTextStream& s );
    void writeInfo( QTextStream& s );
    void writeObjectsPrinters( QTextStream& s );
    void writeUnitsPrinters( QTextStream& s );
+   void writeLogsPrinters( QTextStream& s );
 };
 
 

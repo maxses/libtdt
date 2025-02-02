@@ -60,7 +60,23 @@ class CObject
    {
       m_profileInEnum=doSo;
    }
+   int numericalValue() const;
+   bool operator ==(int nv) const
+   {
+      return( numericalValue() == nv );
+   }
+   const QString& getName()
+   {
+      return( m_name );
+   }
+   const CProfile& getProfile()
+   {
+      return( m_profile );
+   }
 };
+
+
+bool operator== (const QSharedPointer<CObject> c, const int nv);
 
 
 //--- Fin. -------------------------------------------------------------------

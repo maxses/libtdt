@@ -126,4 +126,16 @@ QString CObject::printerString()
 }
 
 
+int CObject::numericalValue() const
+{
+   return( m_profile.getBase() + m_object );
+}
+
+
+bool operator== (const QSharedPointer<CObject> c, const int nv)
+{
+   return( *c == nv );
+}
+
+
 //--- Fin. -------------------------------------------------------------------

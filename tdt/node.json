@@ -80,6 +80,11 @@
                "description": "Size of the internal flash"
             },
             {
+               "name": "debug value",
+               "offset": "0x40",
+               "size": "0x10"
+            },
+            {
                "offset": "0x0080",
                "name": "status",
                "description": ""

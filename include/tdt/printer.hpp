@@ -292,6 +292,46 @@ class CPrinter: public CPrinterBase
                }
                break;
             }
+            case Tdt::EUnit::logBlended:
+            {
+               Tdt::ELog log=toLog( msg.getTdtValue()->logBlended );
+               ELogCategory cat=Tdt::toCategory( msg.getTdtValue()->logBlended );
+               
+               // Inforunately lepto is not availabvle
+               switch( (int)cat )
+               {
+                  case 0:
+                     // Debug/ Good/ Info
+                     ts << "Info: ";
+                     break;
+                  case 1:
+                     ts << "Caution: ";
+                     break;
+                  case 2:
+                     ts << "Warning: ";
+                     break;
+                  case 3:
+                     ts << "Critical: ";
+                     break;
+                  case 4:
+                     // Does not happen at all
+                     ts << "Fatal: ";
+                     break;
+                  default:
+                     ts << "Other: ";
+                     break;
+               }
+               
+               if( m_logMap.contains( log ) )
+               {
+                  ts << m_logMap[ log ];
+               }
+               else
+               {
+                  ts << "UK:" << msg.getTdtValueUInt();
+               }
+               break;
+            }
             default:
             {
                if( m_unitMap.contains( msg.getTdtUnit() ) )

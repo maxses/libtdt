@@ -73,7 +73,6 @@ QString CUnit::nameToEnum()
    int pos;
    while( ( pos=enumName.indexOf(' ') ) >= 0 )
    {
-      //if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
       enumName.replace( pos, 2, enumName.at(pos+1).toUpper() );
    }
    
