@@ -10,7 +10,7 @@
          "description": "Libbiwak brings some log codes",
          "base": "0x00",
          "size": "0x10",
-         "_includes": [
+         "No_includes": [
             "<biwak/error_codes.h>"
          ],
          "logs": [
