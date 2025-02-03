@@ -32,6 +32,13 @@ int CTdtGen::generate()
    {
       qFatal("No profiles");
    }
+
+   QStringList allIncludes;
+   for( const auto& profile : m_profiles )
+   {
+      allIncludes += profile->getIncludes();
+   }
+
    
    CSourceFileObjects sfo( m_outDir + "/objects.hpp");
    QTextStream& so=sfo.getStream();
@@ -72,7 +79,7 @@ int CTdtGen::generate()
       profile->writeUnitsEnums( su );
    }
    
-   CSourceFileHeader sfc( m_outDir + "/commands.hpp", "commands", "ECommand" );
+   CSourceFileHeader sfc( m_outDir + "/commands.hpp", "commands", "ECommand", allIncludes );
    QTextStream& sc=sfc.getStream();
    
    for( const auto& profile : m_profiles )
@@ -80,9 +87,9 @@ int CTdtGen::generate()
       profile->writeCommandsEnums( sc );
    }
    
-   CSourceFileHeader sfl( m_outDir + "/logs.hpp", "logs", "ELog" );
+   CSourceFileHeader sfl( m_outDir + "/logs.hpp", "logs", "ELog", allIncludes );
    QTextStream& sl=sfl.getStream();
-   
+
    for( const auto& profile : m_profiles )
    {
       profile->writeLogsEnums( sl );

@@ -32,6 +32,16 @@ void CSourceFileHeader::writeTop( )
    m_stream << "//---------------------------------------\n";
    m_stream << "\n";
    m_stream << "\n";
+   m_stream << "// headers: " << m_includes.count() << "\n";
+   if( m_includes.count() )
+   {
+      for( const auto& include: m_includes)
+      {
+         m_stream << "#include " << include << "\n";
+      }
+      m_stream << "\n";
+      m_stream << "\n";
+   }
    m_stream << "namespace Tdt\n";
    m_stream << "{\n";
    m_stream << "\n";

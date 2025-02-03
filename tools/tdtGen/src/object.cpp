@@ -62,8 +62,17 @@ void CObject::parse( QJsonObject& o )
 void CObject::appendObjectNumber( QString& str, int objectNumber ) const
 {
    str=str.leftJustified( 35, ' ' );
-   str+=QString("= 0x%1 + 0x%2,").arg(m_profile.getBase(), 4, 16, QChar('0') )
+   str+="= ";
+   if( m_macro.isEmpty() )
+   {
+      str+=QString("0x%1 + 0x%2,").arg(m_profile.getBase(), 4, 16, QChar('0') )
               .arg( objectNumber, 4, 16, QChar('0') );
+   }
+   else
+   {
+      str+=m_macro;
+      str+=", ";
+   }
    return;
 }
 

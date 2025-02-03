@@ -30,7 +30,8 @@ class CSourceFile
       
    protected:
       QTextStream m_stream;
-      
+      QStringList m_includes;
+
    public:
       CSourceFile( QString fileName )
          :m_fileName( fileName )
@@ -59,6 +60,10 @@ class CSourceFile
       QTextStream& getStream()
       {
          return( m_stream );
+      }
+      void setIncludes( const QStringList& includes )
+      {
+         m_includes+=includes;
       }
 };
 

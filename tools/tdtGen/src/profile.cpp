@@ -38,6 +38,11 @@ void CProfile::parseProfile( const QJsonObject& obj )
    parseUnits( obj["units"].toArray() );
    parseCommands( obj["commands"].toArray() );
    parseLogs( obj["logs"].toArray() );
+   for( auto obj : obj["includes"].toArray() )
+   {
+      //qFatal( "To String: %s", qPrintable( obj.toString() ) );
+      m_includes+=obj.toString();
+   }
 }
 
 
@@ -52,12 +57,14 @@ int CProfile::parseObjects( const QJsonArray& array )
                   o["description"].toString() ) );
       object->parse( o );
       qDebug() << "   Object: " << o["offset"].toString().toInt( nullptr, 0 );
-      if( m_objects.contains( object->numericalValue() ) )
+      for( const auto& otherObject: m_objects )
       {
-         int index=m_objects.indexOf( object->numericalValue() );
-         if( &( m_objects[index]->getProfile() ) != this )
+         if( object->numericalValue() && ( object->numericalValue() == otherObject->numericalValue() ) )
          {
-            qFatal("Object '%s' overlaps.", qPrintable( object->getName() ) );
+            if( &( otherObject->getProfile() ) != this )
+            {
+               qFatal("Object '%s' overlaps.", qPrintable( object->getName() ) );
+            }
          }
       }
       m_objects+=object;
@@ -94,12 +101,17 @@ int CProfile::parseCommands( const QJsonArray& array )
                                                                o["description"].toString() ) );
       command->parse( o );
       qDebug() << "   Command: " << o["offset"].toString().toInt( nullptr, 0 );
-      if( m_commands.contains( command->numericalValue() ) )
+      //if( m_commands.contains( command->numericalValue() ) )
+      for( const auto& otherCommand: m_commands )
       {
-         int index=m_commands.indexOf( command->numericalValue() );
-         if( &m_commands[ index ]->getProfile() != this )
+         //int index=m_commands.indexOf( command->numericalValue() );
+         //if( &m_commands[ index ]->getProfile() != this )
+         if( command->numericalValue() == otherCommand->numericalValue() )
          {
-            qFatal("Cummand '%s' overlaps.", qPrintable( command->getName() ) );
+            if( &( command->getProfile() ) != this )
+            {
+               qFatal("Cummand '%s' overlaps.", qPrintable( command->getName() ) );
+            }
          }
       }
       m_commands+=command;
@@ -110,20 +122,35 @@ int CProfile::parseCommands( const QJsonArray& array )
 
 int CProfile::parseLogs( const QJsonArray& array )
 {
+   bool ok;
    for( auto obj : array )
    {
       QJsonObject o=obj.toObject();
+      QString offset=o["offset"].toString();
       QSharedPointer<CLog> log=QSharedPointer<CLog>(
-               new CLog( *this, o["offset"].toString().toInt( nullptr, 0 ),
+               new CLog( *this, offset.toInt( &ok, 0 ),
                         o["name"].toString(), o["description"].toString() ) );
+      if(!ok)
+      {
+         if( offset[0].isNumber() )
+         {
+            qFatal( "Parse error in '%s'", qPrintable(offset) );
+         }
+         log->setMacro( offset );
+      }
       log->parse( o );
       qDebug() << "   Log: " << o["offset"].toString().toInt( nullptr, 0 );
-      if( m_logs.contains( log->numericalValue() ) )
+      //if( m_logs.contains( log->numericalValue() ) )
+      for( const auto& otherLog: m_logs )
       {
-         int index=m_logs.indexOf( log->numericalValue() );
-         if( &m_logs[ index ]->getProfile() != this )
+         //int index=m_logs.indexOf( log->numericalValue() );
+         //if( &m_logs[ index ]->getProfile() != this )
+         if( log->numericalValue() == otherLog->numericalValue() )
          {
-            qFatal("Log '%s' overlaps.", qPrintable( log->getName() ) );
+            if( &( log->getProfile() ) != this )
+            {
+               qFatal("Log '%s' overlaps.", qPrintable( log->getName() ) );
+            }
          }
       }
       m_logs+=log;

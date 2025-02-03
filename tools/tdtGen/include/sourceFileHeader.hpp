@@ -31,11 +31,12 @@ class CSourceFileHeader: public CSourceFile
    QString m_enum;
    
    public:
-      CSourceFileHeader( QString fileName, QString name, QString _enum )
+      CSourceFileHeader( QString fileName, QString name, QString _enum, QStringList includes )
          :CSourceFile( fileName )
          ,m_name( name )
          ,m_enum( _enum )
       {
+         m_includes += includes;
          start();
       };
       ~CSourceFileHeader()

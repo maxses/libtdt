@@ -17,6 +17,7 @@
 
 #include <QString>
 #include <QJsonObject>
+#include <QSharedPointer>
 
 
 //--- Implementation----------------------------------------------------------
@@ -32,6 +33,7 @@ class CObject
    const QString m_desc;
    int m_size=0;
    bool m_profileInEnum=true;
+   QString m_macro;
       
    public:
        
@@ -72,6 +74,10 @@ class CObject
    const CProfile& getProfile()
    {
       return( m_profile );
+   }
+   void setMacro(const QString& macro)
+   {
+      m_macro=macro;
    }
 };
 

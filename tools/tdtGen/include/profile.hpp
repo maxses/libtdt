@@ -39,6 +39,7 @@ class CProfile
    QList <QSharedPointer<CUnit>> m_units;
    QList <QSharedPointer<CCommand>> m_commands;
    QList <QSharedPointer<CLog>> m_logs;
+   QStringList m_includes;
    
 public:
    
@@ -68,6 +69,10 @@ public:
    void writeObjectsPrinters( QTextStream& s );
    void writeUnitsPrinters( QTextStream& s );
    void writeLogsPrinters( QTextStream& s );
+   const QStringList& getIncludes() const
+   {
+      return(m_includes);
+   }
 };
 
 
