@@ -1,16 +1,18 @@
 {
    "comments": [
-            "Log code provided by biwak which may be send via CAN.",
-            "Header could be included to resolve macros.",
-            "But host software should not need biwak to compile."
-            ],
+      "Log code provided by biwak which may be send via CAN.",
+      "Header could be included to resolve macros.",
+      "But host software should not need biwak to compile."
+   ],
    "profiles": [
       {
          "name": "biwak",
          "description": "Libbiwak brings some log codes",
          "base": "0x00",
          "size": "0x10",
-         "_includes": [ "<biwak/error_codes.h>" ],
+         "_includes": [
+            "<biwak/error_codes.h>"
+         ],
          "logs": [
             {
                "misc": "EC_BIWAK_CAN_TX_ERROR",
