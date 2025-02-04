@@ -109,12 +109,12 @@ enum class EEvent: uint32_t
    wannaSleepEnd        = 0x1F + LOG_CODE_OFFSET,
    noRelease_OBS        = 0x20 + LOG_CODE_OFFSET,
    shutdown             = 0x21 + LOG_CODE_OFFSET,
-   //batteryLow           = 0x22 + LOG_CODE_OFFSET,
-   //vbusLow              = 0x23 + LOG_CODE_OFFSET,
+   // batteryLow           = 0x22 + LOG_CODE_OFFSET,
+   // vbusLow              = 0x23 + LOG_CODE_OFFSET,
+   // couldNotReadEeprom   = 0x24 + LOG_CODE_OFFSET,
    
    #endif
-   couldNotReadEeprom,
-   noRelease,
+   noRelease            = 0x25 + LOG_CODE_OFFSET,
    test,                // Just for Catch2 tests
 };
 

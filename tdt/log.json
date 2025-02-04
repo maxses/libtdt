@@ -11,6 +11,22 @@
                "name": "Blended"
             }
          ]
+      },
+      {
+         "name": "tdtlog",
+         "description": "Log codes from tdt library that should be moved",
+         "base": "0x3000",
+         "size": "0x10",
+         "objects": [
+            {
+               "offset": "0x0024",
+               "name": "Could not read eeprom"
+            },
+            {
+               "offset": "0x0025",
+               "name": "No Release"
+            }
+         ]
       }
    ]
 }

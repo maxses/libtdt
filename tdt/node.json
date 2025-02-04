@@ -129,6 +129,25 @@
                "offset": "0x008C",
                "description": ""
             }
+         ],
+         "logs": [
+            {
+               "offset": "0x24",
+               "name": "Could not read EEPROM"
+            },
+            {
+               "offset": "0x25",
+               "name": "Could not read HWData"
+            },
+            {
+               "offset": "0x26",
+               "name": "Could not read config"
+            },
+            {
+               "offset": "0x27",
+               "name": "No release",
+               "description": "Git commits drifted from version tag"
+            }
          ]
       },
       {
