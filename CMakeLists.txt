@@ -141,48 +141,39 @@ elseif( EXISTS "${CMAKE_SYSROOT}/usr/include/lepto/config.h" )
    set ( TDT_CONFIG_HEADER "${CMAKE_SYSROOT}/usr/include/lepto/config.h" )
 endif()
 
-# If you dont want a config header, stop lepto to complain about this.
-if( TDT_CONFIGURED )
-   target_compile_definitions(
-      ${PROJECT_NAME}
-      PUBLIC
-         "-DTDT_CONFIGURED"
-   )
-endif()
 
-if( TDT_CONFIG_HEADER )
-   get_filename_component( TDT_CONFIG_PATH ${TDT_CONFIG_HEADER} DIRECTORY )
-   get_filename_component( TDT_CONFIG_FILE ${TDT_CONFIG_HEADER} NAME )
-
-   target_compile_options(
-      ${PROJECT_NAME}
-      PRIVATE
-         "SHELL:-include ${TDT_CONFIG_HEADER}"
-      PUBLIC
-         "SHELL:-include ${TDT_CONFIG_HEADER}"
-   )
-
-   set_source_files_properties(
-      ${sources}
-      ${headers}
-      PROPERTIES
-      OBJECT_DEPENDS
-      ${TDT_CONFIG_HEADER}
-   )
-
-   set( TDT_CONFIGURED Yes )
-endif()
-
-if( NOT TDT_CONFIGURED )
-   message( ERROR "TDT_CONFIGURED not set." )
-   message( FATAL_ERROR "No config header for tdt defined. Either set "
-            "'COMMON_CONFIG_HEADER' or 'TDT_CONFIG_HEADER' in your projects "
-            "root cmake file. If you are sure that you don't need it, set "
-            "'TDT_CONFIGURED' cmake variable")
-endif()
-
-# message( FATAL_ERROR "### use lepto: ${USE_LEPTO}" )
+if( NOT ${COMMON_CONFIG_HEADER_INCLUDED} )
+   if( TDT_CONFIG_HEADER )
+      get_filename_component( TDT_CONFIG_PATH ${TDT_CONFIG_HEADER} DIRECTORY )
+      get_filename_component( TDT_CONFIG_FILE ${TDT_CONFIG_HEADER} NAME )
    
+      target_compile_options(
+         ${PROJECT_NAME}
+         PRIVATE
+            "SHELL:-include ${TDT_CONFIG_HEADER}"
+         PUBLIC
+            "SHELL:-include ${TDT_CONFIG_HEADER}"
+      )
+   
+      set_source_files_properties(
+         ${sources}
+         ${headers}
+         PROPERTIES
+         OBJECT_DEPENDS
+         ${TDT_CONFIG_HEADER}
+      )
+   
+      set( TDT_CONFIGURED Yes )
+   else()
+      message( FATAL_ERROR "No config header for tdt defined. Either "
+               "use common_config_header(), set "
+               "'COMMON_CONFIG_HEADER' or 'TDT_CONFIG_HEADER' in your projects "
+               "root cmake file. If you are sure that you don't need it, set "
+               "'TDT_CONFIGURED' cmake variable")
+      
+   endif()
+endif()
+
 if( USE_LEPTO )
    set( LIBS ${LIBS} lepto )
 endif( USE_LEPTO )
