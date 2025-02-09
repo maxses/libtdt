@@ -328,7 +328,8 @@ class CPrinter: public CPrinterBase
                }
                else
                {
-                  ts << "UK:" << msg.getTdtValueUInt();
+                  ts.setIntegerBase(16);
+                  ts << "UK: 0x" << msg.getTdtValueUInt();
                }
                break;
             }
