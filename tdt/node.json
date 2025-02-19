@@ -147,6 +147,11 @@
                "offset": "0x27",
                "name": "No release",
                "description": "Git commits drifted from version tag"
+            },
+            {
+               "offset": "0x28",
+               "name": "Timestamp not plausible",
+               "description": "CANRec: timestamp of an message is older as an previous one"
             }
          ]
       },
