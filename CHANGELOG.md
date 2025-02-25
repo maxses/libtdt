@@ -1,3 +1,10 @@
+# Changes for v0.3.0
+
+* minor update on objects
+* formated json files
+* added biwak logs
+* support for includes and macros
+
 # Changes for v0.2.0
 
 * implemented generating log enums
