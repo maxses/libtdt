@@ -12,6 +12,11 @@
                "description": "When were replayed messages recorded"
             },
             {
+               "offset": "0x0012",
+               "name": "replay timespan",
+               "description": "Timespan into the past when replaying."
+            },
+            {
                "offset": "0x5001",
                "name": "time stamp drift",
                "description": "Cordyceps is using this for some reson. TBD."
