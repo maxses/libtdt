@@ -44,6 +44,11 @@
                "description": "Main supply voltage"
             },
             {
+               "name": "PCB Temperature",
+               "offset": "0x35",
+               "description": "Board temperature"
+            },
+            {
                "name": "id",
                "comment": "Its 'nodeId' but 'node' does get injected automatically by the profile",
                "offset": "0x36",
