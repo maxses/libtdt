@@ -65,7 +65,7 @@ void CMmpTransfer::writeMMP( Tdt::EObject object, int pos, uint32_t value )
    //if( pos % 100 == 0 )
    {
       qDebug("# MMP TX Shred: pos %d; length=%d; MMP command=0x%X", pos
-               , m_data.header().dataLength, m_data.header().mmpCommand);
+               , m_data.header().dataLength, (int)m_data.header().mmpCommand);
    }
    Tdt::CMessage message( m_counterNodeId,
                          Tdt::EFunctionCode::dataBlob,
@@ -180,7 +180,7 @@ bool CMmpTransfer::handleTx( const Tdt::CMessage& msg )
           (msg.getTdtObject() == Tdt::EObject::mmpAcknowledgeTransfer)
             ? "TRANSFER" : "SHRED" );
    qDebug( "   Node: %d", msg.getNodeId() );
-   qDebug( "   MMP Command: 0x%X", m_data.header().mmpCommand );
+   qDebug( "   MMP Command: 0x%X", (int)m_data.header().mmpCommand );
    
    if( msg.getTdtObject() == Tdt::EObject::mmpAcknowledgeTransfer )
    {
