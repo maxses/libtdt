@@ -223,7 +223,7 @@ class CMmpTransferData
       }
 };
 
-class CSocketCan;
+//class CSocketCan;
 
 class CMmpTransfer
             #if ! defined STM32
