@@ -14,10 +14,10 @@
 
 #if defined USE_LEPTO
    #include <lepto/log.h>     // ELogCategory
-   enum class ELogBlended: int;
+   enum class ELogCode: int;
 #else
    #include <tdt/compat.hpp>
-   enum class ELogBlended: int32_t;
+   enum class ELogCode: int32_t;
    enum class ELogCategory: int32_t;
 #endif
 
@@ -94,6 +94,9 @@ enum class ENmtObject: uint16_t
 typedef uint32_t nodeId_t;
 
 
+enum class EEvent: uint32_t;
+
+#if 0
 enum class EEvent: uint32_t
 {
    null              = 0x0,
@@ -117,12 +120,14 @@ enum class EEvent: uint32_t
    noRelease            = 0x25 + LOG_CODE_OFFSET,
    test,                // Just for Catch2 tests
 };
+#endif
 
+#if 0
 enum class ELogCode2: uint32_t
 {
    couldNotReadEeprom
 };
-
+#endif
 
 enum class ESystemState: uint32_t
 {
@@ -138,37 +143,42 @@ inline constexpr Tdt::EEvent operator+ ( Tdt::EEvent e1, int i1 )
    return( (Tdt::EEvent)( (int)e1 + i1 ) );
 }
 
-inline constexpr ELogBlended operator+ (ELogCategory c, Tdt::EEvent e)
+inline constexpr ELogCode operator+ (ELogCategory c, Tdt::EEvent e)
 {
-   return( (ELogBlended)( (int)c | ( (int)e << 4 ) ) );
+   return( (ELogCode)( (int)c | ( (int)e  ) ) );
 }
 
-inline constexpr ELogBlended operator| (ELogCategory c, Tdt::EEvent e)
+/*inline constexpr operator ELogBlended(ELogCategory c)
 {
-   return( (ELogBlended)( (int)c | ( (int)e << 4 ) ) );
+   return( (ELogBlended)( (int)c  ) );
+}
+*/
+inline constexpr ELogCode operator| (ELogCategory c, Tdt::EEvent e)
+{
+   return( (ELogCode)( (int)c | ( (int)e  ) ) );
 }
 
-inline constexpr ELogBlended operator+ (ELogCategory c, Tdt::ELog l)
+inline constexpr ELogCode operator+ (ELogCategory c, Tdt::ELog l)
 {
-   return( (ELogBlended)( (int)c | ( (int)l << 4 ) ) );
+   return( (ELogCode)( (int)c | ( (int)l  ) ) );
 }
 
-inline constexpr ELogBlended operator| (ELogCategory c, Tdt::ELog l)
+inline constexpr ELogCode operator| (ELogCategory c, Tdt::ELog l)
 {
-   return( (ELogBlended)( (int)c | ( (int)l << 4 ) ) );
+   return( (ELogCode)( (int)c | ( (int)l  ) ) );
 }
 
-inline constexpr Tdt::EEvent toEvent( ELogBlended c )
+inline constexpr Tdt::EEvent toEvent( ELogCode c )
 {
-   return( (Tdt::EEvent)((int)c >> 4 ) );
+   return( (Tdt::EEvent)((int)c & 0xFFFFFFF0 ) );
 }
 
-inline constexpr Tdt::ELog toLog( ELogBlended c )
+inline constexpr Tdt::ELog toLog( ELogCode c )
 {
-   return( (Tdt::ELog)((int)c >> 4 ) );
+   return( (Tdt::ELog)((int)c  ) );
 }
 
-inline constexpr ELogCategory toCategory( ELogBlended c )
+inline constexpr ELogCategory toCategory( ELogCode c )
 {
    return( (ELogCategory)((int)c & 0xF ) );
 }
@@ -220,7 +230,7 @@ union SValue
 
       ECommand command;
       nodeId_t  nodeId;
-      ELogBlended logBlended;
+      ELogCode logCode;
       EEvent event;
       ESystemState systemState;
 };
