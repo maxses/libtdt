@@ -86,7 +86,7 @@ add_custom_command(
         ${CMAKE_COMMAND} -E env sh -c
             "${CMAKE_BINARY_DIR}/tools/bin/tdtGen -i ${tdtProfilesJoined} \
                -o ${TDT_OUTPUT_DIR}/tdt/gen \
-               2>&1 > ${TDT_OUTPUT_DIR}/${CMAKE_PROJECT_NAME}.log"
+               2>&1 | cat > ${TDT_OUTPUT_DIR}/${CMAKE_PROJECT_NAME}.log"
     DEPENDS
          tdtGen ${tdtProfiles}
     VERBATIM
