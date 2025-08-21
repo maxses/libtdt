@@ -223,7 +223,7 @@ class CMmpTransferData
       }
 };
 
-class CSocketCan;
+//class CSocketCan;
 
 class CMmpTransfer
             #if ! defined STM32
@@ -260,7 +260,7 @@ class CMmpTransfer
       
    public:
       CMmpTransfer();
-      virtual ~CMmpTransfer();
+      ~CMmpTransfer();
        
       void writeMMP( Tdt::EObject object, int pos, uint32_t value );
        
