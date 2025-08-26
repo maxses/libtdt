@@ -72,12 +72,17 @@ class CPrinter: public CPrinterBase
       CPrinter( )
       {
       };
-       
+      
       QString printValue( const Tdt::CMessage& msg ) const
+      {
+         return( printValue( msg.getFunctionCode(), msg.getTdtUnit(), *msg.getTdtValue() ) );
+      };
+      
+      QString printValue( EFunctionCode functionCode, EUnit unit, const SValue& value ) const
       {
          QString s;
          QTextStream ts( &s );
-         switch( msg.getFunctionCode() )
+         switch( functionCode )
          {
             case Tdt::EFunctionCode::alert:
                s="Alert:";
@@ -86,12 +91,12 @@ class CPrinter: public CPrinterBase
                break;
          }
 
-         switch( msg.getTdtUnit() )
+         switch( unit )
          {
             case Tdt::EUnit::version:
             {
                Tdt::SValue::SSoftwareVersion sw
-                        =msg.getTdtValue()->softwareVersion;
+                        =value.softwareVersion;
                ts       << ( sw.drift.bootloader ? "BL " : "")
                         << "v"
                         << sw.major << "." << sw.minor << "." << sw.patch
@@ -101,13 +106,18 @@ class CPrinter: public CPrinterBase
             }
             case Tdt::EUnit::durationSeconds:
             {
-               int secs = (int)msg.getTdtValueUInt();
-               if ( secs < 100 )
+               int secs = (int)value._int;
+               if ( qAbs(secs) < 100 )
                {
-                  ts << msg.getTdtValue()->_int << " s";
+                  ts << value._int << " s";
                }
                else
                {
+                  if( secs<0 )
+                  {
+                     ts << "- ";
+                     secs=-secs;
+                  }
                   int days = secs / SEC_PER_DAY;
                   secs-=days * SEC_PER_DAY;
                   int hours =  secs / SEC_PER_HOUR;
@@ -125,18 +135,18 @@ class CPrinter: public CPrinterBase
             }
             case Tdt::EUnit::time:
             {
-               Tdt::SValue::STime t=msg.getTdtValue()->time;
+               Tdt::SValue::STime t=value.time;
                ts << t.hour << ":" << t.min << ":" << t.sec;
                break;
             }
             case Tdt::EUnit::percentHumidity:
             {
-               ts << ( ( msg.getTdtValue()->_int / 10 ) / 100.0) << " %";
+               ts << ( ( value._int / 10 ) / 100.0) << " %";
                break;
             }
             case Tdt::EUnit::_switch:
             {
-               ts << ( msg.getTdtValue()->_bool ? "ON" : "OFF" );
+               ts << ( value._bool ? "ON" : "OFF" );
                break;
             }
             case Tdt::EUnit::percentQuality:
@@ -150,11 +160,11 @@ class CPrinter: public CPrinterBase
                   { 40, "Very Unhealthy" },
                   {  0, "Hazardous" },
                };
-               unsigned int value=msg.getTdtValue()->_uint;
-               ts << value << " %; ";
+               unsigned int intValue=value._uint;
+               ts << intValue << " %; ";
                for(int i1=0; i1<sizeof(ranges)/sizeof(ranges[0]); i1++)
                {
-                  if( value >= ranges[i1].value )
+                  if( intValue >= ranges[i1].value )
                   {
                      ts << ranges[i1].text;
                      break;
@@ -175,20 +185,20 @@ class CPrinter: public CPrinterBase
                   { 0xB0, "CANSwitch"},
                   { 0xD0, "Main-Switch"},
                };
-               if( map.contains(msg.getTdtValue()->_uint) )
+               if( map.contains(value._uint) )
                {
-                  ts << map[msg.getTdtValue()->_uint];
+                  ts << map[value._uint];
                }
                else
                {
-                  ts << "UK Article: " << msg.getTdtValue()->_uint;
+                  ts << "UK Article: " << value._uint;
                }
                break;
             }
             case Tdt::EUnit::powerSwitchFunction:
             {
                Tdt::EObject object=
-                   (Tdt::EObject)(msg.getTdtValue()->_uint
+                   (Tdt::EObject)(value._uint
                                        + (int)Tdt::EObject::powerSwitchStart);
                if( m_objectMap.contains(object) )
                {
@@ -202,12 +212,12 @@ class CPrinter: public CPrinterBase
             }
             case Tdt::EUnit::index:
             {
-               ts << "[" << msg.getTdtValue()->_uint << "]";
+               ts << "[" << value._uint << "]";
                break;
             }
             case Tdt::EUnit::deviceStatus:
             {
-               switch( msg.getTdtValue()->_uint )
+               switch( value._uint )
                {
                   // Brrr, There   friend class CTopic; should not be a depency to biwak;
                   // CHeartBeats "DeviceStatus" should be moved to lepto
@@ -218,7 +228,7 @@ class CPrinter: public CPrinterBase
                      ts << "Warning";
                      break;
                   case 2 ... 3:
-                     ts << "Error(" << msg.getTdtValue()->_uint << ")";
+                     ts << "Error(" << value._uint << ")";
                      break;
                   case 5:
                      ts << "Calm";
@@ -227,7 +237,7 @@ class CPrinter: public CPrinterBase
                      ts << "Resetting";
                      break;
                   default:
-                     ts << "UK:" << msg.getTdtValue()->_uint;
+                     ts << "UK:" << value._uint;
                      break;
                }
                break;
@@ -256,24 +266,24 @@ class CPrinter: public CPrinterBase
             #endif
             case Tdt::EUnit::room:
             {
-               if( m_roomMap.contains( msg.getTdtValue()->_uint ) )
+               if( m_roomMap.contains( value._uint ) )
                {
-                  ts << m_roomMap[ msg.getTdtValue()->_uint ];
+                  ts << m_roomMap[ value._uint ];
                }
                else
                {
-                  ts << "UK Article: " << msg.getTdtValue()->_uint;
+                  ts << "UK Article: " << value._uint;
                }
                break;
             }
             case Tdt::EUnit::capacity:
             {
-               ts << (int)msg.getTdtValueUInt() / 1000 << " KB";
+               ts << (int)value._uint / 1000 << " KB";
                break;
             }
             case Tdt::EUnit::systemState:
             {
-               switch( msg.getTdtValue()->systemState )
+               switch( value.systemState )
                {
                   case Tdt::ESystemState::application:
                      ts << "Application";
@@ -286,7 +296,7 @@ class CPrinter: public CPrinterBase
                      break;
                   default:
                      ts << "Unknown ("
-                        << (uint32_t)msg.getTdtValue()->systemState
+                        << (uint32_t)value.systemState
                         << ")";
                      break;
                }
@@ -294,8 +304,8 @@ class CPrinter: public CPrinterBase
             }
             case Tdt::EUnit::logBlended:
             {
-               Tdt::ELog log=toLog( msg.getTdtValue()->logBlended );
-               ELogCategory cat=Tdt::toCategory( msg.getTdtValue()->logBlended );
+               Tdt::ELog log=toLog( value.logBlended );
+               ELogCategory cat=Tdt::toCategory( value.logBlended );
                
                // Inforunately lepto is not availabvle
                switch( (int)cat )
@@ -329,30 +339,30 @@ class CPrinter: public CPrinterBase
                else
                {
                   ts.setIntegerBase(16);
-                  ts << "UK: 0x" << msg.getTdtValueUInt();
+                  ts << "UK: 0x" << value._uint;
                }
                break;
             }
             default:
             {
-               if( m_unitMap.contains( msg.getTdtUnit() ) )
+               if( m_unitMap.contains( unit ) )
                {
-                  SUnitDesc desc=m_unitMap[ msg.getTdtUnit() ];
+                  SUnitDesc desc=m_unitMap[ unit ];
                   if( desc.format == 'x' )
                   {
                      ts.setIntegerBase(16);
-                     ts << "0x" << (unsigned int)msg.getTdtValueUInt();
+                     ts << "0x" << (unsigned int)value._uint;
                   }
                   else
                   {
                      if( desc.decimalPower != 1 )
                      {
-                        float t = msg.getTdtValue()->_int * ( pow(10.0, desc.decimalPower ) );
+                        float t = value._int * ( pow(10.0, desc.decimalPower ) );
                         ts << t;
                      }
                      else
                      {
-                        ts << (int)msg.getTdtValueUInt();
+                        ts << (int)value._uint;
                      }
                   }
                   if( desc.postfix[0] )
@@ -363,7 +373,7 @@ class CPrinter: public CPrinterBase
                else
                {
                   ts.setIntegerBase(16);
-                  ts << "UK: Unit=0x" << (int)msg.getTdtUnit();
+                  ts << "UK: Unit=0x" << (int)unit;
                }
                break;
             }
