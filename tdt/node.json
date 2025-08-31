@@ -137,24 +137,24 @@
          ],
          "logs": [
             {
-               "offset": "0x24",
+               "offset": "0x240",
                "name": "Could not read EEPROM"
             },
             {
-               "offset": "0x25",
+               "offset": "0x250",
                "name": "Could not read HWData"
             },
             {
-               "offset": "0x26",
+               "offset": "0x260",
                "name": "Could not read config"
             },
             {
-               "offset": "0x27",
+               "offset": "0x270",
                "name": "No release",
                "description": "Git commits drifted from version tag"
             },
             {
-               "offset": "0x28",
+               "offset": "0x280",
                "name": "Timestamp not plausible",
                "description": "CANRec: timestamp of an message is older as an previous one"
             }
