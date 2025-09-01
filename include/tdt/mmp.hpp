@@ -26,7 +26,7 @@
 
 #if defined USE_LEPTO
    #include <lepto/crc32.h>
-   #include <lepto/signal.h>
+   #include <lepto/signal.hpp>
    #if defined( STM32 )
       #include <lepto/mockQt.hpp>
    #endif
