@@ -16,9 +16,9 @@
 #include <math.h>
 
 #if defined USE_LEPTO
-   #include <lepto/events.h>
+   // #include <lepto/events.h>
    #include <lepto/log.h>
-   #include <lepto/time.h>        // SEC_PER_DAY
+   #include <lepto/units.h>        // SEC_PER_DAY
 #endif
 
 #define ENUM_MAP( a, e ) { a::e, "" #e }
@@ -304,8 +304,8 @@ class CPrinter: public CPrinterBase
             }
             case Tdt::EUnit::logCode:
             {
-               Tdt::ELog log=toLog( msg.getTdtValue()->logCode );
-               ELogCategory cat=Tdt::toCategory( msg.getTdtValue()->logCode );
+               Tdt::ELog log=toLog( value.logCode );
+               ELogCategory cat=Tdt::toCategory( value.logCode );
                
                // Inforunately lepto is not availabvle
                switch( (int)cat )
