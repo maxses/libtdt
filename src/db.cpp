@@ -1,11 +1,21 @@
-//-----------------------------------------------------------------------------
-//
-//
-//
-//-----------------------------------------------------------------------------
+/**---------------------------------------------------------------------------
+ *
+ * @file    db.cpp
+ * @brief   Hold lists of available nodes and their objects (optional)
+ *
+ * This can help GUIs to show preprocessed and nicely readable tables/forms.
+ * The information is read at start from $HOME/.config/tdt.xml.
+ * 
+ * This class is only available on the host pc, not the MCU.
+ *
+ * @date      20241219
+ * @author    Maximilian Seesslen <mes@seesslen.net>
+ * @copyright SPDX-License-Identifier: Apache-2.0
+ *
+ *--------------------------------------------------------------------------*/
 
 
-//-----------------------------------------------------------------------------
+/*--- Defines --------------------------------------------------------------*/
 
 
 #include <tdt/db.hpp>
@@ -16,7 +26,7 @@
 #include <QDebug>
 
 
-//-----------------------------------------------------------------------------
+/*--- Implementation -------------------------------------------------------*/
 
 
 namespace Tdt
@@ -25,7 +35,7 @@ namespace Tdt
 
 CDb::CDb()
 {
-   QFile file( QDir::home().path() + "/.lepto/tdt.xml" );
+   QFile file( QDir::home().path() + "/.config/tdt.xml" );
    QDomDocument xmlBOM;
    
    if( !file.open(QIODevice::ReadOnly) )
@@ -42,7 +52,7 @@ CDb::CDb()
    if( root.tagName() != QString("tdt") )
    {
       qWarning() << "Schema wrong. Unexpercted '" << root.tagName() << "'";
-      qWarning() << "Install a proper device info XML file to $HOME/.lepto/tdt.xml";
+      qWarning() << "Install a proper device info XML file to $HOME/.config/tdt.xml";
       qFatal( "exiting..." );
    }
    
@@ -83,4 +93,4 @@ CDb::CDb()
 } // namespace Tdt
 
 
-//---fin-----------------------------------------------------------------------
+/*--- Fin ------------------------------------------------------------------*/

@@ -1,25 +1,25 @@
 #ifndef TDT_MMP_HPP
 #define TDT_MMP_HPP
-//----------------------------------------------------------------------------
-///
-/// \brief  Multi-message-package suzpport for TDT protocol
-///
-///         Transfer BLOBs from one device to another.
-/// 
-///         Handling the shreds directly (writing them to flash) are making CRC
-///         handling impossible. Retransmitting an transfer does not work any 
-///         more because the flash would be needed to erased again.
-///
-/// \date   20241003
-/// \author Maximilian Seesslen <mes@seesslen.net>
-///
-//----------------------------------------------------------------------------
+/**---------------------------------------------------------------------------
+ *
+ * @file    mmp.hpp
+ * @brief   Multi-message-package support for TDT protocol
+ *
+ * Transfer BLOBs from one device to another.
+ * 
+ * Handling the shreds directly (writing them to flash) are making CRC
+ * handling impossible. Retransmitting an transfer does not work any 
+ * more because the flash would be needed to erased again.
+ * 
+ * @date      20241003
+ * @author    Maximilian Seesslen <mes@seesslen.net>
+ * @copyright SPDX-License-Identifier: Apache-2.0
+ *
+ *--------------------------------------------------------------------------*/
 
 
-//---Includes-----------------------------------------------------------------
+/*--- Includes -------------------------------------------------------------*/
 
-
-//---Own------------------------------
 
 #include <tdt/message.hpp>
 #include <stdlib.h>           // malloc
@@ -41,7 +41,8 @@
 #endif
 
 
-//---Declaration--------------------------------------------------------------
+/*--- Declaration ----------------------------------------------------------*/
+
 
 class CCan;
 extern CCan* mmpCan;
@@ -223,8 +224,12 @@ class CMmpTransferData
       }
 };
 
-//class CSocketCan;
 
+/**
+ * @brief Ongoing mmp transfer in one direction
+ * 
+ * A node will nedd a rx transfer object and a tx transfer object.
+ */
 class CMmpTransfer
             #if ! defined STM32
             :public QObject
@@ -314,10 +319,6 @@ class CMmpNode
       CMmpTransfer m_tx;
       CMmpTransfer m_rx;
       
-   //signals:
-      //void send(Tdt::CMessage& msg);
-   //signals:
-      //void sendMessage( const Tdt::CMessage& msg );
       #if ! defined( STM32 )
          signals:
          void sendTdtMessage( const Tdt::CMessage& msg );
@@ -394,5 +395,5 @@ class CMmpNode
 } // namespace Tdt
 
 
-//---fin----------------------------------------------------------------------
+/*--- Fin ------------------------------------------------------------------*/
 #endif // ? ! TDT_MMP_HPP

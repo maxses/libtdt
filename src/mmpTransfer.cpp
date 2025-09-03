@@ -1,19 +1,19 @@
-//-----------------------------------------------------------------------------
-///
-/// \brief  Multi-message-package suzpport for TDT protocol
-///
-///         Transfer BLOBs from one device to another.
-///
-/// \date   20241003
-/// \author Maximilian Seesslen <mes@seesslen.net>
-///
-//-----------------------------------------------------------------------------
+/**---------------------------------------------------------------------------
+ *
+ * @file    mmpNode.cpp
+ * @brief   Multi-message-package support for TDT protocol
+ *
+ * Transfer BLOBs from one device to another.
+ * 
+ * @date      20241003
+ * @author    Maximilian Seesslen <mes@seesslen.net>
+ * @copyright SPDX-License-Identifier: Apache-2.0
+ *
+ *--------------------------------------------------------------------------*/
 
 
-//---Includes-----------------------------------------------------------------
+/*--- Includes -------------------------------------------------------------*/
 
-
-//---Own------------------------------
 
 #include <tdt/mmp.hpp>
 #if ( ! defined STM32 ) && defined ( USE_LEPTO )
@@ -21,7 +21,7 @@
 #endif
 
 
-//---Implementation-----------------------------------------------------------
+/*--- Implementation -------------------------------------------------------*/
 
 
 namespace Tdt
@@ -71,7 +71,6 @@ void CMmpTransfer::writeMMP( Tdt::EObject object, int pos, uint32_t value )
                          Tdt::EFunctionCode::dataBlob,
                          (uint16_t)object, // TBD: Its me, the source
                          pos, value );
-   //m_socketCan << message;
    #if ! defined ( STM32 )
       emit sendTdtMessage(message);
    #elif 0
@@ -315,4 +314,4 @@ void CMmpTransfer::handleMmpTransfer(CMmpTransferData& data)
 }; // namespace Tdt
 
 
-//---fin----------------------------------------------------------------------
+/*--- Fin ------------------------------------------------------------------*/

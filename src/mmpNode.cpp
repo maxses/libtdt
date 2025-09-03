@@ -1,19 +1,23 @@
-//-----------------------------------------------------------------------------
-///
-/// \brief  Multi-message-package suzpport for TDT protocol
-///
-///         Transfer BLOBs from one device to another.
-///
-/// \date   20241003
-/// \author Maximilian Seesslen <mes@seesslen.net>
-///
-//-----------------------------------------------------------------------------
+/**---------------------------------------------------------------------------
+ *
+ * @file    mmpNode.cpp
+ * @brief   Multi-message-package support for TDT protocol
+ *
+ * Transfer BLOBs from one device to another.
+ * 
+ * Handling the shreds directly (writing them to flash) are making CRC
+ * handling impossible. Retransmitting an transfer does not work any 
+ * more because the flash would be needed to erased again.
+ * 
+ * @date      20241003
+ * @author    Maximilian Seesslen <mes@seesslen.net>
+ * @copyright SPDX-License-Identifier: Apache-2.0
+ *
+ *--------------------------------------------------------------------------*/
 
 
-//---Includes-----------------------------------------------------------------
+/*--- Includes -------------------------------------------------------------*/
 
-
-//---Own------------------------------
 
 #include <tdt/mmp.hpp>
 #if defined ( STM32 )
@@ -21,7 +25,7 @@
 #endif
 
 
-//---Implementation-----------------------------------------------------------
+/*--- Implementation -------------------------------------------------------*/
 
 
 namespace Tdt
@@ -104,4 +108,4 @@ int CMmpNode::slotHandleMmpTransfer( CMmpTransferData &data )
 }; // namespace Tdt
 
 
-//---fin----------------------------------------------------------------------
+/*--- Fin ------------------------------------------------------------------*/

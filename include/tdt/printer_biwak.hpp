@@ -1,10 +1,21 @@
-#ifndef LEPTO_CAN_TDT_PRINTER_BIWAK_H
-#define LEPTO_CAN_TDT_PRINTER_BIWAK_H
-//-----------------------------------------------------------------------------
-//
-//
-//
-//-----------------------------------------------------------------------------
+#ifndef TDT_PRINTER_BIWAK_HPP
+#define TDT_PRINTER_BIWAK_HPP
+/**---------------------------------------------------------------------------
+ *
+ * @file    printer_biwak.hpp
+ * @brief   Generate text fragments from tdt messages
+ *
+ * Those text strings can be used on target MCU.
+ * For text fragments to be used on host pc, see "printer.hpp".
+ * 
+ * @date      20241214
+ * @author    Maximilian Seesslen <mes@seesslen.net>
+ * @copyright SPDX-License-Identifier: Apache-2.0
+ *
+ *--------------------------------------------------------------------------*/
+
+
+/*--- Includes -------------------------------------------------------------*/
 
 
 #include <biwak/canMessage.hpp>
@@ -175,5 +186,5 @@ const char *CCanTdtPrinter::getObjectString() const
 }
 
 
-//---fin-----------------------------------------------------------------------
-#endif // ? ! LEPTO_CAN_TDT_PRINTER_H
+/*--- Fin ------------------------------------------------------------------*/
+#endif // ? ! TDT_PRINTER_BIWAK_HPP

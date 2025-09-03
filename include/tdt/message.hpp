@@ -1,16 +1,23 @@
 #ifndef LEPTO_CAN_MESSAGE_TDT_HPP
 #define LEPTO_CAN_MESSAGE_TDT_HPP
-//-----------------------------------------------------------------------------
-//
-//
-//
-//-----------------------------------------------------------------------------
+/**---------------------------------------------------------------------------
+ *
+ * @file    message.hpp
+ * @brief   The tdt message structures and functions
+ *
+ * @date      20241219
+ * @author    Maximilian Seesslen <mes@seesslen.net>
+ * @copyright SPDX-License-Identifier: Apache-2.0
+ *
+ *--------------------------------------------------------------------------*/
+
+
+/*--- Includes -------------------------------------------------------------*/
 
 
 #include <stdint.h>
 #include <cassert>      // assert
 #include <memory.h>     // memcpy
-
 
 #if defined USE_LEPTO
    #include <lepto/log.h>     // ELogCategory
@@ -32,6 +39,10 @@
 #include <tdt/gen/commands.hpp>
 #include <tdt/gen/logs.hpp>
 
+
+/*--- Declaration ----------------------------------------------------------*/
+
+
 #define CAN_TDT_PROTOCOL_VERSION    4
    
 #define TdtMatchesSubIndexedObject( objectIndex , objectEnum ) \
@@ -48,7 +59,9 @@ static constexpr unsigned int FUNCTIONCODE_BITMASK  =0x780;
 static constexpr unsigned int FUNCTIONCODE_RSHIFTED_BITMASK  =0xF;
 
 
-/*
+/**
+ * @brief Function code of an TDT message
+ * 
  * The NMT-Introduce is speccial because Node-ID and UID/MAC have to be within
  * a single message.
  * Other NMT messages from the master can be split (As long as there is only a
@@ -75,6 +88,11 @@ static_assert( ( (int)EFunctionCode::max & FUNCTIONCODE_RSHIFTED_BITMASK )
                                                 == (int)EFunctionCode::max
                , "Masks not plausible");
 
+/**
+ * @brief Fixed NMT objects
+ * 
+ * These are not generated at the moment. This may change.
+ */
 enum class ENmtObject: uint16_t
 {
    nmtScan                    = 0x00 + NMT_OBJECT_OFFSET,
@@ -127,6 +145,7 @@ enum class ELogCode2: uint32_t
 {
    couldNotReadEeprom
 };
+
 #endif
 
 enum class ESystemState: uint32_t
@@ -136,7 +155,6 @@ enum class ESystemState: uint32_t
    application,
    reverseBootloader,
 };
-
 
 inline constexpr Tdt::EEvent operator+ ( Tdt::EEvent e1, int i1 )
 {
@@ -183,10 +201,15 @@ inline constexpr ELogCategory toCategory( ELogCode c )
    return( (ELogCategory)((int)c & 0xF ) );
 }
 
+
 #undef PHONY_PACKED
 //#define PACKED __attribute ((packed))
 #define PHONY_PACKED
 
+
+/**
+ * @brief The actual payload of an TDT message
+ */
 union SValue
 {
       int32_t _int;
@@ -238,8 +261,11 @@ union SValue
 static_assert( sizeof(SValue) == 4, "Size missmatch");
 
 
-// This is an "overloaded" class of the SCanMessage. It brings the Tdt payload
-// on top of the can message
+/**
+ * @brief Somehow "overloaded" class of the SCanMessage. 
+ * 
+ * It brings the Tdt payload on top of the can message
+ */
 class SCanMessageTdt
 {
    protected:
@@ -327,6 +353,9 @@ class SCanMessageTdt
 };
 
 
+/**
+ * @brief The final class of an TDT message
+ */
 class CMessage : public SCanMessageTdt
 {
       friend class CMessageRef;
@@ -489,5 +518,5 @@ inline constexpr int operator-(const EObject &a, EObject b)
 };  // namespace Tdt
 
 
-//---fin-----------------------------------------------------------------------
+/*--- Fin ------------------------------------------------------------------*/
 #endif // ? ! LEPTO_CAN_MESSAGE_TDT_HPP

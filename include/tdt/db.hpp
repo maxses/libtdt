@@ -1,13 +1,29 @@
 #ifndef TDT_DB_HPP
 #define TDT_DB_HPP
-//-----------------------------------------------------------------------------
-//
-//
-//
-//-----------------------------------------------------------------------------
+/**---------------------------------------------------------------------------
+ *
+ * @file    db.hpp
+ * @brief   Hold lists of available nodes and their objects (optional)
+ *
+ * This can help GUIs to show preprocessed and nicely readable tables/forms.
+ * The information is read at start from $HOME/.config/tdt.xml.
+ *
+ * This class is only available on the host pc, not the MCU.
+ * 
+ * @date      20241219
+ * @author    Maximilian Seesslen <mes@seesslen.net>
+ * @copyright SPDX-License-Identifier: Apache-2.0
+ *
+ *--------------------------------------------------------------------------*/
+
+
+/*--- Defines --------------------------------------------------------------*/
 
 
 #include <QMap>
+
+
+/*--- Implementation -------------------------------------------------------*/
 
 
 namespace Tdt
@@ -56,5 +72,5 @@ class CDb
 } // namespace Tdt;
 
 
-//---fin-----------------------------------------------------------------------
+/*--- Fin ------------------------------------------------------------------*/
 #endif // ? ! TDT_DB_HPP

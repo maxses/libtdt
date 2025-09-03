@@ -1,10 +1,21 @@
 #ifndef TDT_PRINTER_EXT_HPP
 #define TDT_PRINTER_EXT_HPP
-//-----------------------------------------------------------------------------
-//
-//
-//
-//-----------------------------------------------------------------------------
+/**---------------------------------------------------------------------------
+ *
+ * @file    printer.hpp
+ * @brief   Generate text fragments from tdt messages
+ *
+ * Those text strings can be used by user interfaces on host PC.
+ * For text fragments to be used on target microcontroller, see "printer_biwak.hpp".
+ * 
+ * @date      20241214
+ * @author    Maximilian Seesslen <mes@seesslen.net>
+ * @copyright SPDX-License-Identifier: Apache-2.0
+ *
+ *--------------------------------------------------------------------------*/
+
+
+/*--- Includes -------------------------------------------------------------*/
 
 
 #include <tdt/message.hpp>
@@ -24,6 +35,9 @@
 #define ENUM_MAP( a, e ) { a::e, "" #e }
 #define ENUM_MAP_TEXT( a, e, t ) { a::e, t }
 // #define EID( id, subId ) ( ( id << 4 ) | subId )
+
+
+/*--- Declarations ---------------------------------------------------------*/
 
 
 namespace Tdt
@@ -425,5 +439,5 @@ class CPrinter: public CPrinterBase
 } // namespace Tdt
 
 
-//---fin-----------------------------------------------------------------------
+/*--- Fin ------------------------------------------------------------------*/
 #endif // ? ! TDT_PRINTER_EXT_HPP

@@ -103,6 +103,7 @@ set( headers
 )
 
 set( sources
+   README.md
    src/message.cpp
    src/mmpTransfer.cpp
    src/mmpNode.cpp
