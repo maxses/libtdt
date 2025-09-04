@@ -52,6 +52,7 @@
             },
             {
                "name": "percentHumidity",
+               "postfix": "%",
                "offset": "0x05"
             },
             {
