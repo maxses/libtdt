@@ -44,8 +44,8 @@ set (
 if( NOT tdtProfiles )
    file( GLOB
       tdtProfiles
-         ${CMAKE_CURRENT_SOURCE_DIR}/tdtBase/*.json
-         ${CMAKE_CURRENT_SOURCE_DIR}/tdtExample/*.json
+         ${CMAKE_CURRENT_SOURCE_DIR}/tdt/base/*.json
+         ${CMAKE_CURRENT_SOURCE_DIR}/tdt/example/*.json
    )
 endif( NOT tdtProfiles )
 
