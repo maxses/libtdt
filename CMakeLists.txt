@@ -35,27 +35,19 @@ set( TDT_OUTPUT_DIR
 )
 
 set ( 
-    TDT_GEN_HEADER
-        ${TDT_OUTPUT_DIR}/tdt/gen/objects.hpp
-        ${TDT_OUTPUT_DIR}/tdt/gen/printerBase.hpp
+   TDT_GEN_HEADER
+      ${TDT_OUTPUT_DIR}/tdt/gen/objects.hpp
+      ${TDT_OUTPUT_DIR}/tdt/gen/printerBase.hpp
 )
 
-list( APPEND
-    tdtProfiles
-    ${CMAKE_CURRENT_SOURCE_DIR}/tdt/node.json
-    ${CMAKE_CURRENT_SOURCE_DIR}/tdt/environment.json
-    ${CMAKE_CURRENT_SOURCE_DIR}/tdt/power.json
-    ${CMAKE_CURRENT_SOURCE_DIR}/tdt/mmp.json
-    ${CMAKE_CURRENT_SOURCE_DIR}/tdt/log.json
-    ${CMAKE_CURRENT_SOURCE_DIR}/tdt/plants.json
-    ${CMAKE_CURRENT_SOURCE_DIR}/tdt/generic.json
-    ${CMAKE_CURRENT_SOURCE_DIR}/tdt/recorder.json
-    ${CMAKE_CURRENT_SOURCE_DIR}/tdt/global.json
-    ${CMAKE_CURRENT_SOURCE_DIR}/tdt/infoDisplay.json
-    ${CMAKE_CURRENT_SOURCE_DIR}/tdt/facility.json
-    ${CMAKE_CURRENT_SOURCE_DIR}/tdt/nmt.json
-    ${CMAKE_CURRENT_SOURCE_DIR}/tdt/biwak.json
-)
+# Fill default profiles if nothing is specified
+if( NOT tdtProfiles )
+   file( GLOB
+      tdtProfiles
+         ${CMAKE_CURRENT_SOURCE_DIR}/tdtBase/*.json
+         ${CMAKE_CURRENT_SOURCE_DIR}/tdtExample/*.json
+   )
+endif( NOT tdtProfiles )
 
 include(ExternalProject)
 
@@ -201,10 +193,10 @@ target_include_directories( ${PROJECT_NAME}
 
 if( "${MCU_PLATFORM}" MATCHES "linux" )
    target_link_libraries(
-		${PROJECT_NAME}
-      Qt${QT_VERSION_MAJOR}::Core
-      Qt${QT_VERSION_MAJOR}::Xml
-	)
+      ${PROJECT_NAME}
+         Qt${QT_VERSION_MAJOR}::Core
+         Qt${QT_VERSION_MAJOR}::Xml
+   )
 endif()
 
 target_include_directories(
