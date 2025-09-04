@@ -1,18 +1,20 @@
 #if ! defined TDT_TDTGEN_SOURCE_FILE_HPP
 #define TDT_TDTGEN_SOURCE_FILE_HPP
-//----------------------------------------------------------------------------
-///
-///   \file    sourceFile.hpp
-///   \brief   Source file generator
-///
-///            Print stuff
-/// 
-///   \author  Maximilian Seesslen <mes@seesslen.net>
-///
-//----------------------------------------------------------------------------
+/**---------------------------------------------------------------------------
+ *
+ * @file    sourceFile.hpp
+ * @brief   Source file generator
+ *
+ * Print stuff.
+ *
+ * @date      20241003
+ * @author    Maximilian Seesslen <mes@seesslen.net>
+ * @copyright SPDX-License-Identifier: Apache-2.0
+ *
+ *--------------------------------------------------------------------------*/
 
 
-//--- Includes ---------------------------------------------------------------
+/*--- Includes -------------------------------------------------------------*/
 
 
 #include <QString>
@@ -20,7 +22,7 @@
 #include <object.hpp>
 
 
-//--- Implementation----------------------------------------------------------
+/*--- Declaration ----------------------------------------------------------*/
 
 
 class CSourceFile
@@ -68,5 +70,5 @@ class CSourceFile
 };
 
 
-//--- Fin. -------------------------------------------------------------------
+/*--- Fin ------------------------------------------------------------------*/
 #endif //   ? ! TDT_TDTGEN_SOURCE_FILE_HPP

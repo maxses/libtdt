@@ -1,16 +1,18 @@
-//----------------------------------------------------------------------------
-///
-///   \file    sourceFilePrinter.cpp
-///   \brief   Source file generator for object header
-///
-///            Print the object-to-string map
-/// 
-///   \author  Maximilian Seesslen <mes@seesslen.net>
-///
-//----------------------------------------------------------------------------
+/**---------------------------------------------------------------------------
+ *
+ * @file    sourceFilePrinter.cpp
+ * @brief   Source file generator for object header
+ *
+ * Print the object-to-string map
+ *
+ * @date      20241003
+ * @author    Maximilian Seesslen <mes@seesslen.net>
+ * @copyright SPDX-License-Identifier: Apache-2.0
+ *
+ *--------------------------------------------------------------------------*/
 
 
-//--- Includes ---------------------------------------------------------------
+/*--- Includes -------------------------------------------------------------*/
 
 
 #include <QString>
@@ -18,7 +20,7 @@
 #include <sourceFilePrinter.hpp>
 
 
-//--- Implementation----------------------------------------------------------
+/*--- Implementation -------------------------------------------------------*/
 
 
 void CSourceFilePrinter::writeTop( )
@@ -99,4 +101,4 @@ void CSourceFilePrinter::writeBottom( )
 };
 
 
-//--- Fin. -------------------------------------------------------------------
+/*--- Fin ------------------------------------------------------------------*/

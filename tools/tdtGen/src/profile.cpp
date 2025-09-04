@@ -1,16 +1,18 @@
-//----------------------------------------------------------------------------
-///
-///   \file    profile.cpp
-///   \brief   Carries description for TDT-Profile
-///
-///            Print the enums
-/// 
-///   \author  Maximilian Seesslen <mes@seesslen.net>
-///
-//----------------------------------------------------------------------------
+/**---------------------------------------------------------------------------
+ *
+ * @file    profile.cpp
+ * @brief   Carries description for TDT-Profile
+ *
+ * Print the enums.
+ *
+ * @date      20241003
+ * @author    Maximilian Seesslen <mes@seesslen.net>
+ * @copyright SPDX-License-Identifier: Apache-2.0
+ *
+ *--------------------------------------------------------------------------*/
 
 
-//--- Includes ---------------------------------------------------------------
+/*--- Includes -------------------------------------------------------------*/
 
 
 #include <QJsonObject>
@@ -20,7 +22,7 @@
 #include <QDebug>
 
 
-//--- Implementation----------------------------------------------------------
+/*--- Implementation -------------------------------------------------------*/
 
 
 void CProfile::parseProfile( const QJsonObject& obj )
@@ -278,4 +280,4 @@ void CProfile::writeLogsPrinters( QTextStream& s )
 }
 
 
-//--- Fin. -------------------------------------------------------------------
+/*--- Fin ------------------------------------------------------------------*/

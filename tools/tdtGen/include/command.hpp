@@ -1,18 +1,20 @@
 #if ! defined TDT_TDTGEN_COMMAND_HPP
 #define TDT_TDTGEN_COMMAND_HPP
-//----------------------------------------------------------------------------
-///
-///   \file    command.hpp
-///   \brief   Carries description for TDT-node-Command
-///
-///            Print the enums
-/// 
-///   \author  Maximilian Seesslen <mes@seesslen.net>
-///
-//----------------------------------------------------------------------------
+/**---------------------------------------------------------------------------
+ *
+ * @file    command.hpp
+ * @brief   Carries description for TDT-node-Command
+ *
+ * Print the enums.
+ *
+ * @date      20241003
+ * @author    Maximilian Seesslen <mes@seesslen.net>
+ * @copyright SPDX-License-Identifier: Apache-2.0
+ *
+ *--------------------------------------------------------------------------*/
 
 
-//--- Includes ---------------------------------------------------------------
+/*--- Includes -------------------------------------------------------------*/
 
 
 #include <QString>
@@ -20,7 +22,7 @@
 #include <object.hpp>
 
 
-//--- Implementation----------------------------------------------------------
+/*--- Declaration ----------------------------------------------------------*/
 
 
 class CProfile;
@@ -41,5 +43,5 @@ class CCommand: public CObject
 };
 
 
-//--- Fin. -------------------------------------------------------------------
+/*--- Fin ------------------------------------------------------------------*/
 #endif //   ? ! TDT_TDTGEN_COMMAND_HPP

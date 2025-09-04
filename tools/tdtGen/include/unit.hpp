@@ -1,25 +1,27 @@
 #if ! defined TDT_TDTGEN_UNIT_HPP
 #define TDT_TDTGEN_UNIT_HPP
-//----------------------------------------------------------------------------
-///
-///   \file    unit.hpp
-///   \brief   Carries description for TDT-Unit
-///
-///            Print the enums
-/// 
-///   \author  Maximilian Seesslen <mes@seesslen.net>
-///
-//----------------------------------------------------------------------------
+/**---------------------------------------------------------------------------
+ *
+ * @file    unit.hpp
+ * @brief   Carries description for TDT-Unit
+ *
+ * Print the enums.
+ *
+ * @date      20241003
+ * @author    Maximilian Seesslen <mes@seesslen.net>
+ * @copyright SPDX-License-Identifier: Apache-2.0
+ *
+ *--------------------------------------------------------------------------*/
 
 
-//--- Includes ---------------------------------------------------------------
+/*--- Includes -------------------------------------------------------------*/
 
 
 #include <QString>
 #include <QJsonObject>
 
 
-//--- Implementation----------------------------------------------------------
+/*--- Declaration ----------------------------------------------------------*/
 
 
 class CProfile;
@@ -56,5 +58,5 @@ class CUnit
 };
 
 
-//--- Fin. -------------------------------------------------------------------
+/*--- Fin ------------------------------------------------------------------*/
 #endif //   ? ! TDT_TDTGEN_UNIT_HPP

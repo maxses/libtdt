@@ -1,18 +1,20 @@
 #if ! defined TDT_TDTGEN_LOG_HPP
 #define TDT_TDTGEN_LOG_HPP
-//----------------------------------------------------------------------------
-///
-///   \file    log.hpp
-///   \brief   Carries description for TDT-node-log
-///
-///            Print the enums
-/// 
-///   \author  Maximilian Seesslen <mes@seesslen.net>
-///
-//----------------------------------------------------------------------------
+/**---------------------------------------------------------------------------
+ *
+ * @file    log.hpp
+ * @brief   Carries description for TDT-node-log
+ *
+ * Print the enums.
+ *
+ * @date      20241003
+ * @author    Maximilian Seesslen <mes@seesslen.net>
+ * @copyright SPDX-License-Identifier: Apache-2.0
+ *
+ *--------------------------------------------------------------------------*/
 
 
-//--- Includes ---------------------------------------------------------------
+/*--- Includes -------------------------------------------------------------*/
 
 
 #include <QString>
@@ -20,7 +22,7 @@
 #include <object.hpp>
 
 
-//--- Implementation----------------------------------------------------------
+/*--- Declaration ----------------------------------------------------------*/
 
 
 class CProfile;
@@ -41,5 +43,5 @@ class CLog: public CObject
 };
 
 
-//--- Fin. -------------------------------------------------------------------
+/*--- Fin ------------------------------------------------------------------*/
 #endif //   ? ! TDT_TDTGEN_LOG_HPP

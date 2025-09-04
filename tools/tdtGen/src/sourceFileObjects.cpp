@@ -1,16 +1,18 @@
-//----------------------------------------------------------------------------
-///
-///   \file    sourceFileObjects.cpp
-///   \brief   Source file generator for object header
-///
-///            Print the enums
-/// 
-///   \author  Maximilian Seesslen <mes@seesslen.net>
-///
-//----------------------------------------------------------------------------
+/**---------------------------------------------------------------------------
+ *
+ * @file    sourceFileObjects.cpp
+ * @brief   Source file generator for object header
+ *
+ * Print the enums.
+ *
+ * @date      20241003
+ * @author    Maximilian Seesslen <mes@seesslen.net>
+ * @copyright SPDX-License-Identifier: Apache-2.0
+ *
+ *--------------------------------------------------------------------------*/
 
 
-//--- Includes ---------------------------------------------------------------
+/*--- Includes -------------------------------------------------------------*/
 
 
 #include <QString>
@@ -18,7 +20,7 @@
 #include <sourceFileObjects.hpp>
 
 
-//--- Implementation----------------------------------------------------------
+/*--- Implementation -------------------------------------------------------*/
 
 
 void CSourceFileObjects::writeTop( )
@@ -49,4 +51,4 @@ void CSourceFileObjects::writeBottom( )
 };
 
 
-//--- Fin. -------------------------------------------------------------------
+/*--- Fin ------------------------------------------------------------------*/

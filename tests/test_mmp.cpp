@@ -1,22 +1,22 @@
-//----------------------------------------------------------------------------
-///
-/// \file   main.cpp
-///
-/// \brief  main file for pinmux
-///
-/// \date   20220619
-/// \author Maximilian Seesslen <mes@seesslen.net>
-///
-//----------------------------------------------------------------------------
+/**---------------------------------------------------------------------------
+ *
+ * @file    test_mmp.cpp
+ * @brief   Unit test for a MMP transfer
+ *
+ * Construct virtual pseudo units and start transfers on each. After some time
+ * the transfer should have finished. The transfered data can be verified.
+ *
+ * Warning: Disfunctional at the moment.
+ *
+ * @date      20220619
+ * @author    Maximilian Seesslen <mes@seesslen.net>
+ * @copyright SPDX-License-Identifier: Apache-2.0
+ *
+ *--------------------------------------------------------------------------*/
 
 
-//---Documentation------------------------------------------------------------
+/*--- Includes -------------------------------------------------------------*/
 
-
-//---Includes -----------------------------------------------------------------
-
-
-//---General--------------------------
 
 #if defined ( CATCH_V3 )
    #include <catch2/catch_test_macros.hpp>
@@ -33,15 +33,11 @@
 #include <QElapsedTimer>
 #include <QObject>
 
-
-//--- Own ----------------------------
-
-
 #define TEST_ALL
 #define STOP_ON_FAIL
 
 
-//---Implementation------------------------------------------------------------
+/*--- Implementation -------------------------------------------------------*/
 
 
 const char* data1{ R"(
@@ -142,4 +138,5 @@ TEST_CASE( "MMP full duplex", "[default]" )
 
 #endif
 
-//---fin-----------------------------------------------------------------------
+
+/*--- Fin ------------------------------------------------------------------*/

@@ -1,18 +1,20 @@
 #if ! defined TDT_TDTGEN_SOURCE_FILE_OBJECTS_HPP
 #define TDT_TDTGEN_SOURCE_FILE_OBJECTS_HPP
-//----------------------------------------------------------------------------
-///
-///   \file    sourceFileObjects.hpp
-///   \brief   Source file generator for object header
-///
-///            Print the enums
-/// 
-///   \author  Maximilian Seesslen <mes@seesslen.net>
-///
-//----------------------------------------------------------------------------
+/**---------------------------------------------------------------------------
+ *
+ * @file    sourceFileObjects.hpp
+ * @brief   Source file generator for object header
+ *
+ * Print the enums.
+ *
+ * @date      20241003
+ * @author    Maximilian Seesslen <mes@seesslen.net>
+ * @copyright SPDX-License-Identifier: Apache-2.0
+ *
+ *--------------------------------------------------------------------------*/
 
 
-//--- Includes ---------------------------------------------------------------
+/*--- Includes -------------------------------------------------------------*/
 
 
 #include <QString>
@@ -21,7 +23,7 @@
 #include <sourceFile.hpp>
 
 
-//--- Implementation----------------------------------------------------------
+/*--- Declaration ----------------------------------------------------------*/
 
 
 class CSourceFileObjects: public CSourceFile
@@ -41,5 +43,5 @@ class CSourceFileObjects: public CSourceFile
 };
 
 
-//--- Fin. -------------------------------------------------------------------
+/*--- Fin ------------------------------------------------------------------*/
 #endif //   ? ! TDT_TDTGEN_SOURCE_FILE_OBJECTS_HPP

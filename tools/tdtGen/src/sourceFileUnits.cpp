@@ -1,16 +1,18 @@
-//----------------------------------------------------------------------------
-///
-///   \file    sourceFileUnits.cpp
-///   \brief   Source file generator for unit header
-///
-///            Print the enums
-/// 
-///   \author  Maximilian Seesslen <mes@seesslen.net>
-///
-//----------------------------------------------------------------------------
+/**---------------------------------------------------------------------------
+ *
+ * @file    sourceFileUnits.cpp
+ * @brief   Source file generator for unit header
+ *
+ * Print the enums.
+ *
+ * @date      20241003
+ * @author    Maximilian Seesslen <mes@seesslen.net>
+ * @copyright SPDX-License-Identifier: Apache-2.0
+ *
+ *--------------------------------------------------------------------------*/
 
 
-//--- Includes ---------------------------------------------------------------
+/*--- Includes -------------------------------------------------------------*/
 
 
 #include <QString>
@@ -18,7 +20,7 @@
 #include <sourceFileUnits.hpp>
 
 
-//--- Implementation----------------------------------------------------------
+/*--- Implementation -------------------------------------------------------*/
 
 
 void CSourceFileUnits::writeTop( )
@@ -49,4 +51,4 @@ void CSourceFileUnits::writeBottom( )
 };
 
 
-//--- Fin. -------------------------------------------------------------------
+/*--- Fin ------------------------------------------------------------------*/

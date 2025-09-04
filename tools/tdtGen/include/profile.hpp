@@ -1,18 +1,20 @@
 #if ! defined TDT_TDTGEN_PROFILE_HPP
 #define TDT_TDTGEN_PROFILE_HPP
-//----------------------------------------------------------------------------
-///
-///   \file    profile.hpp
-///   \brief   Carries description for TDT-Profile
-///
-///            Print the enums
-/// 
-///   \author  Maximilian Seesslen <mes@seesslen.net>
-///
-//----------------------------------------------------------------------------
+/**---------------------------------------------------------------------------
+ *
+ * @file    profile.hpp
+ * @brief   Carries description for TDT-Profile
+ *
+ * Print the enums.
+ *
+ * @date      20241003
+ * @author    Maximilian Seesslen <mes@seesslen.net>
+ * @copyright SPDX-License-Identifier: Apache-2.0
+ *
+ *--------------------------------------------------------------------------*/
 
 
-//--- Includes ---------------------------------------------------------------
+/*--- Includes -------------------------------------------------------------*/
 
 
 #include <QString>
@@ -26,7 +28,7 @@
 #include <logs.hpp>
 
 
-//--- Implementation----------------------------------------------------------
+/*--- Declaration ----------------------------------------------------------*/
 
 
 class CProfile
@@ -76,5 +78,5 @@ public:
 };
 
 
-//--- Fin. -------------------------------------------------------------------
+/*--- Fin ------------------------------------------------------------------*/
 #endif //   ? ! TDT_TDTGEN_PROFILE_HPP

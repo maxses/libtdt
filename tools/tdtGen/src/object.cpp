@@ -1,23 +1,25 @@
-//----------------------------------------------------------------------------
-///
-///   \file    object.cpp
-///   \brief   Carries description for TDT-Object
-///
-///            Print the enums
-///
-///   \author  Maximilian Seesslen <mes@seesslen.net>
-///
-//----------------------------------------------------------------------------
+/**---------------------------------------------------------------------------
+ *
+ * @file    object.cpp
+ * @brief   Carries description for TDT-Object
+ *
+ * Print the enums.
+ *
+ * @date      20241003
+ * @author    Maximilian Seesslen <mes@seesslen.net>
+ * @copyright SPDX-License-Identifier: Apache-2.0
+ *
+ *--------------------------------------------------------------------------*/
 
 
-//--- Includes ---------------------------------------------------------------
+/*--- Includes -------------------------------------------------------------*/
 
 
 #include <object.hpp>
 #include <profile.hpp>
 
 
-//--- Implementation----------------------------------------------------------
+/*--- Implementation -------------------------------------------------------*/
 
 
 QString CObject::enumString()
@@ -147,4 +149,4 @@ bool operator== (const QSharedPointer<CObject> c, const int nv)
 }
 
 
-//--- Fin. -------------------------------------------------------------------
+/*--- Fin ------------------------------------------------------------------*/

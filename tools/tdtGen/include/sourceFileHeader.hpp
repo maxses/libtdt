@@ -1,18 +1,20 @@
 #if ! defined TDT_TDTGEN_SOURCE_FILE_HEADER_HPP
 #define TDT_TDTGEN_SOURCE_FILE_HEADER_HPP
-//----------------------------------------------------------------------------
-///
-///   \file    sourceFileHeader.hpp
-///   \brief   Source file generator for generic header
-///
-///            Print an generic header
-/// 
-///   \author  Maximilian Seesslen <mes@seesslen.net>
-///
-//----------------------------------------------------------------------------
+/**---------------------------------------------------------------------------
+ *
+ * @file    sourceFileHeader.hpp
+ * @brief   Source file generator for generic header
+ *
+ * Print an generic header.
+ *
+ * @date      20241003
+ * @author    Maximilian Seesslen <mes@seesslen.net>
+ * @copyright SPDX-License-Identifier: Apache-2.0
+ *
+ *--------------------------------------------------------------------------*/
 
 
-//--- Includes ---------------------------------------------------------------
+/*--- Includes -------------------------------------------------------------*/
 
 
 #include <QString>
@@ -22,7 +24,7 @@
 #include <sourceFile.hpp>
 
 
-//--- Implementation----------------------------------------------------------
+/*--- Declaration ----------------------------------------------------------*/
 
 
 class CSourceFileHeader: public CSourceFile
@@ -48,5 +50,5 @@ class CSourceFileHeader: public CSourceFile
 };
 
 
-//--- Fin. -------------------------------------------------------------------
+/*--- Fin ------------------------------------------------------------------*/
 #endif //   ? ! TDT_TDTGEN_SOURCE_FILE_HEADER_HPP

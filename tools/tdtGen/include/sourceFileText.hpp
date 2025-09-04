@@ -1,18 +1,20 @@
 #if ! defined TDT_TDTGEN_SOURCE_FILE_TEXT_HPP
 #define TDT_TDTGEN_SOURCE_FILE_TEXT_HPP
-//----------------------------------------------------------------------------
-///
-///   \file    sourceFileText.hpp
-///   \brief   Source file generator for generic text file
-///
-///            Print som info text to a file
-/// 
-///   \author  Maximilian Seesslen <mes@seesslen.net>
-///
-//----------------------------------------------------------------------------
+/**---------------------------------------------------------------------------
+ *
+ * @file    sourceFileText.hpp
+ * @brief   Source file generator for generic text file
+ *
+ * Print som info text to a file.
+ *
+ * @date      20241003
+ * @author    Maximilian Seesslen <mes@seesslen.net>
+ * @copyright SPDX-License-Identifier: Apache-2.0
+ *
+ *--------------------------------------------------------------------------*/
 
 
-//--- Includes ---------------------------------------------------------------
+/*--- Includes -------------------------------------------------------------*/
 
 
 #include <QString>
@@ -22,7 +24,7 @@
 #include <sourceFile.hpp>
 
 
-//--- Implementation----------------------------------------------------------
+/*--- Declaration ----------------------------------------------------------*/
 
 
 class CSourceFileText: public CSourceFile
@@ -42,5 +44,5 @@ class CSourceFileText: public CSourceFile
 };
 
 
-//--- Fin. -------------------------------------------------------------------
+/*--- Fin ------------------------------------------------------------------*/
 #endif //   ? ! TDT_TDTGEN_SOURCE_FILE_TEXT_HPP

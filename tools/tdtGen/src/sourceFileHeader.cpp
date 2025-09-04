@@ -1,16 +1,18 @@
-//----------------------------------------------------------------------------
-///
-///   \file    sourceFileHeader.cpp
-///   \brief   Source file generator for generic header
-///
-///            Print generic header
-/// 
-///   \author  Maximilian Seesslen <mes@seesslen.net>
-///
-//----------------------------------------------------------------------------
+/**---------------------------------------------------------------------------
+ *
+ * @file    sourceFileHeader.cpp
+ * @brief   Source file generator for generic header
+ *
+ * Print generic header.
+ *
+ * @date      20241003
+ * @author    Maximilian Seesslen <mes@seesslen.net>
+ * @copyright SPDX-License-Identifier: Apache-2.0
+ *
+ *--------------------------------------------------------------------------*/
 
 
-//--- Includes ---------------------------------------------------------------
+/*--- Includes -------------------------------------------------------------*/
 
 
 #include <QString>
@@ -18,7 +20,7 @@
 #include <sourceFileHeader.hpp>
 
 
-//--- Implementation----------------------------------------------------------
+/*--- Implementation -------------------------------------------------------*/
 
 
 void CSourceFileHeader::writeTop( )
@@ -62,4 +64,4 @@ void CSourceFileHeader::writeBottom( )
 };
 
 
-//--- Fin. -------------------------------------------------------------------
+/*--- Fin ------------------------------------------------------------------*/

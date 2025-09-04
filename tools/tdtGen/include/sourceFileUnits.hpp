@@ -1,18 +1,20 @@
 #if ! defined TDT_TDTGEN_SOURCE_FILE_UNITS_HPP
 #define TDT_TDTGEN_SOURCE_FILE_UNITS_HPP
-//----------------------------------------------------------------------------
-///
-///   \file    sourceFileUnits.hpp
-///   \brief   Source file generator for unit header
-///
-///            Print the object-to-string map
-/// 
-///   \author  Maximilian Seesslen <mes@seesslen.net>
-///
-//----------------------------------------------------------------------------
+/**---------------------------------------------------------------------------
+ *
+ * @file    sourceFileUnits.hpp
+ * @brief   Source file generator for unit header
+ *
+ * Print the object-to-string map.
+ *
+ * @date      20241003
+ * @author    Maximilian Seesslen <mes@seesslen.net>
+ * @copyright SPDX-License-Identifier: Apache-2.0
+ *
+ *--------------------------------------------------------------------------*/
 
 
-//--- Includes ---------------------------------------------------------------
+/*--- Includes -------------------------------------------------------------*/
 
 
 #include <QString>
@@ -22,7 +24,7 @@
 #include <sourceFile.hpp>
 
 
-//--- Implementation----------------------------------------------------------
+/*--- Declaration ----------------------------------------------------------*/
 
 
 class CSourceFileUnits: public CSourceFile
@@ -43,5 +45,5 @@ class CSourceFileUnits: public CSourceFile
 };
 
 
-//--- Fin. -------------------------------------------------------------------
+/*--- Fin ------------------------------------------------------------------*/
 #endif //   ? ! TDT_TDTGEN_SOURCE_FILE_UNITS_HPP

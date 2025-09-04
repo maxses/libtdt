@@ -1,18 +1,20 @@
 #if ! defined TDT_TDTGEN_OBJECT_HPP
 #define TDT_TDTGEN_OBJECT_HPP
-//----------------------------------------------------------------------------
-///
-///   \file    object.hpp
-///   \brief   Carries description for TDT-Object
-///
-///            Print the enums
-/// 
-///   \author  Maximilian Seesslen <mes@seesslen.net>
-///
-//----------------------------------------------------------------------------
+/**---------------------------------------------------------------------------
+ *
+ * @file    object.hpp
+ * @brief   Carries description for TDT-Object
+ *
+ * Print the enums.
+ *
+ * @date      20241003
+ * @author    Maximilian Seesslen <mes@seesslen.net>
+ * @copyright SPDX-License-Identifier: Apache-2.0
+ *
+ *--------------------------------------------------------------------------*/
 
 
-//--- Includes ---------------------------------------------------------------
+/*--- Includes -------------------------------------------------------------*/
 
 
 #include <QString>
@@ -20,7 +22,7 @@
 #include <QSharedPointer>
 
 
-//--- Implementation----------------------------------------------------------
+/*--- Declaration ----------------------------------------------------------*/
 
 
 class CProfile;
@@ -85,5 +87,5 @@ class CObject
 bool operator== (const QSharedPointer<CObject> c, const int nv);
 
 
-//--- Fin. -------------------------------------------------------------------
+/*--- Fin ------------------------------------------------------------------*/
 #endif //   ? ! TDT_TDTGEN_OBJECT_HPP
