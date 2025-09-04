@@ -1,3 +1,10 @@
+# Changes for v0.3.1
+
+* Minor fixes and object updates
+* Adopted lepto changes
+* Cleanup
+* CMake: Avoid log spam when tdtGen gets called
+
 # Changes for v0.3.0
 
 * minor update on objects
