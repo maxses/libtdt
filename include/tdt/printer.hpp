@@ -174,9 +174,9 @@ class CPrinter: public CPrinterBase
                   { 40, "Very Unhealthy" },
                   {  0, "Hazardous" },
                };
-               unsigned int intValue=value._uint;
+               int intValue=value._int;
                ts << intValue << " %; ";
-               for(int i1=0; i1<sizeof(ranges)/sizeof(ranges[0]); i1++)
+               for(int i1=0; i1<(int)( sizeof(ranges)/sizeof(ranges[0]) ); i1++)
                {
                   if( intValue >= ranges[i1].value )
                   {
