@@ -15,11 +15,11 @@
                "offset": "0x0001"
             },
             {
-               "name": "recipient low ID",
+               "name": "obsolete recipient low ID",
                "offset": "0x0002"
             },
             {
-               "name": "recipient high ID",
+               "name": "obsolete recipient high ID",
                "offset": "0x0003"
             },
             {
@@ -51,6 +51,11 @@
                "name": "enable application boot",
                "offset": "0x000A",
                "comment": "This is in NMT, does it make sense? TBD"
+            },
+            {
+               "name": "recipient ID part",
+               "offset": "0x000B",
+               "size": "4"
             }
          ]
       }
