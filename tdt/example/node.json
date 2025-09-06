@@ -66,21 +66,17 @@
             },
             {
                "offset": "0x0039",
-               "name": "uid low",
-               "description": "UID of node, low 32bit of 64bit"
+               "name": "uid part",
+               "size": "4",
+               "description": "UID part of node. Total size can be 128Bit."
             },
             {
-               "offset": "0x003A",
-               "name": "uid high",
-               "description": "UID of node, high 32bit of 64bit"
-            },
-            {
-               "offset": "0x003B",
+               "offset": "0x003D",
                "name": "Chip ID",
                "description": "MCU code"
             },
             {
-               "offset": "0x003C",
+               "offset": "0x003E",
                "name": "flash size",
                "description": "Size of the internal flash"
             },
