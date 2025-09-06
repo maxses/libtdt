@@ -63,6 +63,7 @@ void CSourceFilePrinter::startUnits( )
    m_stream << "      const char* postfix;\n";
    m_stream << "      char format;\n";
    m_stream << "      int decimalPower;\n";
+   m_stream << "      QMap<int, QString> enumValues;\n";
    m_stream << "   };\n";
    m_stream << "\n";
    m_stream << "   const QMap<Tdt::EUnit, SUnitDesc> m_unitMap\n";

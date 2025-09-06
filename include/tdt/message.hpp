@@ -114,40 +114,6 @@ typedef uint32_t nodeId_t;
 
 enum class EEvent: uint32_t;
 
-#if 0
-enum class EEvent: uint32_t
-{
-   null              = 0x0,
-   #if 1
-
-   // CAUTION: lower nibble must be 0 because log category is mangled in
-
-   // routine control
-   wannaSleepStart      = 0x10 + LOG_CODE_OFFSET,
-   wannaSleepAll        = 0x11 + LOG_CODE_OFFSET,
-   wannaSleepRoom0      = 0x12 + LOG_CODE_OFFSET,
-   wannaSleepRoom1      = 0x13 + LOG_CODE_OFFSET,
-   wannaSleepEnd        = 0x1F + LOG_CODE_OFFSET,
-   noRelease_OBS        = 0x20 + LOG_CODE_OFFSET,
-   shutdown             = 0x21 + LOG_CODE_OFFSET,
-   // batteryLow           = 0x22 + LOG_CODE_OFFSET,
-   // vbusLow              = 0x23 + LOG_CODE_OFFSET,
-   // couldNotReadEeprom   = 0x24 + LOG_CODE_OFFSET,
-   
-   #endif
-   noRelease            = 0x25 + LOG_CODE_OFFSET,
-   test,                // Just for Catch2 tests
-};
-#endif
-
-#if 0
-enum class ELogCode2: uint32_t
-{
-   couldNotReadEeprom
-};
-
-#endif
-
 enum class ESystemState: uint32_t
 {
    invalid,

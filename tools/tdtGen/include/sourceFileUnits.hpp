@@ -42,6 +42,8 @@ class CSourceFileUnits: public CSourceFile
       }
       virtual void writeTop( ) override;
       virtual void writeBottom( ) override;
+      void openEnum();
+      void closeEnum();
 };
 
 

@@ -31,6 +31,10 @@ void CProfile::parseProfile( const QJsonObject& obj )
    {
       setBase( obj["base"].toString().toInt( nullptr, 0) );
    }
+   if( obj.contains("unitsBase") )
+   {
+      setUnitsBase( obj["unitsBase"].toString().toInt( nullptr, 0) );
+   }
    if( obj.contains("size") )
    {
       m_size=obj["size"].toString().toInt( nullptr, 0);
@@ -80,10 +84,10 @@ int CProfile::parseUnits( const QJsonArray& array )
    for( auto obj : array )
    {
       QJsonObject o=obj.toObject();
-      QSharedPointer<CUnit> unit=QSharedPointer<CUnit>(new 
-                                                               CUnit( *this, o["offset"].toString().toInt( nullptr, 0 ),
-                                                                       o["name"].toString(),
-                                                                       o["description"].toString() ) );
+      QSharedPointer<CUnit> unit=QSharedPointer<CUnit>(
+               new CUnit( *this, o["offset"].toString().toInt( nullptr, 0 ),
+                     o["name"].toString(),
+                     o["description"].toString() ) );
       unit->parse( o );
       qDebug() << "   Unit: " << o["offset"].toString().toInt( nullptr, 0 );
       m_units+=unit;
@@ -185,6 +189,12 @@ int CProfile::getBase() const
 }
 
 
+int CProfile::getUnitsBase() const
+{
+   return( m_unitsBase );
+}
+
+
 void CProfile::writeObjectsEnums( QTextStream& s )
 {
    s << "\n";
@@ -206,6 +216,15 @@ void CProfile::writeUnitsEnums( QTextStream& s )
       s << unit->enumString() << "\n";
    }
    return;
+}
+
+
+void CProfile::writeUnitsEnumTypeEnums( QTextStream& s )
+{
+   for( const auto& unit : m_units )
+   {
+      unit->writeEnumTypeEnums( s );
+   }
 }
 
 

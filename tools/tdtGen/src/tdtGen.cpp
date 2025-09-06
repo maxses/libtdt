@@ -75,10 +75,16 @@ int CTdtGen::generate()
    
    CSourceFileUnits sfu( m_outDir + "/units.hpp" );
    QTextStream& su=sfu.getStream();
-   
+   sfu.openEnum();
    for( const auto& profile : m_profiles )
    {
       profile->writeUnitsEnums( su );
+   }
+   sfu.closeEnum();
+   
+   for( const auto& profile : m_profiles )
+   {
+      profile->writeUnitsEnumTypeEnums( su );
    }
    
    CSourceFileHeader sfc( m_outDir + "/commands.hpp", "commands", "ECommand", allIncludes );

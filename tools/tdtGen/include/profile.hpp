@@ -36,6 +36,7 @@ class CProfile
    const QString m_name;
    const QString m_desc;
    int m_base=0;
+   int m_unitsBase=0;
    int m_size=0;
    QList <QSharedPointer<CObject>> m_objects;
    QList <QSharedPointer<CUnit>> m_units;
@@ -62,9 +63,15 @@ public:
    {
       m_base=base;
    }
+   void setUnitsBase( int base )
+   {
+      m_unitsBase=base;
+   }
    int getBase() const;
+   int getUnitsBase() const;
    void writeObjectsEnums( QTextStream& s );
    void writeUnitsEnums( QTextStream& s );
+   void writeUnitsEnumTypeEnums( QTextStream& s );
    void writeCommandsEnums( QTextStream& s );
    void writeLogsEnums( QTextStream& s );
    void writeInfo( QTextStream& s );

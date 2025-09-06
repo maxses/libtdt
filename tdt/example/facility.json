@@ -4,12 +4,34 @@
          "name": "Facility",
          "description": "A building",
          "base": "0x4C0",
+         "unitsBase": "0x20",
          "size": "0x20",
          "objects": [
             {
                "offset": "0x0000",
                "name": "room",
                "example": "-"
+            }
+         ],
+         "units": [
+            {
+               "name": "one of my rooms",
+               "offset": "0x22",
+               "format": "E",
+               "postfix": "room",
+               "values": {
+                  "Sleeping": "1",
+                  "Living": "2",
+                  "Kitchen": "3",
+                  "Floor 1": "0x4",
+                  "Floor 2": "0xa"
+               }
+            },
+            {
+               "name": "size",
+               "offset": "0x23",
+               "format": "X",
+               "postfix": " m²"
             }
          ]
       }

@@ -36,14 +36,22 @@ void CSourceFileUnits::writeTop( )
    m_stream << "namespace Tdt\n";
    m_stream << "{\n";
    m_stream << "\n";
+};
+
+void CSourceFileUnits::openEnum( )
+{
    m_stream << "enum class EUnit: uint8_t\n";
    m_stream << "{\n";
 };
 
 
-void CSourceFileUnits::writeBottom( )
+void CSourceFileUnits::closeEnum( )
 {
    m_stream << "};\n";
+};
+
+void CSourceFileUnits::writeBottom( )
+{
    m_stream << "\n";
    m_stream << "} // namespace Tdt\n";
    m_stream << "\n";

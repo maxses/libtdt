@@ -35,6 +35,7 @@ class CUnit
    QString m_postfix;
    int m_decimalPower=1;
    QString m_format;
+   QMap< int, QString > m_values;
       
    public:
        
@@ -48,8 +49,10 @@ class CUnit
    };
    void parse( QJsonObject& o );
    QString enumString();
+   void writeEnumTypeEnums( QTextStream& s );
    void appendObjectNumber( QString& str, int objectNumber ) const;
    QString nameToEnum();
+   static QString nameToEnum( const QString& name );
    QString printerString();
    const QString nsPrefix() const
    {
