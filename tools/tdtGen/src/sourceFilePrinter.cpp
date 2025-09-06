@@ -60,9 +60,10 @@ void CSourceFilePrinter::startUnits( )
 {
    m_stream << "   struct SUnitDesc {\n";
    m_stream << "      const char* name;\n";
+   m_stream << "      const char* prefix;\n";
    m_stream << "      const char* postfix;\n";
    m_stream << "      char format;\n";
-   m_stream << "      int decimalPower;\n";
+   m_stream << "      int divider;\n";
    m_stream << "      QMap<int, QString> enumValues;\n";
    m_stream << "   };\n";
    m_stream << "\n";

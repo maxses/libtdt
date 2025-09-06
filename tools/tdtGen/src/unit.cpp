@@ -57,14 +57,19 @@ void CUnit::writeEnumTypeEnums( QTextStream& s )
 
 void CUnit::parse( QJsonObject& o )
 {
-   if( o.contains("decimalPower") )
+   if( o.contains("divider") )
    {
-      m_decimalPower=( o["decimalPower"].toString().toInt(nullptr, 0) );
+      m_divider=( o["divider"].toString().toInt(nullptr, 0) );
    }
    
    if( o.contains("postfix") )
    {
       m_postfix=o["postfix"].toString();
+   }
+   
+   if( o.contains("prefix") )
+   {
+      m_prefix=o["prefix"].toString();
    }
    
    if( o.contains("format") )
@@ -129,9 +134,10 @@ QString CUnit::printerString()
    QString str( QString("      { %1%2,  ").arg( nsPrefix() ).arg( nameToEnum() ) );
    str=str.leftJustified( 20, ' ' );
    str+=QString("{ \"%1\" " ).arg( m_name );
+   str+=QString(", \"%1\" " ).arg( m_prefix );
    str+=QString(", \"%1\" " ).arg( m_postfix );
-   str+=QString(", '%1' " ).arg( m_format.isEmpty() ? " " : m_format );
-   str+=QString(", %1 " ).arg( m_decimalPower );
+   str+=QString(", '%1' " ).arg( m_format.isEmpty() ? "\\0" : m_format );
+   str+=QString(", %1 " ).arg( m_divider );
 
    // Print enum values
    if( m_values.size() )

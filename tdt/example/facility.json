@@ -15,10 +15,9 @@
          ],
          "units": [
             {
-               "name": "one of my rooms",
+               "name": "Room",
                "offset": "0x22",
                "format": "E",
-               "postfix": "room",
                "values": {
                   "Sleeping": "1",
                   "Living": "2",
@@ -33,7 +32,7 @@
                "format": "X",
                "postfix": " m²"
             }
-         ]
+         ] 
       }
    ]
-}
+} 

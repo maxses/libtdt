@@ -110,17 +110,14 @@ enum class ENmtObject: uint16_t
 
 
 typedef uint32_t nodeId_t;
-
-
 enum class EEvent: uint32_t;
+enum class EAnyEnum: uint32_t;
 
-enum class ESystemState: uint32_t
+template<typename T>
+EAnyEnum toAny(T t)
 {
-   invalid,
-   bootloader,
-   application,
-   reverseBootloader,
-};
+   return( static_cast<Tdt::EAnyEnum>(t) );
+}
 
 inline constexpr Tdt::EEvent operator+ ( Tdt::EEvent e1, int i1 )
 {
@@ -132,11 +129,6 @@ inline constexpr ELogCode operator+ (ELogCategory c, Tdt::EEvent e)
    return( (ELogCode)( (int)c | ( (int)e  ) ) );
 }
 
-/*inline constexpr operator ELogBlended(ELogCategory c)
-{
-   return( (ELogBlended)( (int)c  ) );
-}
-*/
 inline constexpr ELogCode operator| (ELogCategory c, Tdt::EEvent e)
 {
    return( (ELogCode)( (int)c | ( (int)e  ) ) );
@@ -221,7 +213,8 @@ union SValue
       nodeId_t  nodeId;
       ELogCode logCode;
       EEvent event;
-      ESystemState systemState;
+      //ESystemState systemState;
+      EAnyEnum anyEnum;
 };
 
 static_assert( sizeof(SValue) == 4, "Size missmatch");

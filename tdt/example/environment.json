@@ -81,6 +81,33 @@
                "offset": "0x7"
             }
          ]
+      },
+      {
+         "name": "environmental units",
+         "base": "0x10",
+         "size": "0x30",
+         "units": [
+            {
+               "name": "centiCelsius",
+               "offset": "0x04",
+               "postfix": " °C", 
+               "divider": "100"
+            },
+            {
+               "name": "percentHumidity",
+               "postfix": " %",
+               "offset": "0x05"
+            },
+            {
+               "name": "voc",
+               "offset": "0x06",
+               "postfix": " Ohm"
+            },
+            {
+               "name": "percentQuality",
+               "offset": "0x16"
+            }
+         ]
       }
    ]
 }

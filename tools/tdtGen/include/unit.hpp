@@ -32,8 +32,9 @@ class CUnit
    int m_unit;
    const QString m_name;
    const QString m_desc;
+   QString m_prefix;
    QString m_postfix;
-   int m_decimalPower=1;
+   int m_divider=1;
    QString m_format;
    QMap< int, QString > m_values;
       

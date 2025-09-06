@@ -39,7 +39,7 @@ set(sources
    test_main.cpp
    test_message.cpp
    test_mmp.cpp
-   test_main.cpp
+   test_printer.cpp
 )
 
 add_executable(
