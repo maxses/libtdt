@@ -1,0 +1,203 @@
+{
+   "profiles": [
+      {
+         "name": "Node",
+         "description": "Generic device node",
+         "base": "0x400",
+         "size": "0x40",
+         "objects": [
+            {
+               "offset": "0x0002",
+               "name": "Device temperature",
+               "description": "The generic device temperature which can be an I2C sensor or the MCU temperature.",
+               "example": "22.00°C"
+            },
+            {
+               "offset": "0x0010",
+               "name": "Firmware version",
+               "description": "Firmware version.",
+               "example": "v0.1.10-12+"
+            },
+            {
+               "offset": "0x0011",
+               "name": "Firmware date",
+               "description": "Release date. Probably not used anywhere"
+            },
+            {
+               "name": "battery level",
+               "offset": "0x20",
+               "description": "Voltage of main battery"
+            },
+            {
+               "offset": "0x0030",
+               "name": "Command",
+               "description": "Let a node do something"
+            },
+            {
+               "name": "current",
+               "offset": "0x32",
+               "description": "How much current does the device draw"
+            },
+            {
+               "name": "supply voltage",
+               "offset": "0x34",
+               "description": "Main supply voltage"
+            },
+            {
+               "name": "PCB Temperature",
+               "offset": "0x35",
+               "description": "Board temperature"
+            },
+            {
+               "name": "id",
+               "comment": "Its 'nodeId' but 'node' does get injected automatically by the profile",
+               "offset": "0x36",
+               "description": "Node id"
+            },
+            {
+               "name": "article Id",
+               "offset": "0x37",
+               "description": "Articel ID"
+            },
+            {
+               "name": "serial number",
+               "offset": "0x38",
+               "description": "Serno"
+            },
+            {
+               "offset": "0x0039",
+               "name": "uid part",
+               "size": "4",
+               "description": "UID part of node. Total size can be 128Bit."
+            },
+            {
+               "offset": "0x003D",
+               "name": "Chip ID",
+               "description": "MCU code"
+            },
+            {
+               "offset": "0x003E",
+               "name": "flash size",
+               "description": "Size of the internal flash"
+            },
+            {
+               "name": "debug value",
+               "offset": "0x40",
+               "size": "0x10"
+            },
+            {
+               "offset": "0x0080",
+               "name": "status",
+               "description": ""
+            },
+            {
+               "offset": "0x0081",
+               "name": "error code",
+               "description": ""
+            },
+            {
+               "offset": "0x0082",
+               "name": "event code",
+               "description": ""
+            },
+            {
+               "offset": "0x0084",
+               "name": "boot counter",
+               "description": "How many times has the node booted"
+            },
+            {
+               "offset": "0x0085",
+               "name": "operating time",
+               "description": "How long has the node been running in total."
+            },
+            {
+               "offset": "0x0086",
+               "name": "shutdown time",
+               "description": "After how much runtime should the node automatically shut down"
+            },
+            {
+               "offset": "0x0089",
+               "name": "event code repeated",
+               "description": ""
+            },
+            {
+               "offset": "0x008B",
+               "name": "last error",
+               "description": ""
+            },
+            {
+               "name": "system state",
+               "offset": "0x008C",
+               "description": ""
+            }
+         ],
+         "logs": [
+            {
+               "offset": "0x240",
+               "name": "Could not read EEPROM"
+            },
+            {
+               "offset": "0x250",
+               "name": "Could not read HWData"
+            },
+            {
+               "offset": "0x260",
+               "name": "Could not read config"
+            },
+            {
+               "offset": "0x270",
+               "name": "No release",
+               "description": "Git commits drifted from version tag"
+            },
+            {
+               "offset": "0x280",
+               "name": "Timestamp not plausible",
+               "description": "CANRec: timestamp of an message is older as an previous one"
+            }
+         ]
+      },
+      {
+         "name": "Node commands",
+         "description": "Generic device node commands",
+         "base": "0x600",
+         "size": "0x20",
+         "commands": [
+            {
+               "name": "ident",
+               "offset": "0x5"
+            },
+            {
+               "name": "bootToRecovery",
+               "offset": "0x8"
+            },
+            {
+               "name": "bootToProductive",
+               "offset": "0x9"
+            },
+            {
+               "name": "keep awake",
+               "offset": "0x10",
+               "size": "0x10"
+            },
+            {
+               "name": "keep awake all",
+               "offset": "0x11"
+            },
+            {
+               "name": "measure loop",
+               "description": "Can be set in cordyceps for sensemux. Obsolete?",
+               "offset": "0x20"
+            },
+            {
+               "name": "enable application boot",
+               "offset": "0x21"
+            },
+            {
+               "name": "unknown",
+               "offset": "0x1000",
+               "description": "For tests?"
+            }
+         ]
+      }
+   ]
+}

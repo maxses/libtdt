@@ -1,0 +1,177 @@
+{
+   "profiles": [
+      {
+         "name": "Generic",
+         "description": "Generic values",
+         "base": "0x0400",
+         "size": "0x10",
+         "objects": [
+            {
+               "offset": "0x0008",
+               "name": "Sensor",
+               "size": "0x8"
+            },
+            {
+               "offset": "0x8008",
+               "name": "SensorRaw",
+               "size": "0x8"
+            }
+         ]
+      },
+      {
+         "name": "generic units",
+         "base": "0x10",
+         "size": "0x30",
+         "units": [
+            {
+               "name": "null",
+               "offset": "0x00"
+            },
+            {
+               "name": "none",
+               "offset": "0x00"
+            },
+            {
+               "name": "hz",
+               "offset": "0x01",
+               "postfix": "Hz"
+            },
+            {
+               "name": "time",
+               "offset": "0x02"
+            },
+            {
+               "name": "date",
+               "offset": "0x03"
+            },
+            {
+               "name": "permilPwm",
+               "offset": "0x07",
+               "postfix": " ‰ PWM"
+            },
+            {
+               "name": "_switch",
+               "offset": "0x08"
+            },
+            {
+               "name": "version",
+               "offset": "0x09"
+            },
+            {
+               "name": "softwareVersion",
+               "offset": "0x09"
+            },
+            {
+               "name": "hardwareRevision",
+               "offset": "0x0A"
+            },
+            {
+               "name": "milliVolt",
+               "offset": "0x0B",
+               "postfix": " mV"
+            },
+            {
+               "name": "durationSeconds",
+               "offset": "0x0C"
+            },
+            {
+               "name": "pressure",
+               "offset": "0x0D",
+               "postfix": " hPa"
+            },
+            {
+               "name": "command",
+               "offset": "0x0E"
+            },
+            {
+               "name": "timeStamp",
+               "offset": "0x0F",
+               "postfix": " s",
+               "type": "u"
+            },
+            {
+               "name": "milliAmpere",
+               "offset": "0x10",
+               "postfix": " mA"
+            },
+            {
+               "name": "address",
+               "offset": "0x11"
+            },
+            {
+               "name": "nodeId",
+               "offset": "0x12"
+            },
+            {
+               "name": "tdtObject",
+               "offset": "0x13"
+            },
+            {
+               "name": "number",
+               "offset": "0x14"
+            },
+            {
+               "name": "numberHex",
+               "offset": "0x15",
+               "format": "x"
+            },
+            {
+               "name": "timeStampDelta",
+               "offset": "0x17",
+               "postfix": "s",
+               "format": "i"
+            },
+            {
+               "name": "index",
+               "offset": "0x1A",
+               "format": "d",
+               "prefix": "[",
+               "postfix": "]"
+            },
+            {
+               "name": "deviceStatus",
+               "offset": "0x1B"
+            },
+            {
+               "name": "errorCode",
+               "offset": "0x1C",
+               "format": "x"
+            },
+            {
+               "name": "eventCode",
+               "offset": "0x1D",
+               "format": "x"
+            },
+            {
+               "name": "flags",
+               "offset": "0x1E",
+               "format": "x"
+            },
+            {
+               "name": "room__obsolete",
+               "offset": "0x1F"
+            },
+            {
+               "name": "permilHumidity",
+               "offset": "0x20",
+               "postfix": " ‰"
+            },
+            {
+               "name": "logCode",
+               "offset": "0x21"
+            },
+            {
+               "name": "capacity",
+               "offset": "0x22",
+               "format": "d",
+               "divider": "1024",
+               "postfix": " KB"
+            },
+            {
+               "name": "durationDays",
+               "offset": "0x23"
+            }
+         ]
+      }
+   ]
+}

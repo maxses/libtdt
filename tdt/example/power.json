@@ -1,0 +1,83 @@
+{
+   "profiles": [
+      {
+         "name": "Power",
+         "description": "Power switches",
+         "base": "0x490",
+         "size": "0x20",
+         "objects": [
+            {
+               "offset": "0x0000",
+               "name": "switch",
+               "example": "-",
+               "size": "0x12"
+            },
+            {
+               "offset": "0x0001",
+               "name": "switch ambient light all",
+               "description": "Used in candis. Should probably be changed to something mor generic."
+            },
+            {
+               "offset": "0x0002",
+               "name": "switch ambient light living room",
+               "example": "-"
+            },
+            {
+               "offset": "0x0003",
+               "name": "switch ambient light sleeping room",
+               "example": "-"
+            },
+            {
+               "offset": "0x0004",
+               "name": "switch ambient light kitchen",
+               "example": "-"
+            },
+            {
+               "offset": "0x0005",
+               "name": "switch ambient light office",
+               "example": "-"
+            },
+            {
+               "offset": "0x0010",
+               "name": "switch plant light",
+               "example": "-"
+            },
+            {
+               "offset": "0x0011",
+               "name": "switch multimedia",
+               "example": "-"
+            },
+            {
+               "offset": "0x0011",
+               "name": "switch main",
+               "example": "-"
+            }
+         ],
+         "logs": [
+            {
+               "offset": "0x22",
+               "name": "Battery low"
+            },
+            {
+               "offset": "0x23",
+               "name": "VBUS low",
+               "description": "The power on CANBus is low"
+            }
+         ]
+      },
+      {
+         "name": "power",
+         "description": "Power switches; configuration objects, not actual PWM values",
+         "base": "0x470",
+         "size": "0x20",
+         "objects": [
+            {
+               "offset": "0x0000",
+               "name": "Switch object offset",
+               "example": "-",
+               "size": "0x4"
+            }
+         ]
+      }
+   ]
+}

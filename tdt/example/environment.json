@@ -1,0 +1,113 @@
+{
+   "profiles": [
+      {
+         "name": "Environment",
+         "description": "Environment sensors like temperatures, VOC, humidity",
+         "base": "0x400",
+         "size": "0x10",
+         "objects": [
+            {
+               "offset": "0x0014",
+               "name": "Air humidity",
+               "description": "Air humidity",
+               "example": "40 %"
+            },
+            {
+               "offset": "0x0015",
+               "name": "VOC",
+               "description": "VOC n promil; other factors taken into evaluation. No use at the moment. See air quality.",
+               "example": "1000 ‰",
+               "unit": "promil"
+            },
+            {
+               "offset": "0x0016",
+               "name": "Air quality",
+               "description": "Air quality, several factors are taken into account",
+               "example": "40 %"
+            },
+            {
+               "offset": "0x0017",
+               "name": "VOC Raw",
+               "description": "Raw VOC air restistance value in ohm",
+               "example": "1000 Ohm"
+            },
+            {
+               "offset": "0x0018",
+               "name": "Temperature",
+               "example": "22.35°C",
+               "size": "8",
+               "unit": "centi degree"
+            },
+            {
+               "offset": "0x0021",
+               "name": "Air pressure",
+               "description": "Air pressure",
+               "example": "1.001 hPa"
+            },
+            {
+               "offset": "0x0050",
+               "name": "Food temperature",
+               "description": "supposed to be in the oven",
+               "example": "25°C"
+            },
+            {
+               "offset": "0x0051",
+               "name": "Connected sensors",
+               "description": "Bitmask of detected sensors",
+               "example": "0x00003"
+            }
+         ]
+      },
+      {
+         "name": "Environment sensor commands",
+         "description": "Environment sendor commands",
+         "base": "0x600",
+         "size": "0x20",
+         "commands": [
+            {
+               "name": "burn in",
+               "offset": "0x3"
+            },
+            {
+               "name": "force measure",
+               "offset": "0x4"
+            },
+            {
+               "name": "burn in short",
+               "offset": "0x6"
+            },
+            {
+               "name": "burn in long",
+               "offset": "0x7"
+            }
+         ]
+      },
+      {
+         "name": "environmental units",
+         "base": "0x10",
+         "size": "0x30",
+         "units": [
+            {
+               "name": "centiCelsius",
+               "offset": "0x04",
+               "postfix": " °C", 
+               "divider": "100"
+            },
+            {
+               "name": "percentHumidity",
+               "postfix": " %",
+               "offset": "0x05"
+            },
+            {
+               "name": "voc",
+               "offset": "0x06",
+               "postfix": " Ohm"
+            },
+            {
+               "name": "percentQuality",
+               "offset": "0x16"
+            }
+         ]
+      }
+   ]
+}

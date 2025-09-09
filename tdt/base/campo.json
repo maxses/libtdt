@@ -1,0 +1,50 @@
+{
+   "profiles": [
+      {
+         "name": "Campo",
+         "description": "Specific for campo devices",
+         "base": "0x0400",
+         "size": "0x10",
+         "objects": [
+         ]
+      },
+      {
+         "name": "campo units",
+         "base": "0x10",
+         "size": "0x30",
+         "units": [
+            {
+               "name": "article",
+               "offset": "0x18",
+               "format": "E",
+               "values": {
+                  "can io": "0x50",
+                  "can bridge": "0x51",
+                  "Rufa": "0x52",
+                  "Can Dis": "0x60",
+                  "Sensemux": "0x80",
+                  "CAN rec": "0x90",
+                  "Minutnik EInk": "0xA0",
+                  "CanSwitch": "0xB0",
+                  "MainSwitch": "0xD0"
+               }
+            },
+            {
+               "name": "powerSwitchFunction",
+               "offset": "0x19"
+            },
+            {
+               "name": "systemState",
+               "offset": "0x24",
+               "format": "E",
+               "values": {
+                  "Invalid": "0",
+                  "Bootloader": "1",
+                  "Application": "2",
+                  "Reverse Bootloader": "3"
+               }
+            }
+         ]
+      }
+   ]
+}
