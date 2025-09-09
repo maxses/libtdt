@@ -1,3 +1,10 @@
+# Changes for v0.4.0
+
+* [#674] tdtGen: Generate enums for custom units with type enum
+* [#674] tdtGen: Generate string maps for all enums in the units
+* [#628] Use 128 bit UID
+* Got rid of 'log blended'
+
 # Changes for v0.3.1
 
 * Minor fixes and object updates
