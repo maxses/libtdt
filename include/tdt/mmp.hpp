@@ -295,7 +295,7 @@ class CMmpTransfer
       {
          m_counterNodeId=nodeId;
       }
-      void setNodeId( int nodeId )
+      void setNodeId( nodeId_t nodeId )
       {
          m_nodeId=nodeId;
       }

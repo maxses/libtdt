@@ -25,13 +25,6 @@
 namespace Tdt
 {
 
-
-EObject operator+(const EObject &a, int value)
-{
-   return( (EObject)( (int)a + value ) );
-};
-
-
 QString CPrinter::printValue( EFunctionCode functionCode, EUnit unit, const SValue& value ) const
 {
    QString s;

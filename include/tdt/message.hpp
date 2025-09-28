@@ -97,14 +97,19 @@ enum class ENmtObject: uint16_t
 {
    nmtScan                    = 0x00 + NMT_OBJECT_OFFSET,
    nmtScanConfig              = 0x01 + NMT_OBJECT_OFFSET,
-   nmtRecipientLowId          = 0x02 + NMT_OBJECT_OFFSET,
-   nmtRecipientHighId         = 0x03 + NMT_OBJECT_OFFSET,
+   //nmtRecipientLowId          = 0x02 + NMT_OBJECT_OFFSET,
+   //nmtRecipientHighId         = 0x03 + NMT_OBJECT_OFFSET,
    nmtSetNodeId               = 0x04 + NMT_OBJECT_OFFSET,
    nmtBeckon                  = 0x05 + NMT_OBJECT_OFFSET,
    nmtReset                   = 0x06 + NMT_OBJECT_OFFSET,
    nmtCalm                    = 0x07 + NMT_OBJECT_OFFSET,
    nmtJumpBootLoader          = 0x08 + NMT_OBJECT_OFFSET,
    nmtJumpApplication         = 0x09 + NMT_OBJECT_OFFSET,
+   nmtRecipientUidStart      = 0x0A + NMT_OBJECT_OFFSET,
+   nmtRecipientUid0          = 0x0B + NMT_OBJECT_OFFSET,
+   nmtRecipientUid1          = 0x0C + NMT_OBJECT_OFFSET,
+   nmtRecipientUid2          = 0x0D + NMT_OBJECT_OFFSET,
+   nmtRecipientUid3          = 0x0E + NMT_OBJECT_OFFSET,
    //nmtEnableApplicationBoot   = 0x0A + NMT_OBJECT_OFFSET,
 };
 
@@ -122,6 +127,11 @@ EAnyEnum toAny(T t)
 inline constexpr Tdt::EEvent operator+ ( Tdt::EEvent e1, int i1 )
 {
    return( (Tdt::EEvent)( (int)e1 + i1 ) );
+}
+
+inline constexpr Tdt::ENmtObject operator+ ( Tdt::ENmtObject o1, int i1 )
+{
+   return( (Tdt::ENmtObject)( (int)o1 + i1 ) );
 }
 
 inline constexpr ELogCode operator+ (ELogCategory c, Tdt::EEvent e)

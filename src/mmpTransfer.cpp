@@ -100,8 +100,7 @@ bool CMmpTransfer::handleRx( const Tdt::CMessage& msg )
    }
    else if( msg.getMmpPos() != m_data.pos() )
    {
-      qCritical( LDS("M ODNM", "MMP order does not match:" ) );
-      qDebug( "   msg %d vs. cur %d"
+      qCritical( LDS("M ODNM m %d vs c %d", "MMP order MM: m %d vs c %d" )
                 , (int)msg.getMmpPos(), (int)m_data.pos() );
 
       m_data.reset();

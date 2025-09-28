@@ -5,7 +5,7 @@
  *
  * Transfer BLOBs from one device to another.
  * 
- * Handling the shreds directly (writing them to flash) are making CRC
+ * Handling the shreds directly (writing them to flash) is making CRC
  * handling impossible. Retransmitting an transfer does not work any 
  * more because the flash would be needed to erased again.
  * 

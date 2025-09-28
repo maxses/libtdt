@@ -12,7 +12,7 @@
 
 /*--- Includes -------------------------------------------------------------*/
 
-#define CATCH_CONFIG_MAIN
+#define CATCH_CONFIG_MAIN     1
 
 #if defined ( CATCH_V3 )
    #include <catch2/catch_test_macros.hpp>
