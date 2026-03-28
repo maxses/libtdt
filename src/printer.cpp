@@ -147,6 +147,11 @@ QString CPrinter::printValue( EFunctionCode functionCode, EUnit unit, const SVal
          }
          break;
       }
+      case Tdt::EUnit::milliVolt:
+      {
+         ts << value._int << " mV";
+         break;
+      }
       default:
       {
          s=QString( "<No Format: Unit %1>" ).arg( (int)unit );

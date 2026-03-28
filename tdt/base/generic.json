@@ -34,6 +34,7 @@
             {
                "name": "hz",
                "offset": "0x01",
+               "format": "d",
                "postfix": "Hz"
             },
             {
@@ -100,7 +101,8 @@
             },
             {
                "name": "nodeId",
-               "offset": "0x12"
+               "offset": "0x12",
+               "format": "d"
             },
             {
                "name": "tdtObject",
@@ -108,7 +110,8 @@
             },
             {
                "name": "number",
-               "offset": "0x14"
+               "offset": "0x14",
+               "format": "d"
             },
             {
                "name": "numberHex",
