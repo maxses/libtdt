@@ -166,6 +166,8 @@ QString CPrinter::printValueGeneric( EFunctionCode functionCode, EUnit unit,
                const SValue& value, const SUnitDesc& unitDesc ) const
 {
    QString s;
+   (void)functionCode;
+   (void)unit;
    
    s+=QString::fromUtf8( unitDesc.prefix );
    

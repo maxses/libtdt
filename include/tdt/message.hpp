@@ -288,25 +288,25 @@ class SCanMessageTdt
          
       };
 
-      constexpr SCanMessageTdt(nodeId_t id, EFunctionCode functionCode, EObject object
-                         , Tdt::EUnit unit, const SValue value = {._uint=0} )
+      constexpr SCanMessageTdt(nodeId_t id, EFunctionCode functionCode, EObject _object
+                         , Tdt::EUnit _unit, const SValue _value = {._uint=0} )
          :m_id( id | ( (unsigned int)functionCode << FUNCTIONCODE_BITSHIFT ) )
          ,m_len( 8 ) // sizeof(m.m_data)
-         ,object( object )
-         ,unit( unit )
+         ,object( _object )
+         ,unit( _unit )
          ,reserved( 0 )
-         ,value( value )
+         ,value( _value )
 
       {
 
       }
       constexpr SCanMessageTdt(nodeId_t id, EFunctionCode functionCode
-                           , uint16_t _mmpSource, uint16_t _mmpPos, uint32_t value)
+                           , uint16_t _mmpSource, uint16_t _mmpPos, uint32_t _value)
          :m_id( id | ( (unsigned int)functionCode << FUNCTIONCODE_BITSHIFT ) )
          ,m_len( 8 ) // sizeof(m.m_data)
          ,mmpSource( _mmpSource )
          ,mmpPos( _mmpPos )
-         ,value( {._uint = value } )
+         ,value( {._uint = _value } )
       {
 
       }
@@ -340,15 +340,15 @@ class CMessage : public SCanMessageTdt
       CMessage()
       {
       }
-      constexpr CMessage(nodeId_t id, EFunctionCode functionCode, EObject object
-                         , Tdt::EUnit unit, const SValue value = {._uint=0} )
+      constexpr CMessage(nodeId_t id, EFunctionCode functionCode, EObject _object
+                         , Tdt::EUnit _unit, const SValue _value = {._uint=0} )
          :SCanMessageTdt( id,
-            functionCode, object, unit, value)
+            functionCode, _object, _unit, _value)
       {
       }
       constexpr CMessage(nodeId_t id, EFunctionCode functionCode
-               , uint16_t mmpSource, uint16_t mmpPos, uint32_t value)
-         :SCanMessageTdt(id, functionCode, mmpSource, mmpPos, value)
+               , uint16_t _mmpSource, uint16_t _mmpPos, uint32_t _value)
+         :SCanMessageTdt(id, functionCode, _mmpSource, _mmpPos, _value)
       {
       }
       constexpr CMessage( const SCanMessage& msg)
