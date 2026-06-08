@@ -208,7 +208,7 @@ class CMmpTransferData
              .crc32Data=0,
              .mmpCommand=command,
              .flashAddress=0,
-             .reserved=0,
+             .reserved{0},
              //.mmpFunctionCode=0,
          };
          m_data=(char*)data;
