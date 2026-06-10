@@ -88,6 +88,8 @@ static_assert( ( (int)EFunctionCode::max & FUNCTIONCODE_RSHIFTED_BITMASK )
                                                 == (int)EFunctionCode::max
                , "Masks not plausible");
 
+#if 0
+
 /**
  * @brief Fixed NMT objects
  * 
@@ -113,6 +115,7 @@ enum class ENmtObject: uint16_t
    //nmtEnableApplicationBoot   = 0x0A + NMT_OBJECT_OFFSET,
 };
 
+#endif
 
 typedef uint32_t nodeId_t;
 enum class EEvent: uint32_t;
@@ -127,11 +130,6 @@ EAnyEnum toAny(T t)
 inline constexpr Tdt::EEvent operator+ ( Tdt::EEvent e1, int i1 )
 {
    return( (Tdt::EEvent)( (int)e1 + i1 ) );
-}
-
-inline constexpr Tdt::ENmtObject operator+ ( Tdt::ENmtObject o1, int i1 )
-{
-   return( (Tdt::ENmtObject)( (int)o1 + i1 ) );
 }
 
 inline constexpr ELogCode operator+ (ELogCategory c, Tdt::EEvent e)
@@ -248,11 +246,7 @@ class SCanMessageTdt
             // This can not be outsourced to an struct partially.
             union {  // 4 Byte
                struct {
-                  union {
-                     EObject object;      // 2 B
-                     ENmtObject nmtObject;      // 2 B
-                     //EMmpObject mmpObject;      // 2 B
-                  };
+                  EObject object;      // 2 B
                   EUnit unit;          // 1 Binclude/tdt/message.hpp
                   uint8_t reserved;    // 1 B
                } PHONY_PACKED;

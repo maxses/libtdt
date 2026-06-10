@@ -25,12 +25,14 @@
 namespace Tdt
 {
 
+#if 0
 
 EObject operator+(const EObject &a, int value)
 {
    return( (EObject)( (int)a + value ) );
 };
 
+#endif
 
 QString CPrinter::printValue( Tdt::EFunctionCode functionCode, Tdt::EUnit unit, const Tdt::SValue& value ) const
 {
