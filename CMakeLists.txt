@@ -184,11 +184,14 @@ target_link_libraries(
    ${LIBS}
 )
 
-target_include_directories( ${PROJECT_NAME}
+target_include_directories( 
+   ${PROJECT_NAME}
    PRIVATE
-      ${CMAKE_BINARY_DIR}/tdt_generated
+      ${TDT_OUTPUT_DIR}
+      include/
    INTERFACE
-      ${CMAKE_BINARY_DIR}/tdt_generated
+      ${TDT_OUTPUT_DIR}
+      include/
 )
 
 if( "${MCU_PLATFORM}" MATCHES "linux" )
@@ -198,14 +201,6 @@ if( "${MCU_PLATFORM}" MATCHES "linux" )
          Qt${QT_VERSION_MAJOR}::Xml
    )
 endif()
-
-target_include_directories(
-   ${PROJECT_NAME}
-   PRIVATE
-      include/
-   INTERFACE
-      include/
-)
 
 if( "${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86_64" )
     add_subdirectory(tests)

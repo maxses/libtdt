@@ -16,7 +16,7 @@ microcontrollers with flash down to 16KB.
 </div>
 
 Ont the first level, the data flow resembles a disorganized yelling. Each node 
-can send measured values ​​without a destination. Another node can evaluate them 
+can send measured values without destination. Another node can evaluate them 
 if interested. There is not directly central master.
 At a further layer, there is the Multi-Message Packet Protocol. This defines 
 the protocol for exchanging larger amounts of data between two nodes. This can 

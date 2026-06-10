@@ -205,8 +205,10 @@ class CMmpTransferData
              .magic=0x1234,
              .dataLength=(int32_t)size,
              .sourceNodeId=0,
+             .crc32Data=0,
              .mmpCommand=command,
-             .flashAddress=0
+             .flashAddress=0,
+             .reserved{0},
              //.mmpFunctionCode=0,
          };
          m_data=(char*)data;
@@ -295,7 +297,7 @@ class CMmpTransfer
       {
          m_counterNodeId=nodeId;
       }
-      void setNodeId( int nodeId )
+      void setNodeId( nodeId_t nodeId )
       {
          m_nodeId=nodeId;
       }

@@ -100,8 +100,7 @@ bool CMmpTransfer::handleRx( const Tdt::CMessage& msg )
    }
    else if( msg.getMmpPos() != m_data.pos() )
    {
-      qCritical( LDS("M ODNM", "MMP order does not match:" ) );
-      qDebug( "   msg %d vs. cur %d"
+      qCritical( LDS("M ODNM m %d vs c %d", "MMP order MM: m %d vs c %d" )
                 , (int)msg.getMmpPos(), (int)m_data.pos() );
 
       m_data.reset();
@@ -119,7 +118,7 @@ bool CMmpTransfer::handleRx( const Tdt::CMessage& msg )
    {
       if( m_data.header().dataLength > m_data.maxReceiveSize() )
       {
-         qFatal( LDS("POTB", "Block too big: %d"), m_data.header().dataLength );
+         qFatal( LDS("POTB %d", "Block too big: %d"), m_data.header().dataLength );
       }
    }
    
@@ -206,7 +205,7 @@ bool CMmpTransfer::handleTx( const Tdt::CMessage& msg )
       {
          // An STM32F103 in the bus forced an STM32L4 to unnecessary retransmits.
          // This could also be seen in cordyceps by scanning devices.
-         qCritical( LDS( "IOA", "Ignoring old/previous ACK; MSG:%d" ),
+         qCritical( LDS( "IOA %d", "Ignoring old/previous ACK; MSG:%d" ),
                   msg.getTdtValue()->_int );
          return(false);
       }

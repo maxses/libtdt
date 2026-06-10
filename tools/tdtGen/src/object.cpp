@@ -91,7 +91,7 @@ QString CObject::nameToEnum()
    int pos;
    while( ( pos=enumName.indexOf(' ') ) >= 0 )
    {
-      // q.g. "hallo welt" -> "halloWelt"
+      // e.g. "hallo welt" -> "halloWelt"
       enumName.replace( pos, 2, enumName.at(pos+1).toUpper() );
    }
    

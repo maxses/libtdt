@@ -74,7 +74,10 @@ class CTdtGen
          QFile file( fileName );
          int profiles=0;
          
-         file.open( QIODevice::ReadOnly | QIODevice::Text );
+         if( ! file.open( QIODevice::ReadOnly | QIODevice::Text ) )
+         {
+            qFatal("Could not oen file '%s'", qPrintable( fileName ) );
+         }
          QByteArray ba=file.readAll();
          QJsonParseError error;
          QJsonDocument doc=QJsonDocument::fromJson( ba, &error );
