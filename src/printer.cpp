@@ -32,7 +32,7 @@ EObject operator+(const EObject &a, int value)
 };
 
 
-QString CPrinter::printValue( EFunctionCode functionCode, EUnit unit, const SValue& value ) const
+QString CPrinter::printValue( Tdt::EFunctionCode functionCode, Tdt::EUnit unit, const Tdt::SValue& value ) const
 {
    QString s;
    QTextStream ts( &s );
@@ -156,7 +156,7 @@ QString CPrinter::printValue( EFunctionCode functionCode, EUnit unit, const SVal
       }
       default:
       {
-         s=QString( "<No Format: Unit %1>" ).arg( (int)unit );
+         s=QString( "<No Format: Unit 0x%1>" ).arg( (int)unit, 0, 16 );
       }
    } // switch unit
    
@@ -189,7 +189,7 @@ QString CPrinter::printValueGeneric( EFunctionCode functionCode, EUnit unit,
       }
       case 'd':
       {
-         s += QString( "%1" ).arg((unsigned int)( value._uint / unitDesc.divider ) );
+         s += QString( "%1" ).arg((int)( value._int / unitDesc.divider ) );
          break;
       }
       default:

@@ -84,7 +84,7 @@
       },
       {
          "name": "environmental units",
-         "base": "0x10",
+         "unitsBase": "0x10",
          "size": "0x30",
          "units": [
             {

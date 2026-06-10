@@ -20,7 +20,7 @@
       },
       {
          "name": "generic units",
-         "base": "0x10",
+         "unitsBase": "0x10",
          "size": "0x30",
          "units": [
             {
@@ -34,6 +34,7 @@
             {
                "name": "hz",
                "offset": "0x01",
+               "format": "d",
                "postfix": "Hz"
             },
             {
@@ -47,6 +48,7 @@
             {
                "name": "permilPwm",
                "offset": "0x07",
+               "format": "d",
                "postfix": " ‰ PWM"
             },
             {
@@ -68,6 +70,7 @@
             {
                "name": "milliVolt",
                "offset": "0x0B",
+               "format": "d",
                "postfix": " mV"
             },
             {
@@ -92,6 +95,7 @@
             {
                "name": "milliAmpere",
                "offset": "0x10",
+               "format": "d",
                "postfix": " mA"
             },
             {
@@ -154,6 +158,7 @@
             {
                "name": "permilHumidity",
                "offset": "0x20",
+               "format": "d",
                "postfix": " ‰"
             },
             {
