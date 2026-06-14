@@ -27,13 +27,13 @@
 
 void CProfile::parseProfile( const QJsonObject& obj )
 {
-   if( obj.contains("base") )
+   if( obj.contains("objectsOffset") )
    {
-      setBase( obj["base"].toString().toInt( nullptr, 0) );
+      setObjectsOffset( obj["objectsOffset"].toString().toInt( nullptr, 0) );
    }
-   if( obj.contains("unitsBase") )
+   if( obj.contains("unitsOffset") )
    {
-      setUnitsBase( obj["unitsBase"].toString().toInt( nullptr, 0) );
+      setUnitsOffset( obj["unitsOffset"].toString().toInt( nullptr, 0) );
    }
    if( obj.contains("size") )
    {
@@ -58,11 +58,11 @@ int CProfile::parseObjects( const QJsonArray& array )
    {
       QJsonObject o=obj.toObject();
       QSharedPointer<CObject> object=QSharedPointer<CObject>(new 
-         CObject( *this, o["offset"].toString().toInt( nullptr, 0 ),
+         CObject( *this, o["address"].toString().toInt( nullptr, 0 ),
                   o["name"].toString(),
                   o["description"].toString() ) );
       object->parse( o );
-      qDebug() << "   Object: " << o["offset"].toString().toInt( nullptr, 0 );
+      qDebug() << "   Object: " << o["address"].toString().toInt( nullptr, 0 );
       for( const auto& otherObject: m_objects )
       {
          if( object->numericalValue() && ( object->numericalValue() == otherObject->numericalValue() ) )
@@ -85,11 +85,11 @@ int CProfile::parseUnits( const QJsonArray& array )
    {
       QJsonObject o=obj.toObject();
       QSharedPointer<CUnit> unit=QSharedPointer<CUnit>(
-               new CUnit( *this, o["offset"].toString().toInt( nullptr, 0 ),
+               new CUnit( *this, o["address"].toString().toInt( nullptr, 0 ),
                      o["name"].toString(),
                      o["description"].toString() ) );
       unit->parse( o );
-      qDebug() << "   Unit: " << o["offset"].toString().toInt( nullptr, 0 );
+      qDebug() << "   Unit: " << o["address"].toString().toInt( nullptr, 0 );
       m_units+=unit;
    }
    return(0);
@@ -102,11 +102,11 @@ int CProfile::parseCommands( const QJsonArray& array )
    {
       QJsonObject o=obj.toObject();
       QSharedPointer<CCommand> command=QSharedPointer<CCommand>(new 
-                                                         CCommand( *this, o["offset"].toString().toInt( nullptr, 0 ),
+                                                         CCommand( *this, o["address"].toString().toInt( nullptr, 0 ),
                                                                o["name"].toString(),
                                                                o["description"].toString() ) );
       command->parse( o );
-      qDebug() << "   Command: " << o["offset"].toString().toInt( nullptr, 0 );
+      qDebug() << "   Command: " << o["address"].toString().toInt( nullptr, 0 );
       //if( m_commands.contains( command->numericalValue() ) )
       for( const auto& otherCommand: m_commands )
       {
@@ -132,20 +132,20 @@ int CProfile::parseLogs( const QJsonArray& array )
    for( auto obj : array )
    {
       QJsonObject o=obj.toObject();
-      QString offset=o["offset"].toString();
+      QString address=o["address"].toString();
       QSharedPointer<CLog> log=QSharedPointer<CLog>(
-               new CLog( *this, offset.toInt( &ok, 0 ),
+               new CLog( *this, address.toInt( &ok, 0 ),
                         o["name"].toString(), o["description"].toString() ) );
       if(!ok)
       {
-         if( offset[0].isNumber() )
+         if( address[0].isNumber() )
          {
-            qFatal( "Parse error in '%s'", qPrintable(offset) );
+            qFatal( "Parse error in '%s'", qPrintable(address) );
          }
-         log->setMacro( offset );
+         log->setMacro( address );
       }
       log->parse( o );
-      qDebug() << "   Log: " << o["offset"].toString().toInt( nullptr, 0 );
+      qDebug() << "   Log: " << o["address"].toString().toInt( nullptr, 0 );
       //if( m_logs.contains( log->numericalValue() ) )
       for( const auto& otherLog: m_logs )
       {
@@ -183,15 +183,15 @@ int CProfile::generate()
 }
 
 
-int CProfile::getBase() const
+int CProfile::getObjectsOffset() const
 {
-   return( m_base );
+   return( m_objectsOffset );
 }
 
 
-int CProfile::getUnitsBase() const
+int CProfile::getUnitsOffset() const
 {
-   return( m_unitsBase );
+   return( m_unitsOffset );
 }
 
 
@@ -257,7 +257,8 @@ void CProfile::writeInfo( QTextStream& s )
    s << "\n";
    s << "Profile: " << m_name << "; " << m_desc << "\n";
    s.setIntegerBase(16);
-   s << "   Base: 0x" << m_base;
+   s << "   ObjectsOffset: 0x" << m_objectsOffset;
+   s << "   UnitsOffset: 0x" << m_unitsOffset;
    s << "   Size: 0x" << m_size;
    return;
 }

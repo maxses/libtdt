@@ -35,8 +35,8 @@ class CProfile
 {
    const QString m_name;
    const QString m_desc;
-   int m_base=0;
-   int m_unitsBase=0;
+   int m_objectsOffset=0;
+   int m_unitsOffset=0;
    int m_size=0;
    QList <QSharedPointer<CObject>> m_objects;
    QList <QSharedPointer<CUnit>> m_units;
@@ -59,16 +59,16 @@ public:
    int parseLogs( const QJsonArray& array );
    const QString& getName() const;
    int generate();
-   void setBase( int base )
+   void setObjectsOffset( int offset )
    {
-      m_base=base;
+      m_objectsOffset=offset;
    }
-   void setUnitsBase( int base )
+   void setUnitsOffset( int offset )
    {
-      m_unitsBase=base;
+      m_unitsOffset=offset;
    }
-   int getBase() const;
-   int getUnitsBase() const;
+   int getObjectsOffset() const;
+   int getUnitsOffset() const;
    void writeObjectsEnums( QTextStream& s );
    void writeUnitsEnums( QTextStream& s );
    void writeUnitsEnumTypeEnums( QTextStream& s );

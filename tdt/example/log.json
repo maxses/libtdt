@@ -3,11 +3,11 @@
       {
          "name": "log",
          "description": "Some Logging",
-         "base": "0x0480",
+         "objectsOffset": "0x0480",
          "size": "0x10",
          "objects": [
             {
-               "offset": "0x000A",
+               "address": "0x000A",
                "name": "Code"
             }
          ]
@@ -15,15 +15,15 @@
       {
          "name": "tdtlog",
          "description": "Log codes from tdt library that should be moved",
-         "base": "0x3000",
+         "objectsOffset": "0x3000",
          "size": "0x10",
          "objects": [
             {
-               "offset": "0x0024",
+               "address": "0x0024",
                "name": "Could not read eeprom"
             },
             {
-               "offset": "0x0025",
+               "address": "0x0025",
                "name": "No Release"
             }
          ]

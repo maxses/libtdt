@@ -3,16 +3,16 @@
       {
          "name": "",
          "description": "Global information like time/date",
-         "base": "0x420",
+         "objectsOffset": "0x420",
          "size": "0x10",
          "objects": [
             {
-               "offset": "0x0001",
+               "address": "0x0001",
                "name": "Time",
                "example": "12:00:23"
             },
             {
-               "offset": "0x0002",
+               "address": "0x0002",
                "name": "Date",
                "description": "Date",
                "example": "17.10.2025"

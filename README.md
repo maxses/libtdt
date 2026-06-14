@@ -38,17 +38,17 @@ Example:
       {
          "name": "Environment",
          "description": "Environment sensors like temperatures, VOC, humidity",
-         "base": "0x400",
+         "objectsOffset": "0x400",
          "size": "0x10",
          "objects": [
             {
-               "offset": "0x0014",
+               "address": "0x0014",
                "name": "Air humidity",
                "description": "Air humidity",
                "example": "40 %"
             },
             {
-               "offset": "0x0018",
+               "address": "0x0018",
                "name": "Temperature",
                "example": "22.35°C",
                "size": "8",

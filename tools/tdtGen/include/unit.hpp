@@ -51,7 +51,7 @@ class CUnit
    void parse( QJsonObject& o );
    QString enumString();
    void writeEnumTypeEnums( QTextStream& s );
-   void appendObjectNumber( QString& str, int objectNumber ) const;
+   void appendUnitNumber( QString& str, int unitNumber ) const;
    QString nameToEnum();
    static QString nameToEnum( const QString& name );
    QString printerString();

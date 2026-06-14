@@ -27,7 +27,7 @@ QString CUnit::enumString()
 {
    QString str( QString("   %1").arg( nameToEnum() ) );
    QString strNewLine;
-   appendObjectNumber(str, m_unit);
+   appendUnitNumber(str, m_unit);
    str=str.leftJustified( 55, ' ' );
    str+=QString( "// %1").arg(m_desc);
    
@@ -91,11 +91,11 @@ void CUnit::parse( QJsonObject& o )
 }
 
 
-void CUnit::appendObjectNumber( QString& str, int objectNumber ) const
+void CUnit::appendUnitNumber( QString& str, int unitNumber ) const
 {
    str=str.leftJustified( 35, ' ' );
-   str+=QString("= 0x%1 + 0x%2,").arg(m_profile.getUnitsBase(), 4, 16, QChar('0') )
-              .arg( objectNumber, 4, 16, QChar('0') );
+   str+=QString("= 0x%1 + 0x%2,").arg(m_profile.getUnitsOffset(), 4, 16, QChar('0') )
+              .arg( unitNumber, 4, 16, QChar('0') );
    return;
 }
 

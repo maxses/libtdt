@@ -38,6 +38,7 @@ QString CPrinter::printValue( Tdt::EFunctionCode functionCode, Tdt::EUnit unit, 
 {
    QString s;
    QTextStream ts( &s );
+
    switch( functionCode )
    {
       case Tdt::EFunctionCode::alert:
@@ -46,16 +47,17 @@ QString CPrinter::printValue( Tdt::EFunctionCode functionCode, Tdt::EUnit unit, 
       default:
          break;
    }
-      
+
    if( m_unitMap.contains( unit ) )
    {
       SUnitDesc unitDesc=m_unitMap[unit];
       if( ( unitDesc.format && ( unitDesc.format != ' ' ) ) || ( unitDesc.divider != 1 ) )
       {
-         return( printValueGeneric( functionCode, unit, value, unitDesc ) );
+         s += printValueGeneric( functionCode, unit, value, unitDesc );
+         return( s );
       }
    }
-   
+
    switch( unit )
    {
       case Tdt::EUnit::version:

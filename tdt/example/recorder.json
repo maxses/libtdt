@@ -3,21 +3,21 @@
       {
          "name": "Recorder",
          "description": "Stores tdt traffic on medium",
-         "base": "0x400",
+         "objectsOffset": "0x400",
          "size": "0x20",
          "objects": [
             {
-               "offset": "0x0011",
+               "address": "0x0011",
                "name": "time stamp",
                "description": "When were replayed messages recorded"
             },
             {
-               "offset": "0x0012",
+               "address": "0x0012",
                "name": "replay timespan",
                "description": "Timespan into the past when replaying."
             },
             {
-               "offset": "0x5001",
+               "address": "0x5001",
                "name": "time stamp drift",
                "description": "Cordyceps is using this for some reson. TBD."
             }
@@ -31,11 +31,11 @@
          "commands": [
             {
                "name": "replay",
-               "offset": "0x1"
+               "address": "0x1"
             },
             {
                "name": "destroy",
-               "offset": "0x2"
+               "address": "0x2"
             }
          ]
       }

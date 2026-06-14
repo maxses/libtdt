@@ -67,7 +67,7 @@ void CObject::appendObjectNumber( QString& str, int objectNumber ) const
    str+="= ";
    if( m_macro.isEmpty() )
    {
-      str+=QString("0x%1 + 0x%2,").arg(m_profile.getBase(), 4, 16, QChar('0') )
+      str+=QString("0x%1 + 0x%2,").arg(m_profile.getObjectsOffset(), 4, 16, QChar('0') )
               .arg( objectNumber, 4, 16, QChar('0') );
    }
    else
@@ -139,7 +139,7 @@ QString CObject::printerString()
 
 int CObject::numericalValue() const
 {
-   return( m_profile.getBase() + m_object );
+   return( m_profile.getObjectsOffset() + m_object );
 }
 
 
