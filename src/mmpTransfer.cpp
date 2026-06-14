@@ -313,4 +313,20 @@ void CMmpTransfer::handleMmpTransfer(CMmpTransferData& data)
 }; // namespace Tdt
 
 
+__attribute__((weak)) void cbSendTdtMessage( const Tdt::CMessage& )
+{
+   return;
+}
+
+__attribute__((weak)) Tdt::nodeId_t cbGetNodeId()
+{
+   return(0);
+}
+
+__attribute__((weak)) int cbHandleMmpTransfer( const Tdt::CMmpTransferData& )
+{
+   return(0);
+};
+
+
 /*--- Fin ------------------------------------------------------------------*/
