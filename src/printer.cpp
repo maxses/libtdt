@@ -207,7 +207,7 @@ QString CPrinter::printValueGeneric( EFunctionCode functionCode, EUnit unit,
       {
          if( unitDesc.divider != 1 )
          {
-            float t = value._float;
+            float t = value._int;
             t /= (   // If unitDesc.decimalPower is '0' assume '1'
                      unitDesc.divider ? unitDesc.divider : 1 );
             s += QString("%1").arg( t );
