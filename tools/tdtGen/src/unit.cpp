@@ -139,8 +139,8 @@ QString CUnit::printerString()
    str+=QString(", '%1' " ).arg( m_format.isEmpty() ? "\\0" : m_format );
    str+=QString(", %1 " ).arg( m_divider );
 
-   // Print enum values
-   if( m_values.size() )
+   // Print enum values even if it does not exist to avoid compiler warning
+   // if( m_values.size() )
    {
       str+=QString(", \n            {\n");
       for( auto value : m_values.keys() )
