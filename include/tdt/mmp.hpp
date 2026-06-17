@@ -12,7 +12,7 @@
  * more because the flash would be needed to erased again.
  * 
  * @date      20241003
- * @author    Maximilian Seesslen <mes@seesslen.net>
+ * @author    Maximilian Seesslen <src@seesslen.net>
  * @copyright SPDX-License-Identifier: Apache-2.0
  *
  *--------------------------------------------------------------------------*/
@@ -269,12 +269,12 @@ class CMmpTransfer
       CMmpTransfer();
       ~CMmpTransfer();
        
-      void writeMMP( Tdt::EObject object, int pos, uint32_t value );
+      void sendMMP( Tdt::EObject object, int pos, uint32_t value );
        
       void startTx()
       {
          m_data.reset();
-         writeMMP( m_data.m_object, 0, m_data.data32() );
+         sendMMP( m_data.m_object, 0, m_data.data32() );
          //m_timeoutTimer.start( m_shredTimeout );
       }
       
@@ -334,7 +334,7 @@ class CMmpNode
       #endif
       
    public slots:
-      void receive(const CMessage& msg);
+      void receiveTdtMessage(const Tdt::CMessage& msg);
       void slotSendTdtMessage( const Tdt::CMessage& msg );
       int slotHandleMmpTransfer( Tdt::CMmpTransferData& data );
           

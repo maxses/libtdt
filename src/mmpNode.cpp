@@ -53,7 +53,7 @@ CMmpNode::CMmpNode()
 }
 
 
-void CMmpNode::receive( const Tdt::CMessage& msg )
+void CMmpNode::receiveTdtMessage( const Tdt::CMessage& msg )
 {
    qDebug("MMP in");
    switch( msg.getFunctionCode() )

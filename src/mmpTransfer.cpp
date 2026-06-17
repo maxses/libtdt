@@ -60,7 +60,7 @@ void CMmpTransferData::updateCrc()
 };
 
 
-void CMmpTransfer::writeMMP( Tdt::EObject object, int pos, uint32_t value )
+void CMmpTransfer::sendMMP( Tdt::EObject object, int pos, uint32_t value )
 {
    //if( pos % 100 == 0 )
    {
@@ -245,14 +245,14 @@ bool CMmpTransfer::handleTx( const Tdt::CMessage& msg )
 
 void CMmpTransfer::sendShred()
 {
-   writeMMP( Tdt::EObject::nodeFirmwareDate, m_data.pos(), m_data.data32() );
+   sendMMP( Tdt::EObject::nodeFirmwareDate, m_data.pos(), m_data.data32() );
    //m_timeoutTimer.start( m_shredTimeout );
 }
 
 
 void CMmpTransfer::sendAbort()
 {
-   writeMMP( Tdt::EObject::nodeFirmwareDate, -1, 0 );
+   sendMMP( Tdt::EObject::nodeFirmwareDate, -1, 0 );
    //m_timeoutTimer.stop( );
 }
 
