@@ -40,7 +40,7 @@ target_link_libraries(
    tdt_tests
    PRIVATE
       tdt
-      ${CATCH_LIBRARY}
+      ${CATCH2_TARGET}
 )
 
 
