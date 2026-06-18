@@ -322,7 +322,7 @@ class CMmpNode
       CMmpTransfer m_rx;
       
       #if ! defined( STM32 )
-         signals:
+      signals:
          void sendTdtMessage( const Tdt::CMessage& msg );
          int handleMmpTransfer( Tdt::CMmpTransferData& data );
       #elif 0
