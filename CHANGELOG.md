@@ -1,3 +1,10 @@
+# Changes for v0.5.0
+
+* Got rid of enum ENmtObject
+* Updated descriptor files
+* Printer: support milliVolt
+* Further minor fixes
+
 # Changes for v0.4.0
 
 * [#674] tdtGen: Generate enums for custom units with type enum
