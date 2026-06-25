@@ -1,0 +1,194 @@
+#ifndef TDT_MMP_NODE_HPP
+#define TDT_MMP_NODE_HPP
+/**---------------------------------------------------------------------------
+ *
+ * @file    mmpNode.hpp
+ * @brief   Multi-message-package support for TDT protocol
+ *
+ * Transfer BLOBs from one device to another.
+ * 
+ * Handling the shreds directly (writing them to flash) are making CRC
+ * handling impossible. Retransmitting an transfer does not work any 
+ * more because the flash would be needed to erased again.
+ * 
+ * @date      20241003
+ * @author    Maximilian Seesslen <src@seesslen.net>
+ * @copyright SPDX-License-Identifier: Apache-2.0
+ *
+ *--------------------------------------------------------------------------*/
+
+
+/*--- Includes -------------------------------------------------------------*/
+
+
+#include <tdt/mmp.hpp>
+#include <tdt/mmpTransfer.hpp>
+
+
+/*--- Declaration ----------------------------------------------------------*/
+
+
+#if IS_ENABLED( CONFIG_TDT_MMP_CALLBACKS )
+   void cbSendTdtMessage( const Tdt::CMessage& );
+   int cbHandleMmpTransfer( const Tdt::CMmpTransfer& );
+#endif
+
+namespace Tdt
+{
+
+
+class CMmpNode
+            #if ! defined STM32
+               :public QObject
+            #endif
+{
+   #if ! defined STM32
+      Q_OBJECT
+   #endif
+
+      nodeId_t m_nodeId=0;
+
+      // Needed for unit tests.
+      #if ! defined STM32
+            QList<Tdt::CMessage> m_rxBuffer;
+      #endif
+
+   public:
+      CMmpTransfer m_rx;
+      CMmpTransfer m_tx;
+
+      QTimer m_rxTimeoutTimer;
+      QTimer m_txTimeoutTimer;
+
+      static constexpr const int m_shredTimeout = 125/4;
+      static constexpr const int m_transferExecutionTimeout = 125*4;
+      static constexpr const int m_receiverTimeout = 2000;
+
+      #if ! defined STM32
+         int m_totalRxTransfers=0;
+         int m_messageCounter=0;
+      #endif
+
+      // int m_rxTransferStatus=0;
+      
+      #if ! defined( STM32 )
+      signals:
+         void signalSendTdtMessage( const Tdt::CMessage& msg );
+         int signalHandleMmpTransfer( const Tdt::CMmpTransfer& data );
+      #elif IS_ENABLED( CONFIG_TDT_MMP_SIGNALS )
+         CSignal< void, const Tdt::CMessage& > signalSendTdtMessage;
+         CSignal< int, const Tdt::CMmpTransfer& > signalHandleMmpTransfer;
+      #else
+         // void cbSendTdtMessage( const Tdt::CMessage& );
+         // int cbHandleMmpTransfer( const Tdt::CMmpTransfer& );
+      #endif
+      
+   public slots:
+      void receiveTdtMessage( const Tdt::CMessage& msg );
+      int dummyHandleMmpTransfer( const Tdt::CMmpTransfer& data );
+      //void slotSendTdtMessage( const Tdt::CMessage& msg );
+      //int slotHandleMmpTransfer( Tdt::CMmpTransfer& data );
+          
+   public:
+      CMmpNode( nodeId_t nodeId = 2 );
+      bool retryTransmit()
+      {
+         if( m_tx.incRetry() > 4 )
+         {
+            qWarning( LDS( "TMR", "Too much retries" ) );
+            return(false);
+         }
+         qWarning( LDS( "RTP%d", "Retry pos %d"), m_tx.pos() );
+         sendTxShred();
+         
+         return(true);
+      }
+      bool transmitActive()
+      {
+         return( m_tx.header().mmpCommand != EMmpCommand::null );
+      }
+      /*
+      void startTx(EMmpCommand command, const char* data, uint32_t length)
+      {
+         m_tx.m_data.setData(command, data, length);
+         m_tx.startTx();
+      }
+      */
+      void setCounterNodeId( nodeId_t nodeId )
+      {
+         m_tx.setCounterNodeId( nodeId );
+      }
+      void startTransfer(Tdt::EMmpCommand command, const char *data=0
+                     , int length=0, int flashPos=0)
+      {
+         m_tx.setData( command, data, length );
+         m_tx.setFlashAddress( flashPos );
+         startTx( );
+      }
+      void setSourceNodeId( nodeId_t id )
+      {
+         m_tx.setSourceNodeId( id );
+      }
+      void startTx()
+      {
+         m_tx.reset();
+
+         #if IS_ENABLED( CONFIG_TDT_PEDANTIC )
+            m_tx.setState( ENodeState::transmitting );
+         #endif
+
+         sendTxShred( 0, m_tx.data32() );
+      }
+      void sendTxShred( );
+      void sendTxAbort( );
+      void sendAck( int pos /*=false*/ );
+      void sendTransferAck(int pos, int sta);
+      void sendTxShred( int pos, uint32_t value );
+      bool handleRx( const Tdt::CMessage& msg );
+      bool handleTx( const Tdt::CMessage& msg );
+      nodeId_t getNodeId()
+      {
+         return( m_nodeId );
+      }
+
+      public slots:
+         void txTimeout();
+         void rxTimeout();
+
+      #if ! defined( STM32 )
+
+      public slots:
+         void pushRxMessage( const Tdt::CMessage& msg )
+         {
+            m_rxBuffer+=msg;
+         }
+
+      public:
+         void testEventLoop()
+         {
+            while( m_rxBuffer.count() )
+            {
+               receiveTdtMessage( m_rxBuffer.front() );
+               m_rxBuffer.pop_front();
+            }
+         }
+
+         int getTotalRxTransfers()
+         {
+            return( m_totalRxTransfers );
+         }
+         
+         ENodeState state()
+         {
+            return( m_rx.state() | m_tx.state() );
+         }
+         
+      #endif
+};
+
+
+} // namespace Tdt
+
+
+/*--- Fin ------------------------------------------------------------------*/
+#endif // ? ! TDT_MMP_NODE_HPP

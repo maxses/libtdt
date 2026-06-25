@@ -80,6 +80,7 @@ enum class EFunctionCode: uint32_t
    dataBlob             = 0x9,
    reSendObject         = 0xA,
    ackDataBlob          = 0xB,
+   ackTransfer          = 0xC,
    max                  = 0xF,   // Reserved for unspecified traffic; e.g. for
                                  // CANPong tests
 };
@@ -252,7 +253,7 @@ class SCanMessageTdt
                } PHONY_PACKED;
                struct {
                   uint16_t mmpSource;
-                  uint16_t mmpPos;
+                  int16_t mmpPos;
                } PHONY_PACKED;
             };
             SValue value __attribute ( ( aligned(4) ) );
@@ -295,7 +296,7 @@ class SCanMessageTdt
 
       }
       constexpr SCanMessageTdt(nodeId_t id, EFunctionCode functionCode
-                           , uint16_t _mmpSource, uint16_t _mmpPos, uint32_t _value)
+                           , uint16_t _mmpSource, int16_t _mmpPos, uint32_t _value)
          :m_id( id | ( (unsigned int)functionCode << FUNCTIONCODE_BITSHIFT ) )
          ,m_len( 8 ) // sizeof(m.m_data)
          ,mmpSource( _mmpSource )
@@ -341,7 +342,7 @@ class CMessage : public SCanMessageTdt
       {
       }
       constexpr CMessage(nodeId_t id, EFunctionCode functionCode
-               , uint16_t _mmpSource, uint16_t _mmpPos, uint32_t _value)
+               , uint16_t _mmpSource, int16_t _mmpPos, uint32_t _value)
          :SCanMessageTdt(id, functionCode, _mmpSource, _mmpPos, _value)
       {
       }
@@ -444,7 +445,7 @@ class CMessage : public SCanMessageTdt
       {
          value=_value;
       }
-      uint16_t getMmpPos() const
+      int getMmpPos() const
       {
          return( mmpPos );
       }

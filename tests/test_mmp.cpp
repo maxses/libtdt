@@ -30,8 +30,11 @@
 
 #include <tdt/message.hpp>
 #include <tdt/mmp.hpp>
+#include <tdt/mmpNode.hpp>
 #include <QElapsedTimer>
 #include <QObject>
+#include <QCoreApplication>
+#include <QEventLoop>
 
 #define TEST_ALL
 #define STOP_ON_FAIL
@@ -56,27 +59,6 @@ quidem non admodum indoctis, totum hoc displicet philosophari. quidam autem non
 tam id reprehendunt, si remissius agatur, sed tantum studium tamque multam
 operam ponendam in eo non arbitrantur.)" };
 
-// This test is disfunctional at the moment.
-//
-// Need to prepare smoe helper functions to route CAN messages to the correct
-// methods.
-
-#if 0
-
-void handleQueues(Tdt::CMmpNode& n1, Tdt::CMmpNode& n2)
-{
-   while( n1.m_rx.m_txList.count() )
-   {
-      n2.receive( n1.m_rx.m_txList.last() );
-      n1.m_rx.m_txList.removeLast();
-   }
-   while( n2.m_tx.m_txList.count() )
-   {
-      n1.receive( n2.m_tx.m_txList.last() );
-      n2.m_tx.m_txList.removeLast();
-   }
-};
-
 
 void hexDump(const char* data, int len)
 {
@@ -92,10 +74,79 @@ void hexDump(const char* data, int len)
       for(int i1=0; i1<0x10; i1++)
       {
          char c=data[pos+i1];
-         printf("%C", ( ( c>=' ' ) && ( c<='~' ) ) ? c : '.' );
+         printf("%c", ( ( c>=' ' ) && ( c<='~' ) ) ? c : '.' );
       }
       pos+=0x10;
       printf("\n");
+   }
+}
+
+
+TEST_CASE( "MMP simple", "[default]" )
+{
+   SECTION( "construct" )
+   {
+      Tdt::CMmpNode dut1(8);
+      Tdt::CMmpNode dut2(9);
+      int argc=1;
+      char* argv[1]{ (char*)"Main" };
+      QCoreApplication core(argc, argv);
+      const char* data="Hello World";
+      QElapsedTimer elapsed;
+      QEventLoop loop;
+      bool finished=false;
+
+      /* Must not connect the signal sendTdtMessage() to slot receiveTdtMessage()
+       * directly. Sending an ACK would directly end up in the receive function
+       * before having the old shred finished.
+       */
+      
+      QObject::connect( &dut1, SIGNAL( signalSendTdtMessage( const Tdt::CMessage& ) ),
+                       &dut2, SLOT( pushRxMessage( const Tdt::CMessage& ) ) );
+      
+      QObject::connect( &dut2, SIGNAL( signalSendTdtMessage( const Tdt::CMessage& ) ),
+                       &dut1, SLOT( pushRxMessage( const Tdt::CMessage& ) ) );
+      
+      QObject::connect( &dut1, SIGNAL( signalHandleMmpTransfer( const Tdt::CMmpTransfer& ) ),
+                       &dut1, SLOT( dummyHandleMmpTransfer( const Tdt::CMmpTransfer& ) ) );
+      
+      QObject::connect( &dut2, SIGNAL( signalHandleMmpTransfer( const Tdt::CMmpTransfer& ) ),
+                       &dut2, SLOT( dummyHandleMmpTransfer( const Tdt::CMmpTransfer & ) ) );
+      
+      for(int i1=0; i1<10; i1++)
+      {
+         dut1.m_tx.setData( Tdt::EMmpCommand::writeApplicationFlash, data, strlen( data ) );
+         dut1.m_tx.setCounterNodeId( dut2.getNodeId() );
+         dut1.startTx();
+         
+         finished=false;
+         elapsed.start();
+         
+         while( elapsed.elapsed( ) < 30 * 1000 )
+         {
+            dut1.testEventLoop();
+            dut2.testEventLoop();
+            
+            if( ( dut1.state() == Tdt::ENodeState::idle )
+                &&  ( dut2.state() == Tdt::ENodeState::idle ) )
+            {
+               printf("Both channels finished\n");
+               finished=true;
+               break;
+            }
+            loop.processEvents();
+         }
+         
+         REQUIRE( finished == true );
+         
+         REQUIRE( dut2.getTotalRxTransfers() == i1 + 1 );
+         //REQUIRE( dut1.getTotalRxTransfers() == 1 );
+         
+         dut1.m_tx.dump();
+         dut2.m_tx.dump();
+         
+         REQUIRE ( memcmp( dut2.m_rx.data(), data, strlen(data) ) == 0 );
+      }
    }
 }
 
@@ -104,39 +155,105 @@ TEST_CASE( "MMP full duplex", "[default]" )
 {
    SECTION( "construct" )
    {
-      Tdt::CMmpNode dut1;
-      Tdt::CMmpNode dut2;
+      Tdt::CMmpNode dut1(8);
+      Tdt::CMmpNode dut2(9);
       QElapsedTimer elapsed;
+      int argc=1;
+      char* argv[1]{ (char*)"Main" };
+      QCoreApplication core(argc, argv);
+
+      /* Must not connect the signal sendTdtMessage() to slot receiveTdtMessage()
+       * directly. Sending an ACK would directly end up in the receive function
+       * before having the old shred finished.
+       */
+
+      QObject::connect( &dut1, SIGNAL( signalSendTdtMessage( const Tdt::CMessage& ) ),
+               &dut2, SLOT( pushRxMessage( const Tdt::CMessage& ) ) );
+
+      QObject::connect( &dut2, SIGNAL( signalSendTdtMessage( const Tdt::CMessage& ) ),
+               &dut1, SLOT( pushRxMessage( const Tdt::CMessage& ) ) );
+
+      QObject::connect( &dut1, SIGNAL( signalHandleMmpTransfer( const Tdt::CMmpTransfer& ) ),
+               &dut1, SLOT( dummyHandleMmpTransfer( const Tdt::CMmpTransfer& ) ) );
+
+      QObject::connect( &dut2, SIGNAL( signalHandleMmpTransfer( const Tdt::CMmpTransfer& ) ),
+               &dut2, SLOT( dummyHandleMmpTransfer( const Tdt::CMmpTransfer& ) ) );
       
-      elapsed.start();
-      
-      dut1.m_tx.m_data.setData( Tdt::EMmpCommand::writeApplicationFlash, data1, strlen(data1) );
-      dut1.m_tx.startTx();
-      dut2.m_tx.m_data.setData( Tdt::EMmpCommand::writeApplicationFlash, data2, strlen(data2) );
-      dut2.m_tx.startTx();
-      
-      while( elapsed.elapsed( ) < 1 * 1000 )
+      for(int i1=0; i1<1; i1++)
       {
-         handleQueues( dut1, dut2 );
-         handleQueues( dut2, dut1 );
-         //if( dut1.finishedRx() && dut2.finishedRx() )
+         elapsed.start();
+         
+         dut1.m_rx.wipe();
+         dut2.m_rx.wipe();
+
+         dut1.m_tx.setData( Tdt::EMmpCommand::writeApplicationFlash, data1, strlen(data1) );
+         dut1.m_tx.setCounterNodeId( dut2.getNodeId() );
+         dut1.startTx();
+   
+         #if 1
+            dut2.m_tx.setData( Tdt::EMmpCommand::writeApplicationFlash, data2, strlen(data2) );
+            dut2.m_tx.setCounterNodeId( dut1.getNodeId() );
+            dut2.startTx();
+         #endif
+         
+         QEventLoop loop;
+         bool finished=false;
+   
+         while( elapsed.elapsed( ) < 30 * 1000 )
          {
-            break;
+            dut1.testEventLoop();
+            dut2.testEventLoop();
+   
+            if( ( dut1.state() == Tdt::ENodeState::idle )
+                &&  ( dut2.state() == Tdt::ENodeState::idle ) )
+            {
+               printf("Both channels finished\n");
+               finished=true;
+               break;
+            }
+            // Would block: loop.exec();
+            loop.processEvents();
          }
+   
+         // Flush receive buffers
+         //for(int i1=0; i1<1; i1++)
+         {
+            dut1.testEventLoop();
+            dut2.testEventLoop();
+            loop.processEvents();
+         }
+         
+         REQUIRE( finished == true );
+         
+         REQUIRE( dut2.getTotalRxTransfers() == i1 + 1 );
+         REQUIRE( dut1.getTotalRxTransfers() == i1 + 1 );
+   
+         dut1.m_tx.dump();
+         dut2.m_tx.dump();
+         
+         REQUIRE( dut2.state() == Tdt::ENodeState::idle );
+         REQUIRE( dut1.state() == Tdt::ENodeState::idle );
+
+         REQUIRE( dut2.m_tx.returnCode() == (int)dut1.getNodeId() );
+         REQUIRE( dut1.m_tx.returnCode() == (int)dut2.getNodeId() );
+
+         // Timed out and there is still data
+         //printf( "Data left DUT1: %d (org: %d)\n", dut1.m_tx.dataLeft(), (int)strlen(data1) );
+         //printf( "Data left DUT2: %d (org: %d)\n", dut2.m_tx.dataLeft(), (int)strlen(data2) );
+         
+         // The counters may be reset, shred-position is zero. isFinished will
+         // be false
+         //REQUIRE ( dut1.m_tx.isFinished() );
+         //REQUIRE ( dut2.m_tx.isFinished() );
+   
+         //hexDump( dut2.m_rx.data(), 0x200 );
+   
+         // received data is the vis-à-vis
+         REQUIRE ( memcmp( dut1.m_rx.data(), data2, strlen(data2) ) == 0 );
+         REQUIRE ( memcmp( dut2.m_rx.data(), data1, strlen(data1) ) == 0 );
       }
-      
-      //REQUIRE ( dut1.finishedRx() );
-      //REQUIRE ( dut2.finishedRx() );
-      
-      //hexDump( dut1.m_rx.m_data.data(), 0x20 );
-      
-      // received data is the vis-à-vis
-      REQUIRE ( memcmp( dut1.m_rx.m_data.data(), data2, strlen(data2) ) == 0 );
-      REQUIRE ( memcmp( dut2.m_rx.m_data.data(), data1, strlen(data1) ) == 0 );
    }
 }
-
-#endif
 
 
 /*--- Fin ------------------------------------------------------------------*/

@@ -122,3 +122,19 @@ Example of MMP traffic (TDTDump):
             Object: Blended [0x48A]
             Unit: logBlended [0x31]
             Value: 0 [0x0]
+
+MMP:
+[2B Source (Transfer-ID)]
+[2B Pos]
+[4B Data]
+
+Node A:TX                                              Node B:RX
+ [Node:B/FC:dataBlob/Source:A/Pos:0/data:data]---->
+                   <---- [Node:B/FC:ackDataBlob/Source:A/Pos=0/data:0=OK]
+                               [...]
+ [Node:B/FC:dataBlob/Source:A/Pos:n/data:data]---->
+              ( <-------- [Node:B/FC:ackDataBlob/Source:A/Pos=n] )
+       <-[Node:B/FC:ackDataTransfer/Source:A/Pos=n/data:status]
+
+Pos=-1: Abort
+

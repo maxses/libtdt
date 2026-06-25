@@ -19,9 +19,20 @@
 /*--- Includes -------------------------------------------------------------*/
 
 
-#include <tdt/mmp.hpp>
+#include <tdt/mmpNode.hpp>
+#include <tdt/mmpTransfer.hpp>
+
 #if defined ( STM32 )
    //#include <biwak/can.hpp>
+#endif
+
+#if ( ! defined STM32 ) && defined ( USE_LEPTO )
+   #include <lepto/print.h>      // hexDump
+#endif
+
+#if ( ! defined STM32 )
+   #include <QRandomGenerator>
+   #include <QThread>
 #endif
 
 
@@ -32,49 +43,104 @@ namespace Tdt
 {
 
 
-CMmpNode::CMmpNode()
+CMmpNode::CMmpNode( nodeId_t nodeId )
+         :m_nodeId( nodeId )
+         ,m_rx( CMmpTransfer::EDirection::in )
+         ,m_tx( CMmpTransfer::EDirection::out )
 {
-   m_rx.m_data.alloc();
+   m_rx.allocRx();
 
    #if ! defined ( STM32 )
-   connect( &m_tx, SIGNAL( sendTdtMessage( const Tdt::CMessage& ) ),
-           this, SLOT( slotSendTdtMessage( const Tdt::CMessage& ) ) );
-   connect( &m_rx, SIGNAL( sendTdtMessage( const Tdt::CMessage& ) ),
-           this, SLOT( slotSendTdtMessage( const Tdt::CMessage& ) ) );
-   connect( &m_tx, SIGNAL( handleMmpTransfer( Tdt::CMmpTransferData& ) ),
-           this, SLOT( slotHandleMmpTransfer( Tdt::CMmpTransferData& ) ) );
-   connect( &m_rx, SIGNAL( handleMmpTransfer( Tdt::CMmpTransferData& ) ),
-           this, SLOT( slotHandleMmpTransfer( Tdt::CMmpTransferData& ) ) );
-   #elif 0
-   m_tx.sendMessage.connect(this, &CMmpNode::slotSendMessage );
-   m_rx.sendMessage.connect(this, &CMmpNode::slotSendMessage );
+      connect( &m_txTimeoutTimer, SIGNAL( timeout() ),
+              this, SLOT( txTimeout() ) );
+      connect( &m_rxTimeoutTimer, SIGNAL( timeout() ),
+              this, SLOT( rxTimeout() ) );
    #else
+      m_txTimeoutTimer.timeout.connect( this, &CMmpNode::txTimeout );
+      m_rxTimeoutTimer.timeout.connect( this, &CMmpNode::rxTimeout );
    #endif
 }
 
 
 void CMmpNode::receiveTdtMessage( const Tdt::CMessage& msg )
 {
-   qDebug("MMP in");
+   // Expand unit tests: Loose messages
+   #if ! defined STM32
+      m_messageCounter++;
+   #endif
+
+   #if ! defined STM32
+   // qDebug("MMP in");
+   const char *fc="Unknown";
+   if( msg.getFunctionCode() == Tdt::EFunctionCode::dataBlob )
+   {
+      fc="dataBlob";
+   }
+   if( msg.getFunctionCode() == Tdt::EFunctionCode::ackDataBlob )
+   {
+      fc="ackData";
+   }
+   if( msg.getFunctionCode() == Tdt::EFunctionCode::ackTransfer )
+   {
+      fc="ackTransfer";
+   }
+   #endif
+
+   qDebug("      IN #%d: FC=%s POS=%d", m_nodeId, fc, msg.getMmpPos());
+
+   // Expand unit tests: Loose messages
+   #if ! defined STM32
+      // "Loose" every 10th messsage
+      if( ! ( m_messageCounter % ( 6 + ( QRandomGenerator::global()->generate() % 3 ) ) ) )
+      {
+         qDebug("         Dropping");
+         return;
+      }
+   #endif
+
    switch( msg.getFunctionCode() )
    {
       case ( Tdt::EFunctionCode::dataBlob ):
-         qDebug("   MMP Data");
-         if ( m_rx.handleRx( msg ) )
+
+         // returns true when transfer is finished
+         if ( handleRx( msg ) )
          {
             //signalHandleMmpTransfer.emitSignal( m_rx.m_data );
             #if defined STM32
-               int sta=cbHandleMmpTransfer( m_rx.m_data );
+               #if IS_ENABLED( CONFIG_TDT_MMP_SIGNALS )
+                  signalHandleMmpTransfer.emitSignal( m_rx );
+               #elif IS_ENABLED( CONFIG_TDT_MMP_CALLBACKS )
+                   m_rx.setReturnCode( cbHandleMmpTransfer( m_rx ) );
+               #else
+                  #error "Set either CONFIG_TDT_MMP_SIGNALS or CONFIG_TDT_MMP_CALLBACKS"
+               #endif
             #else
-               int sta=emit handleMmpTransfer( m_rx.m_data );
+               m_rx.setReturnCode( emit signalHandleMmpTransfer( m_rx ) );
             #endif
-            m_rx.sendTransferAck(sta);
-            m_rx.m_data.reset();
+            sendTransferAck( msg.getMmpPos(), m_rx.returnCode() );
+            m_rx.reset();
+            #if IS_ENABLED( CONFIG_TDT_PEDANTIC )
+               m_rx.setState( ENodeState::idle );
+            #endif
          }
          break;
       case ( Tdt::EFunctionCode::ackDataBlob ):
-         qDebug("   MMP Ack");
-         m_tx.handleTx( msg );
+         handleTx( msg );
+         break;
+      case ( Tdt::EFunctionCode::ackTransfer ):
+         // Acknowledge is missing but i already got transfer ack ?
+         if( ! m_tx.isFinished( m_tx.pos()+1 ) )
+         {
+            qFatal("Transfer Ack on non finished ttransfer. Pos is %d, data size is %d."
+                   , m_tx.pos(), m_tx.header().dataLength);
+         }
+         m_tx.setReturnCode( msg.getTdtValue()->_uint );
+
+         #if IS_ENABLED( CONFIG_TDT_PEDANTIC )
+            m_tx.setState( ENodeState::idle );
+         #endif
+
+         m_txTimeoutTimer.stop();
          break;
       default:
          break;
@@ -82,30 +148,366 @@ void CMmpNode::receiveTdtMessage( const Tdt::CMessage& msg )
 }
 
 
-void CMmpNode::slotSendTdtMessage( const Tdt::CMessage& msg )
+void CMmpNode::sendTxShred( int pos, uint32_t value )
 {
-   //lInfo("MMP out");
+   Tdt::CMessage message( m_tx.getCounterNodeId(),
+                         Tdt::EFunctionCode::dataBlob,
+                         m_nodeId, // TBD: Its me, the source
+                         pos, value );
    #if ! defined ( STM32 )
-      emit sendTdtMessage( msg );
-   #elif 0
-      signalSendMessage.emitSignal( msg );
+      emit signalSendTdtMessage( message );
+   #elif IS_ENABLED( CONFIG_TDT_MMP_SIGNALS )
+      signalSendTdtMessage.emitSignal( message );
+   #elif IS_ENABLED( CONFIG_TDT_MMP_CALLBACKS )
+      cbSendTdtMessage( message );
    #else
-      cbSendTdtMessage( msg );
-      // TBD
-      //mmpCan->send( msg );
+      #error "You have to set either CONFIG_TDT_MMP_SIGNALS or CONFIG_TDT_MMP_CALLBACKS"
    #endif
+
+   if( pos >= 0 )
+   {
+      m_txTimeoutTimer.start( m_tx.isLast(pos) ? m_transferExecutionTimeout : m_shredTimeout * 1 );
+   }
+}
+
+
+bool CMmpNode::handleRx( const Tdt::CMessage& msg )
+{
+   // Indicator to abort ttransfer
+   if( m_rx.pos() == -1 )
+   {
+      qCritical( LDS( "MMAB", "MMP abort" ) );
+      m_rx.reset();
+      #if IS_ENABLED( CONFIG_TDT_PEDANTIC )
+         m_rx.setState( ENodeState::idle );
+      #endif
+      return( false );
+   }
+
+   // An retransmission of an messqage i already have: still acknowledge
+   if( m_rx.pos() && ( msg.getMmpPos() == m_rx.pos() - 1 ) )
+   {
+      qCritical( LDS("IGRE", "Ignoring retransmit" ) );
+
+      // Cornercase: Sender may have lost return value. Just send the status again
+      if( m_rx.isLast( msg.getMmpPos() ) )
+      {
+         sendTransferAck( msg.getMmpPos(), m_rx.returnCode() );
+      }
+      else
+      {
+         sendAck( msg.getMmpPos() );
+      }
+      return( false );
+   }
+
+   // Retransmission of the last shred when receiver has already finished.
+   // Assume the header is still valid.
+   if( ( m_rx.pos() == 0 ) && msg.getMmpPos() )
+   {
+      #if IS_ENABLED( CONFIG_TDT_PEDANTIC )
+         if( m_rx.state() != ENodeState::idle )
+         {
+            qFatal("Foo");
+         }
+      #endif
+
+      if( m_rx.isLast( msg.getMmpPos() ) )
+      {
+         //sendAck( msg.getMmpPos() );
+         sendTransferAck( msg.getMmpPos(), m_rx.returnCode() );
+      }
+      else
+      {
+         #if IS_ENABLED( CONFIG_TDT_PEDANTIC )
+         int msgPos=msg.getMmpPos();
+         int size=(int)sizeof( Tdt::SMmpHeader ) + m_rx.header().dataLength;
+         
+         qFatal("Does not make sense: pos %d of total %d is not last?", msgPos, size);
+         #else
+            qFatal("");
+         #endif
+      }
+      return( false );
+   }
+
+   if( msg.getMmpPos() != m_rx.pos() )
+   {
+      qCritical( LDS("M ODNM m %d vs c %d", "MMP order missmatch: message %d vs. buffer %d" )
+                , (int)msg.getMmpPos(), (int)m_rx.pos() );
+
+      m_rx.reset();
+      #if IS_ENABLED( CONFIG_TDT_PEDANTIC )
+         m_rx.setState( ENodeState::idle );
+      #endif
+      sendAck( -1 );
+      return( false );
+   }
+
+   if( !m_rx.pos() )
+   {
+      #if IS_ENABLED( CONFIG_TDT_PEDANTIC )
+         if( m_rx.state( ) != ENodeState::idle )
+         {
+            qFatal( LDS("RSO", "Reseiving still ongoing") );
+         }
+      #endif
+      m_rx.setCounterNodeId( msg.getNodeId() );
+   }
+
+   if( m_rx.getCounterNodeId( ) != msg.getNodeId() )
+   {
+      qFatal( LDS("SMM", "Sender missmatch") );
+   }
+
+   m_rx.data32()=msg.getTdtValue()->_uint;
+
+   if( ! m_rx.isLast() )
+   {
+      sendAck( m_rx.pos( ) );
+   }
+
+   m_rx.inc( );
+
+   qDebug( "Pushing received data, now at %d", m_rx.pos() );
+
+   // Have i just finished receiving the header? Make some checks.
+   // Maybe allocate the memory.
+   if( m_rx.pos() * 4 == sizeof( Tdt::SMmpHeader ) )
+   {
+      if( m_rx.header().dataLength > m_rx.maxReceiveSize() )
+      {
+         qFatal( LDS("POTB %d", "Block too big: %d"), m_rx.header().dataLength );
+      }
+   }
+
+   if( m_rx.isFinished() )
+   {
+      qDebug(LDS("TRFI p=%d", "Transfer finished; pos=%d"), m_rx.pos());
+      qDebug(LDS(" dl=%d", "   dataLength=%d"), m_rx.header().dataLength );
+
+      #if defined ( USE_LEPTO )
+      crc32_t crc32=crc32Init( );
+      crc32=crc32Update( crc32, m_rx.data(), m_rx.header().dataLength );
+      crc32=crc32Finalize(crc32);
+
+      if( ! m_rx.header().dataLength )
+      {
+         crc32=0xffffffff;
+      }
+
+      if( crc32 != m_rx.header().crc32Data )
+      {
+         qWarning( LDS( "CRCWR", "CRC Wrong" ) );
+         //": HD 0x%X vs. CL 0x%X",
+         //             "CRC32 wrong: header 0x%X vs. calc 0x%X")
+         //         , m_data.header().crc32Data, crc32);
+         #if ! defined STM32
+            qDebug( "   Calck: 0x%X", crc32 );
+            qDebug( "   Header: 0x%X", m_rx.header().crc32Data );
+            //dumpMem(m_data.header(), sizeof( Tdt::SMmpHeader ) );
+            hexDump( m_rx.data(), m_rx.header().dataLength );
+         #endif
+      }
+      else
+      #endif // ? USE_LEPTO
+      {
+         //handleMmpTransfer( m_data );
+         //m_data.m_finished=true;
+         return(true);
+      }
+      //m_data.reset();
+   }
+   return(false);
+}
+
+
+bool CMmpNode::handleTx( const Tdt::CMessage& msg )
+{
+   if( msg.getNodeId() != m_tx.getCounterNodeId() )
+   {
+      // Just some ack, not for me
+      qDebug("Error: Wrong counter node id: Expected %d, message has %d", m_tx.getCounterNodeId(), msg.getNodeId());
+
+      return(false);
+   }
+   
+   m_txTimeoutTimer.stop();
+   
+   int pos=msg.getMmpPos();
+
+   if( pos == -1 )
+   {
+      qCritical( LDS("RSTP", "Resetting position" ) );
+      m_tx.reset();
+      #if IS_ENABLED( CONFIG_TDT_PEDANTIC )
+         m_tx.setState( ENodeState::idle );
+      #endif
+      return(false);
+   }
+   if( pos > 0 )
+   {
+      if( pos == m_tx.pos()-1 )
+      {
+         // An STM32F103 in the bus forced an STM32L4 to unnecessary retransmits.
+         // This could also be seen in cordyceps by scanning devices.
+         qFatal( LDS( "IOA %d", "Ignoring old/previous ACK; MSG:%d" ),
+                  pos );
+         return(false);
+      }
+      if( pos != m_tx.pos() )
+      {
+         qWarning( LDS("ANP", "ACK not plausible") );
+         //qWarning("msg %d vs. cur %d", msg.getTdtValue()->_uint
+         //         ,m_data.pos() );
+         sendTxAbort();
+         return(false);
+      }
+   }
+   
+   m_tx.inc();
+   if( m_tx.isFinished() )
+   {
+      qFatal("This should not happen");
+      // The whole transmission has finished; THis is the ack for the last shred
+      return( false );
+   }
+   else
+   {
+      sendTxShred();
+   }
+   return(false);
+}
+
+
+void CMmpNode::sendAck( int pos )
+{
+   Tdt::CMessage message
+   {
+       m_nodeId,
+      Tdt::EFunctionCode::ackDataBlob,
+      (uint16_t)m_rx.getCounterNodeId(),
+      (int16_t)pos,
+      0
+   };
+
+   m_rxTimeoutTimer.start( m_shredTimeout  );
+
+   #if ! defined ( STM32 )
+      emit signalSendTdtMessage( message );
+   #else
+      #if IS_ENABLED( CONFIG_TDT_MMP_SIGNALS )
+         signalSendTdtMessage.emitSignal( message );
+      #elif IS_ENABLED( CONFIG_TDT_MMP_CALLBACKS )
+         cbSendTdtMessage( message );
+      #else
+         #error "Set either CONFIG_TDT_MMP_SIGNALS or CONFIG_TDT_MMP_CALLBACKS"
+      #endif
+   #endif
+}
+
+
+void CMmpNode::sendTransferAck(int pos, int sta)
+{
+   Tdt::CMessage message
+   {
+      m_nodeId,
+      Tdt::EFunctionCode::ackTransfer,
+      (uint16_t)m_rx.getCounterNodeId(),
+      (int16_t)pos,
+      (uint32_t)sta
+   };
+   #if ! defined ( STM32 )
+      signalSendTdtMessage( message );
+   #else
+      #if IS_ENABLED( CONFIG_TDT_MMP_SIGNALS )
+         signalSendTdtMessage.emitSignal( message );
+      #elif IS_ENABLED( CONFIG_TDT_MMP_CALLBACKS )
+         cbSendTdtMessage( message );
+      #else
+         #error "Set either CONFIG_TDT_MMP_SIGNALS or CONFIG_TDT_MMP_CALLBACKS"
+      #endif
+   #endif
+
+   m_rxTimeoutTimer.stop();
+}
+
+void CMmpNode::sendTxShred()
+{
+   sendTxShred( m_tx.pos(), m_tx.data32() );
+   //m_timeoutTimer.start( m_shredTimeout );
+}
+
+void CMmpNode::sendTxAbort()
+{
+   sendTxShred( -1, 0 );
 }
 
 #if ! defined STM32
 
-int CMmpNode::slotHandleMmpTransfer( CMmpTransferData &data )
+int CMmpNode::dummyHandleMmpTransfer( const Tdt::CMmpTransfer& data )
+{
+   printf( "Goal! ID=%d Pos=%d\n", m_nodeId, data.pos() );
+
+   // Simulate writing to flash: 1/3 of timeout This does not work well. There
+   // are messages in the buffers but the whole system sleeps. Afterwards shreds
+   // are handled twice.
+   // QThread::msleep( m_transferExecutionTimeout / 3 );
+   m_totalRxTransfers++;
+
+   // Just store the node-id as transfer status
+   return( m_nodeId );
+}
+
+#endif
+
+void CMmpNode::txTimeout()
+{
+   qCritical( "[%d] TX Timeout", m_nodeId );
+   sendTxShred();
+}
+
+void CMmpNode::rxTimeout()
+{
+   qCritical( "[%d] RX Timeout", m_nodeId );
+   // Don't do anything. Its up to the sender to retransmit its data when he
+   // got no acknowledge.
+   // sendAck();
+}
+
+#if ! defined STM32
+
+#if 0
+
+int CMmpNode::slotHandleMmpTransfer( CMmpTransfer &data )
 {
    return( emit handleMmpTransfer( data ) );
 }
 
 #endif
 
+#endif
+
 }; // namespace Tdt
+
+#if IS_ENABLED( CONFIG_TDT_MMP_CALLBACKS )
+
+__attribute__((weak)) void cbSendTdtMessage( const Tdt::CMessage& )
+{
+   return;
+}
+
+__attribute__((weak)) Tdt::nodeId_t cbGetNodeId()
+{
+   return(0);
+}
+
+__attribute__((weak)) int cbHandleMmpTransfer( const Tdt::CMmpTransfer& )
+{
+   return(0);
+};
+
+#endif // ? CONFIG_TDT_MMP_CALLBACKS
 
 
 /*--- Fin ------------------------------------------------------------------*/

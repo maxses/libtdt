@@ -91,6 +91,8 @@ add_custom_command(
 set( headers
    include/tdt/message.hpp
    include/tdt/mmp.hpp
+   include/tdt/mmpTransfer.hpp
+   include/tdt/mmpNode.hpp
    ${TDT_GEN_HEADER}
 )
 
