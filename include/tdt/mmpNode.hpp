@@ -75,12 +75,17 @@ class CMmpNode
       signals:
          void signalSendTdtMessage( const Tdt::CMessage& msg );
          Tdt::EReturnCode signalHandleMmpTransfer( const Tdt::CMmpTransfer& data );
+         void signalHandleMmpTransferAck( const Tdt::CMmpTransfer& data );
       #elif IS_ENABLED( CONFIG_TDT_MMP_SIGNALS )
          CSignal< void, const Tdt::CMessage& > signalSendTdtMessage;
          CSignal< int, const Tdt::CMmpTransfer& > signalHandleMmpTransfer;
-      #else
+         CSignal< void, const Tdt::CMmpTransfer& > signalHandleMmpTransferAck;
+      #elseif IS_ENABLED( CONFIG_TDT_MMP_CALLBACKS )
          // void cbSendTdtMessage( const Tdt::CMessage& );
          // int cbHandleMmpTransfer( const Tdt::CMmpTransfer& );
+         // void cbHandleMmpTransferAck( const Tdt::CMmpTransfer& );
+      #else
+         #error Either set CONFIG_TDT_MMP_SIGNALS or CONFIG_TDT_MMP_CALLBACKS
       #endif
       
    public slots:

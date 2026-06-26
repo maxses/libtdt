@@ -140,6 +140,19 @@ void CMmpNode::receiveTdtMessage( const Tdt::CMessage& msg )
          #endif
 
          m_txTimeoutTimer.stop();
+
+         // Handling mmp transfer ack could setup another transfer
+         #if defined STM32
+            #if IS_ENABLED( CONFIG_TDT_MMP_SIGNALS )
+               signalHandleMmpTransferAck.emitSignal( m_rx );
+            #elif IS_ENABLED( CONFIG_TDT_MMP_CALLBACKS )
+                cbHandleMmpTransferAck( m_rx ) );
+            #else
+               #error "Set either CONFIG_TDT_MMP_SIGNALS or CONFIG_TDT_MMP_CALLBACKS"
+            #endif
+         #else
+            emit signalHandleMmpTransferAck( m_tx );
+         #endif
          break;
       default:
          break;
@@ -416,8 +429,9 @@ void CMmpNode::sendTransferAck(int pos, Tdt::EReturnCode sta)
       (int16_t)pos,
       (uint32_t)sta
    };
+
    #if ! defined ( STM32 )
-      signalSendTdtMessage( message );
+      emit signalSendTdtMessage( message );
    #else
       #if IS_ENABLED( CONFIG_TDT_MMP_SIGNALS )
          signalSendTdtMessage.emitSignal( message );
