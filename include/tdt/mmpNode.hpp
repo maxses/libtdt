@@ -74,7 +74,8 @@ class CMmpNode
 
       static constexpr const int m_shredTimeout = 125/4;
       static constexpr const int m_transferExecutionTimeout = 125*4;
-      static constexpr const int m_receiverTimeout = 2000;
+      // Don't keep it too low; testing will simulate framw drops
+      static constexpr const int m_receiverTimeout = 1000 * 2;
 
       #if ! defined STM32
          int m_totalRxTransfers=0;

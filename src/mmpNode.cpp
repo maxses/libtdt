@@ -90,8 +90,8 @@ void CMmpNode::receiveTdtMessage( const Tdt::CMessage& msg )
 
    // Expand unit tests: Loose messages
    #if ! defined STM32
-      // "Loose" every 10th messsage
-      if( ! ( m_messageCounter % ( 6 + ( QRandomGenerator::global()->generate() % 3 ) ) ) )
+      // "Loose" messsages. Don't drop too much, timeouts will kick in
+      if( ! ( m_messageCounter % ( 24 + ( QRandomGenerator::global()->generate() % 24 ) ) ) )
       {
          //qDebug("         Dropping");
          return;
@@ -334,7 +334,7 @@ bool CMmpNode::handleTx( const Tdt::CMessage& msg )
    if( msg.getNodeId() != m_tx.getCounterNodeId() )
    {
       // Just some ack, not for me
-      qDebug("Error: Wrong counter node id: Expected %d, message has %d", m_tx.getCounterNodeId(), msg.getNodeId());
+      qDebug("[TX] Error: Wrong counter node id: Expected %d, message has %d", m_tx.getCounterNodeId(), msg.getNodeId());
 
       return(false);
    }
