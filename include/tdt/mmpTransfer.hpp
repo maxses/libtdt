@@ -38,7 +38,7 @@ class CMmpTransfer
       int m_maxReceiveSize;
       int m_retry=0;
       nodeId_t m_counterNodeId;
-      int m_returnCode=0;
+      EReturnCode m_returnCode = EReturnCode::invalidInit;
 
    public:
       enum class EDirection
@@ -102,7 +102,7 @@ class CMmpTransfer
          {
             memset( m_rawData, 0x77, m_maxReceiveSize );
          }
-         m_returnCode=-500;
+         m_returnCode = EReturnCode::invalidInit;
          m_counterNodeId=0;
       }
 
@@ -239,11 +239,11 @@ class CMmpTransfer
       }
       #endif
 
-      void setReturnCode( int returnCode )
+      void setReturnCode( EReturnCode returnCode )
       {
          m_returnCode = returnCode;
       }
-      int returnCode( )
+      EReturnCode returnCode( ) const
       {
          return( m_returnCode );
       }

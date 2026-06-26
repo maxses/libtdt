@@ -47,11 +47,6 @@
 /*--- Declaration ----------------------------------------------------------*/
 
 
-namespace Tdt
-{
-   class CMmpTransferData;
-}
-
 #if defined( STM32 ) && IS_ENABLED( CONFIG_TDT_MMP_CALLBACKS )
    void cbSendTdtMessage( const Tdt::CMessage& );
    Tdt::nodeId_t cbGetNodeId();
@@ -81,6 +76,17 @@ enum class EMmpCommand: uint32_t
 
    eraseBootloaderFlash,
    writeBootloaderFlash,
+};
+
+enum class EReturnCode
+{
+   invalid           = 0,
+   ok                = 1,
+   transferOngoing   = -100,
+   error             = -101,
+   counterPartDead   = -102,
+   unknownCommand    = -103,
+   invalidInit       = -200,
 };
 
 struct SMmpHeader

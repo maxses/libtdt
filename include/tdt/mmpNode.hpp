@@ -74,7 +74,7 @@ class CMmpNode
       #if ! defined( STM32 )
       signals:
          void signalSendTdtMessage( const Tdt::CMessage& msg );
-         int signalHandleMmpTransfer( const Tdt::CMmpTransfer& data );
+         Tdt::EReturnCode signalHandleMmpTransfer( const Tdt::CMmpTransfer& data );
       #elif IS_ENABLED( CONFIG_TDT_MMP_SIGNALS )
          CSignal< void, const Tdt::CMessage& > signalSendTdtMessage;
          CSignal< int, const Tdt::CMmpTransfer& > signalHandleMmpTransfer;
@@ -118,6 +118,7 @@ class CMmpNode
       {
          m_tx.setCounterNodeId( nodeId );
       }
+
       void startTransfer(Tdt::EMmpCommand command, const char *data=0
                      , int length=0, int flashPos=0)
       {
@@ -125,10 +126,12 @@ class CMmpNode
          m_tx.setFlashAddress( flashPos );
          startTx( );
       }
+
       void setSourceNodeId( nodeId_t id )
       {
          m_tx.setSourceNodeId( id );
       }
+
       void startTx()
       {
          m_tx.reset();
@@ -139,10 +142,11 @@ class CMmpNode
 
          sendTxShred( 0, m_tx.data32() );
       }
+
       void sendTxShred( );
       void sendTxAbort( );
       void sendAck( int pos /*=false*/ );
-      void sendTransferAck(int pos, int sta);
+      void sendTransferAck(int pos, Tdt::EReturnCode sta);
       void sendTxShred( int pos, uint32_t value );
       bool handleRx( const Tdt::CMessage& msg );
       bool handleTx( const Tdt::CMessage& msg );

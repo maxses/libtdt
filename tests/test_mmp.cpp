@@ -234,8 +234,8 @@ TEST_CASE( "MMP full duplex", "[default]" )
          REQUIRE( dut2.state() == Tdt::ENodeState::idle );
          REQUIRE( dut1.state() == Tdt::ENodeState::idle );
 
-         REQUIRE( dut2.m_tx.returnCode() == (int)dut1.getNodeId() );
-         REQUIRE( dut1.m_tx.returnCode() == (int)dut2.getNodeId() );
+         REQUIRE( (int)dut2.m_tx.returnCode() == (int)dut1.getNodeId() );
+         REQUIRE( (int)dut1.m_tx.returnCode() == (int)dut2.getNodeId() );
 
          // Timed out and there is still data
          //printf( "Data left DUT1: %d (org: %d)\n", dut1.m_tx.dataLeft(), (int)strlen(data1) );

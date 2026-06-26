@@ -134,8 +134,7 @@ void CMmpNode::receiveTdtMessage( const Tdt::CMessage& msg )
             qFatal("Transfer Ack on non finished ttransfer. Pos is %d, data size is %d."
                    , m_tx.pos(), m_tx.header().dataLength);
          }
-         m_tx.setReturnCode( msg.getTdtValue()->_uint );
-
+         m_tx.setReturnCode( (Tdt::EReturnCode)msg.getTdtValue()->_uint );
          #if IS_ENABLED( CONFIG_TDT_PEDANTIC )
             m_tx.setState( ENodeState::idle );
          #endif
@@ -407,7 +406,7 @@ void CMmpNode::sendAck( int pos )
 }
 
 
-void CMmpNode::sendTransferAck(int pos, int sta)
+void CMmpNode::sendTransferAck(int pos, Tdt::EReturnCode sta)
 {
    Tdt::CMessage message
    {
