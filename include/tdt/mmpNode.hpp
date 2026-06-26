@@ -204,6 +204,7 @@ class CMmpNode
       #endif
 
       void dump();
+      void emitHandleMmpTransferAck();
 };
 
 

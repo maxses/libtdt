@@ -150,6 +150,8 @@ class CMmpTransfer
          // qDebug("Reset data");
          m_retry=0;
          m_pos=0;
+         m_counterNodeId=0;
+         
          //m_header.mmpObject=EMmpObject::null;
          //m_finished=false;
       }

@@ -141,17 +141,8 @@ void CMmpNode::receiveTdtMessage( const Tdt::CMessage& msg )
          m_txTimeoutTimer.stop();
 
          // Handling mmp transfer ack could setup another transfer
-         #if defined STM32
-            #if IS_ENABLED( CONFIG_TDT_MMP_SIGNALS )
-               signalHandleMmpTransferAck.emitSignal( m_rx );
-            #elif IS_ENABLED( CONFIG_TDT_MMP_CALLBACKS )
-                cbHandleMmpTransferAck( m_rx ) );
-            #else
-               #error "Set either CONFIG_TDT_MMP_SIGNALS or CONFIG_TDT_MMP_CALLBACKS"
-            #endif
-         #else
-            emit signalHandleMmpTransferAck( m_tx );
-         #endif
+         emitHandleMmpTransferAck();
+         
          break;
       default:
          break;
@@ -478,8 +469,15 @@ int CMmpNode::dummyHandleMmpTransfer( const Tdt::CMmpTransfer& data )
 
 void CMmpNode::txTimeout()
 {
-   qCritical( "[%d] TX Timeout", m_nodeId );
-   sendTxShred();
+   qWarning( "[%d] TX Timeout", m_nodeId );
+
+   if( !retryTransmit()  )
+   {
+      qWarning("CPD");
+      m_tx.setReturnCode( EReturnCode::counterPartDead );
+      emitHandleMmpTransferAck();
+      return;
+   }
 }
 
 void CMmpNode::rxTimeout()
@@ -497,6 +495,23 @@ void CMmpNode::dump()
             ,m_txTimeoutTimer.isSingleShot());
 }
 
+
+void CMmpNode::emitHandleMmpTransferAck()
+{
+   #if defined STM32
+      #if IS_ENABLED( CONFIG_TDT_MMP_SIGNALS )
+         signalHandleMmpTransferAck.emitSignal( m_tx );
+      #elif IS_ENABLED( CONFIG_TDT_MMP_CALLBACKS )
+          cbHandleMmpTransferAck( m_tx ) );
+      #else
+         #error "Set either CONFIG_TDT_MMP_SIGNALS or CONFIG_TDT_MMP_CALLBACKS"
+      #endif
+   #else
+      emit signalHandleMmpTransferAck( m_tx );
+   #endif
+
+   return;
+}
 
 #if ! defined STM32
 
