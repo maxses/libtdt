@@ -150,7 +150,8 @@ class CMmpTransfer
          // qDebug("Reset data");
          m_retry=0;
          m_pos=0;
-         m_counterNodeId=0;
+         
+         // Must not reset m_counterNodeId; the tx channel will still use it
          
          //m_header.mmpObject=EMmpObject::null;
          //m_finished=false;
