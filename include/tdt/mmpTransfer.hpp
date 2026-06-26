@@ -226,7 +226,13 @@ class CMmpTransfer
       #if ! defined STM32
       void dump() const
       {
-         printf("   # %s Pos:%d\n", m_direction==EDirection::out ? "TX" : "RX", m_pos);
+         printf("   # %s Pos:%d\n",
+            #if IS_ENABLED( CONFIG_TDT_PEDANTIC )
+                m_direction==EDirection::out ? "TX" : "RX"
+            #else
+                "--"
+            #endif
+            , m_pos);
       }
       #endif
       

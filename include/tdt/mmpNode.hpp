@@ -199,10 +199,14 @@ class CMmpNode
             return( m_totalRxTransfers );
          }
          
-         ENodeState state()
-         {
-            return( m_rx.state() | m_tx.state() );
-         }
+         #if IS_ENABLED( CONFIG_TDT_PEDANTIC )
+
+            ENodeState state()
+            {
+               return( m_rx.state() | m_tx.state() );
+            }
+
+         #endif // ? CONFIG_TDT_PEDANTIC
          
       #endif
 
