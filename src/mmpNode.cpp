@@ -491,6 +491,14 @@ void CMmpNode::rxTimeout()
    // sendAck();
 }
 
+void CMmpNode::dump()
+{
+   qDebug("###### Dump #######");
+   qDebug("Tx-Timeout: %d / %s / %d", m_txTimeoutTimer.interval(), m_txTimeoutTimer.isActive() ? "Activce": "Inactive"
+            ,m_txTimeoutTimer.isSingleShot());
+}
+
+
 #if ! defined STM32
 
 #if 0

@@ -205,6 +205,8 @@ class CMmpNode
          }
          
       #endif
+
+      void dump();
 };
 
 
