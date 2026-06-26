@@ -105,10 +105,9 @@ void CMmpNode::receiveTdtMessage( const Tdt::CMessage& msg )
          // returns true when transfer is finished
          if ( handleRx( msg ) )
          {
-            //signalHandleMmpTransfer.emitSignal( m_rx.m_data );
             #if defined STM32
                #if IS_ENABLED( CONFIG_TDT_MMP_SIGNALS )
-                  signalHandleMmpTransfer.emitSignal( m_rx );
+                  m_rx.setReturnCode( signalHandleMmpTransfer.emitSignal( m_rx ) );
                #elif IS_ENABLED( CONFIG_TDT_MMP_CALLBACKS )
                    m_rx.setReturnCode( cbHandleMmpTransfer( m_rx ) );
                #else
