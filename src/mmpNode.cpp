@@ -488,7 +488,7 @@ void CMmpNode::rxTimeout()
    // Its up to the transmitter to retransmit its data when he got no 
    // acknowledge.
    // This timeout is quite long time and shall completely abort the transfer.
-   m_rx.abort();
+   m_rx.reset();
 }
 
 void CMmpNode::dump()
