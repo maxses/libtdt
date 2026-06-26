@@ -136,6 +136,9 @@ class CMmpTransfer
          return(m_rawData);
       }
 
+      /**
+       * @brief Go to the next transmition/receive position
+       */
       void inc()
       {
          m_retry=0;

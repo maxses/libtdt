@@ -5,12 +5,24 @@
  * @file    mmpNode.hpp
  * @brief   Multi-message-package support for TDT protocol
  *
- * Transfer BLOBs from one device to another.
- * 
- * Handling the shreds directly (writing them to flash) are making CRC
- * handling impossible. Retransmitting an transfer does not work any 
- * more because the flash would be needed to erased again.
- * 
+ * Implementation of the MMP protocol of a node. The class contains a transmit
+ * and a receive channel.
+ * The class can be used on target MCU as well as on host PC. Real functions
+ * for sending CAN messages can be linked in via signals (liblepto) or callback
+ * functions.
+ *
+ * Message handling on transmitting side:
+ *
+ *        -->  receiveTdtMessage()        |----------|
+ *        <--  signalSendTdtMessage       | CMmpNode |
+ *        <--  signalHandleMmpTransferAck |----------|
+ *
+ * Message handling on receiving side:
+ *
+ *        -->  receiveTdtMessage()        |----------|
+ *        <--  signalSendTdtMessage       | CMmpNode |
+ *        <--  signalHandleMmpTransfer    |----------|
+ *
  * @date      20241003
  * @author    Maximilian Seesslen <src@seesslen.net>
  * @copyright SPDX-License-Identifier: Apache-2.0
