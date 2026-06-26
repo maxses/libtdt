@@ -86,14 +86,14 @@ void CMmpNode::receiveTdtMessage( const Tdt::CMessage& msg )
    }
    #endif
 
-   qDebug("      IN #%d: FC=%s POS=%d", m_nodeId, fc, msg.getMmpPos());
+   //qDebug("      IN #%d: FC=%s POS=%d", m_nodeId, fc, msg.getMmpPos());
 
    // Expand unit tests: Loose messages
    #if ! defined STM32
       // "Loose" every 10th messsage
       if( ! ( m_messageCounter % ( 6 + ( QRandomGenerator::global()->generate() % 3 ) ) ) )
       {
-         qDebug("         Dropping");
+         //qDebug("         Dropping");
          return;
       }
    #endif
@@ -281,7 +281,9 @@ bool CMmpNode::handleRx( const Tdt::CMessage& msg )
 
    m_rx.inc( );
 
-   qDebug( "Pushing received data, now at %d", m_rx.pos() );
+   #if 0
+      qDebug( "Pushing received data, now at %d", m_rx.pos() );
+   #endif
 
    // Have i just finished receiving the header? Make some checks.
    // Maybe allocate the memory.
@@ -295,8 +297,10 @@ bool CMmpNode::handleRx( const Tdt::CMessage& msg )
 
    if( m_rx.isFinished() )
    {
-      qDebug(LDS("TRFI p=%d", "Transfer finished; pos=%d"), m_rx.pos());
-      qDebug(LDS(" dl=%d", "   dataLength=%d"), m_rx.header().dataLength );
+      #if 0
+         qDebug(LDS("TRFI p=%d", "Transfer finished; pos=%d"), m_rx.pos());
+         qDebug(LDS(" dl=%d", "   dataLength=%d"), m_rx.header().dataLength );
+      #endif
 
       #if defined ( USE_LEPTO )
       crc32_t crc32=crc32Init( );
@@ -343,7 +347,6 @@ bool CMmpNode::handleTx( const Tdt::CMessage& msg )
 
       return(false);
    }
-   
    m_txTimeoutTimer.stop();
    
    int pos=msg.getMmpPos();

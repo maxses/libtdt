@@ -144,7 +144,7 @@ class CMmpTransfer
 
       void reset()
       {
-         qDebug("Reset data");
+         // qDebug("Reset data");
          m_retry=0;
          m_pos=0;
          //m_header.mmpObject=EMmpObject::null;
