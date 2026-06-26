@@ -206,6 +206,8 @@ class CMmpNode
 
       void dump();
       void emitHandleMmpTransferAck();
+      void finishTx( const Tdt::CMessage& msg );
+      void finishRx( const Tdt::CMessage& msg );
 };
 
 

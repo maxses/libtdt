@@ -42,7 +42,7 @@ void CMmpTransfer::updateCrc()
                                           , m_rawData, m_header.dataLength );
          m_header.crc32Data = crc32Finalize( m_header.crc32Data );
       #else
-      m_header.crc32Data = 0;
+         m_header.crc32Data = 0;
       #endif
    }
 };

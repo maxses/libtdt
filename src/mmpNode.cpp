@@ -101,49 +101,13 @@ void CMmpNode::receiveTdtMessage( const Tdt::CMessage& msg )
    switch( msg.getFunctionCode() )
    {
       case ( Tdt::EFunctionCode::dataBlob ):
-
-         // returns true when transfer is finished
-         if ( handleRx( msg ) )
-         {
-            #if defined STM32
-               #if IS_ENABLED( CONFIG_TDT_MMP_SIGNALS )
-                  m_rx.setReturnCode( signalHandleMmpTransfer.emitSignal( m_rx ) );
-               #elif IS_ENABLED( CONFIG_TDT_MMP_CALLBACKS )
-                   m_rx.setReturnCode( cbHandleMmpTransfer( m_rx ) );
-               #else
-                  #error "Set either CONFIG_TDT_MMP_SIGNALS or CONFIG_TDT_MMP_CALLBACKS"
-               #endif
-            #else
-               m_rx.setReturnCode( emit signalHandleMmpTransfer( m_rx ) );
-            #endif
-            sendTransferAck( msg.getMmpPos(), m_rx.returnCode() );
-            m_rxTimeoutTimer.stop();
-            m_rx.reset();
-            #if IS_ENABLED( CONFIG_TDT_PEDANTIC )
-               m_rx.setState( ENodeState::idle );
-            #endif
-         }
+         handleRx( msg );
          break;
       case ( Tdt::EFunctionCode::ackDataBlob ):
          handleTx( msg );
          break;
       case ( Tdt::EFunctionCode::ackTransfer ):
-         // Acknowledge is missing but i already got transfer ack ?
-         if( ! m_tx.isFinished( m_tx.pos()+1 ) )
-         {
-            qFatal("Transfer Ack on non finished ttransfer. Pos is %d, data size is %d."
-                   , m_tx.pos(), m_tx.header().dataLength);
-         }
-         m_tx.setReturnCode( (Tdt::EReturnCode)msg.getTdtValue()->_uint );
-         #if IS_ENABLED( CONFIG_TDT_PEDANTIC )
-            m_tx.setState( ENodeState::idle );
-         #endif
-
-         m_txTimeoutTimer.stop();
-
-         // Handling mmp transfer ack could setup another transfer
-         emitHandleMmpTransferAck();
-         
+         finishTx( msg );
          break;
       default:
          break;
@@ -288,42 +252,7 @@ bool CMmpNode::handleRx( const Tdt::CMessage& msg )
 
    if( m_rx.isFinished() )
    {
-      #if 0
-         qDebug(LDS("TRFI p=%d", "Transfer finished; pos=%d"), m_rx.pos());
-         qDebug(LDS(" dl=%d", "   dataLength=%d"), m_rx.header().dataLength );
-      #endif
-
-      #if defined ( USE_LEPTO )
-      crc32_t crc32=crc32Init( );
-      crc32=crc32Update( crc32, m_rx.data(), m_rx.header().dataLength );
-      crc32=crc32Finalize(crc32);
-
-      if( ! m_rx.header().dataLength )
-      {
-         crc32=0xffffffff;
-      }
-
-      if( crc32 != m_rx.header().crc32Data )
-      {
-         qWarning( LDS( "CRCWR", "CRC Wrong" ) );
-         //": HD 0x%X vs. CL 0x%X",
-         //             "CRC32 wrong: header 0x%X vs. calc 0x%X")
-         //         , m_data.header().crc32Data, crc32);
-         #if ! defined STM32
-            qDebug( "   Calck: 0x%X", crc32 );
-            qDebug( "   Header: 0x%X", m_rx.header().crc32Data );
-            //dumpMem(m_data.header(), sizeof( Tdt::SMmpHeader ) );
-            hexDump( m_rx.data(), m_rx.header().dataLength );
-         #endif
-      }
-      else
-      #endif // ? USE_LEPTO
-      {
-         //handleMmpTransfer( m_data );
-         //m_data.m_finished=true;
-         return(true);
-      }
-      //m_data.reset();
+      finishRx( msg );
    }
    return(false);
 }
@@ -351,6 +280,7 @@ bool CMmpNode::handleTx( const Tdt::CMessage& msg )
       #endif
       return(false);
    }
+   
    if( pos > 0 )
    {
       if( pos == m_tx.pos()-1 )
@@ -374,8 +304,12 @@ bool CMmpNode::handleTx( const Tdt::CMessage& msg )
    m_tx.inc();
    if( m_tx.isFinished() )
    {
-      qFatal("This should not happen");
+      // This can happen when the last shred also has an ACK and the Tranferack
+      // follows after that.
+      // m_tx.dec();
+      // qFatal("This should not happen");
       // The whole transmission has finished; THis is the ack for the last shred
+      finishTx( msg );
       return( false );
    }
    else
@@ -515,6 +449,69 @@ void CMmpNode::emitHandleMmpTransferAck()
 
    return;
 }
+
+
+void CMmpNode::finishTx( const Tdt::CMessage& msg )
+{
+   // Acknowledge is missing but i already got transfer ack ?
+   if( ! m_tx.isFinished( m_tx.pos()+1 ) )
+   {
+      qFatal("Transfer Ack on non finished ttransfer. Pos is %d, data size is %d."
+             , m_tx.pos(), m_tx.header().dataLength);
+   }
+   lAssert( msg.getLen()>= 8 );
+   m_tx.setReturnCode( (Tdt::EReturnCode)msg.getTdtValue()->_uint );
+   
+   #if IS_ENABLED( CONFIG_TDT_PEDANTIC )
+      m_tx.setState( ENodeState::idle );
+   #endif
+   
+   m_txTimeoutTimer.stop();
+   
+   // Handling mmp transfer ack could setup another transfer
+   emitHandleMmpTransferAck();
+}
+
+
+void CMmpNode::finishRx( const Tdt::CMessage& msg )
+{
+   crc32_t crc32=crc32Init( );
+   crc32=crc32Update( crc32, m_rx.data(), m_rx.header().dataLength );
+   crc32=crc32Finalize(crc32);
+   
+   if( ! m_rx.header().dataLength )
+   {
+      crc32=0xffffffff;
+   }
+   
+   if( crc32 != m_rx.header().crc32Data )
+   {
+      qWarning( LDS( "CRCWR", "CRC Wrong" ) );
+      m_rx.setReturnCode( EReturnCode::wrongCRC);
+   }
+   else
+   {
+      #if defined STM32
+         #if IS_ENABLED( CONFIG_TDT_MMP_SIGNALS )
+            m_rx.setReturnCode( signalHandleMmpTransfer.emitSignal( m_rx ) );
+         #elif IS_ENABLED( CONFIG_TDT_MMP_CALLBACKS )
+            m_rx.setReturnCode( cbHandleMmpTransfer( m_rx ) );
+         #else
+            #error "Set either CONFIG_TDT_MMP_SIGNALS or CONFIG_TDT_MMP_CALLBACKS"
+         #endif
+      #else
+         m_rx.setReturnCode( emit signalHandleMmpTransfer( m_rx ) );
+      #endif
+   }
+   sendTransferAck( msg.getMmpPos(), m_rx.returnCode() );
+   m_rxTimeoutTimer.stop();
+   m_rx.reset();
+
+   #if IS_ENABLED( CONFIG_TDT_PEDANTIC )
+      m_rx.setState( ENodeState::idle );
+   #endif
+}
+
 
 #if ! defined STM32
 

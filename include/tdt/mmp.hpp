@@ -86,7 +86,9 @@ enum class EReturnCode
    error             = -101,
    counterPartDead   = -102,
    unknownCommand    = -103,
+   wrongCRC          = -104,
    invalidInit       = -200,
+   
 };
 
 struct SMmpHeader
