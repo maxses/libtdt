@@ -117,6 +117,7 @@ void CMmpNode::receiveTdtMessage( const Tdt::CMessage& msg )
                m_rx.setReturnCode( emit signalHandleMmpTransfer( m_rx ) );
             #endif
             sendTransferAck( msg.getMmpPos(), m_rx.returnCode() );
+            m_rxTimeoutTimer.stop();
             m_rx.reset();
             #if IS_ENABLED( CONFIG_TDT_PEDANTIC )
                m_rx.setState( ENodeState::idle );
@@ -396,7 +397,7 @@ void CMmpNode::sendAck( int pos )
       0
    };
 
-   m_rxTimeoutTimer.start( m_shredTimeout  );
+   m_rxTimeoutTimer.start( m_receiverTimeout  );
 
    #if ! defined ( STM32 )
       emit signalSendTdtMessage( message );
@@ -482,10 +483,12 @@ void CMmpNode::txTimeout()
 
 void CMmpNode::rxTimeout()
 {
-   qCritical( "[%d] RX Timeout", m_nodeId );
-   // Don't do anything. Its up to the sender to retransmit its data when he
-   // got no acknowledge.
-   // sendAck();
+   qWarning( "[%d] RX Timeout", m_nodeId );
+   // Don't do any retransmit on the receivers side.
+   // Its up to the transmitter to retransmit its data when he got no 
+   // acknowledge.
+   // This timeout is quite long time and shall completely abort the transfer.
+   m_rx.abort();
 }
 
 void CMmpNode::dump()
