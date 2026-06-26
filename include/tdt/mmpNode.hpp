@@ -120,17 +120,7 @@ class CMmpNode
          
          return(true);
       }
-      bool transmitActive()
-      {
-         return( m_tx.header().mmpCommand != EMmpCommand::null );
-      }
-      /*
-      void startTx(EMmpCommand command, const char* data, uint32_t length)
-      {
-         m_tx.m_data.setData(command, data, length);
-         m_tx.startTx();
-      }
-      */
+
       void setCounterNodeId( nodeId_t nodeId )
       {
          m_tx.setCounterNodeId( nodeId );
@@ -171,7 +161,10 @@ class CMmpNode
       {
          return( m_nodeId );
       }
-
+      void setNodeId( nodeId_t nodeId )
+      {
+         m_nodeId = nodeId;
+      }
       public slots:
          void txTimeout();
          void rxTimeout();
