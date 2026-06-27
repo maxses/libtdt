@@ -91,6 +91,10 @@ enum class EReturnCode
    counterPartDead   = -102,
    unknownCommand    = -103,
    wrongCRC          = -104,
+   notImplemented    = -105,
+   unhandled         = -106,
+   wrongFlashArea    = -107,
+   errorFlashing     = -108,
    invalidInit       = -200,
    
 };

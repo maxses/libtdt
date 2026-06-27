@@ -80,7 +80,7 @@ enum class EFunctionCode: uint32_t
    dataBlob             = 0x9,
    reSendObject         = 0xA,
    ackDataBlob          = 0xB,
-   ackTransfer          = 0xC,
+   //ackTransfer          = 0xC,
    max                  = 0xF,   // Reserved for unspecified traffic; e.g. for
                                  // CANPong tests
 };

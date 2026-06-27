@@ -80,21 +80,26 @@ void CMmpNode::receiveTdtMessage( const Tdt::CMessage& msg )
    {
       fc="ackData";
    }
+   /*
    if( msg.getFunctionCode() == Tdt::EFunctionCode::ackTransfer )
    {
       fc="ackTransfer";
    }
+   */
    #endif
 
    //qDebug("      IN #%d: FC=%s POS=%d", m_nodeId, fc, msg.getMmpPos());
 
    // Expand unit tests: Loose messages
    #if ! defined STM32
-      // "Loose" messsages. Don't drop too much, timeouts will kick in
-      if( ! ( m_messageCounter % ( 24 + ( QRandomGenerator::global()->generate() % 24 ) ) ) )
+      if( m_simulateDrops )
       {
-         //qDebug("         Dropping");
-         return;
+         // "Loose" messsages. Don't drop too much, timeouts will kick in
+         if( ! ( m_messageCounter % ( 24 + ( QRandomGenerator::global()->generate() % 24 ) ) ) )
+         {
+            qDebug("         Dropping");
+            return;
+         }
       }
    #endif
 
@@ -106,9 +111,11 @@ void CMmpNode::receiveTdtMessage( const Tdt::CMessage& msg )
       case ( Tdt::EFunctionCode::ackDataBlob ):
          handleTx( msg );
          break;
+      #if 0
       case ( Tdt::EFunctionCode::ackTransfer ):
          finishTx( msg );
          break;
+      #endif
       default:
          break;
    }
@@ -352,7 +359,8 @@ void CMmpNode::sendTransferAck(int pos, Tdt::EReturnCode sta)
    Tdt::CMessage message
    {
       m_nodeId,
-      Tdt::EFunctionCode::ackTransfer,
+      //Tdt::EFunctionCode::ackTransfer,
+      Tdt::EFunctionCode::ackDataBlob,
       (uint16_t)m_rx.getCounterNodeId(),
       (int16_t)pos,
       (uint32_t)sta
@@ -404,7 +412,7 @@ int CMmpNode::dummyHandleMmpTransfer( const Tdt::CMmpTransfer& data )
 
 void CMmpNode::txTimeout()
 {
-   qWarning( "[%d] TX Timeout", m_nodeId );
+   qWarning( LDS("%d TXTO","[%d] TX Timeout"), m_nodeId );
 
    if( !retryTransmit()  )
    {
@@ -417,7 +425,7 @@ void CMmpNode::txTimeout()
 
 void CMmpNode::rxTimeout()
 {
-   qWarning( "[%d] RX Timeout", m_nodeId );
+   qWarning( LDS("%d RXTO", "[%d] RX Timeout"), m_nodeId );
    // Don't do any retransmit on the receivers side.
    // Its up to the transmitter to retransmit its data when he got no 
    // acknowledge.
@@ -425,7 +433,7 @@ void CMmpNode::rxTimeout()
    m_rx.reset();
 }
 
-void CMmpNode::dump()
+void CMmpNode::dump() const
 {
    qDebug("###### Dump #######");
    qDebug("Tx-Timeout: %d / %s / %d", m_txTimeoutTimer.interval(), m_txTimeoutTimer.isActive() ? "Activce": "Inactive"
@@ -439,7 +447,7 @@ void CMmpNode::emitHandleMmpTransferAck()
       #if IS_ENABLED( CONFIG_TDT_MMP_SIGNALS )
          signalHandleMmpTransferAck.emitSignal( m_tx );
       #elif IS_ENABLED( CONFIG_TDT_MMP_CALLBACKS )
-          cbHandleMmpTransferAck( m_tx ) );
+          cbHandleMmpTransferAck( m_tx );
       #else
          #error "Set either CONFIG_TDT_MMP_SIGNALS or CONFIG_TDT_MMP_CALLBACKS"
       #endif
@@ -501,7 +509,7 @@ void CMmpNode::finishRx( const Tdt::CMessage& msg )
    {
       #if defined STM32
          #if IS_ENABLED( CONFIG_TDT_MMP_SIGNALS )
-            m_rx.setReturnCode( signalHandleMmpTransfer.emitSignal( m_rx ) );
+            m_rx.setReturnCode( signalHandleMmpTransfer.emitSingle( m_rx ) );
          #elif IS_ENABLED( CONFIG_TDT_MMP_CALLBACKS )
             m_rx.setReturnCode( cbHandleMmpTransfer( m_rx ) );
          #else
@@ -543,14 +551,9 @@ __attribute__((weak)) void cbSendTdtMessage( const Tdt::CMessage& )
    return;
 }
 
-__attribute__((weak)) Tdt::nodeId_t cbGetNodeId()
+__attribute__((weak)) Tdt::EReturnCode cbHandleMmpTransfer( const Tdt::CMmpTransfer& )
 {
-   return(0);
-}
-
-__attribute__((weak)) int cbHandleMmpTransfer( const Tdt::CMmpTransfer& )
-{
-   return(0);
+   return( Tdt::EReturnCode::notImplemented );
 };
 
 #endif // ? CONFIG_TDT_MMP_CALLBACKS
