@@ -80,9 +80,8 @@ class CMmpNode
       #if ! defined STM32
          int m_totalRxTransfers=0;
          int m_messageCounter=0;
+         bool m_simulateDrops=false;
       #endif
-
-      // int m_rxTransferStatus=0;
       
       #if ! defined( STM32 )
       signals:
@@ -158,7 +157,7 @@ class CMmpNode
       void sendTxShred( int pos, uint32_t value );
       bool handleRx( const Tdt::CMessage& msg );
       bool handleTx( const Tdt::CMessage& msg );
-      nodeId_t getNodeId()
+      nodeId_t getNodeId() const
       {
          return( m_nodeId );
       }
@@ -188,7 +187,7 @@ class CMmpNode
             }
          }
 
-         int getTotalRxTransfers()
+         int getTotalRxTransfers() const
          {
             return( m_totalRxTransfers );
          }
@@ -204,10 +203,17 @@ class CMmpNode
          
       #endif
 
-      void dump();
+      void dump() const;
       void emitHandleMmpTransferAck();
       void finishTx( const Tdt::CMessage& msg );
       void finishRx( const Tdt::CMessage& msg );
+
+      #if ! defined( STM32 )
+         void doSimulateDrops()
+         {
+            m_simulateDrops=true;
+         }
+      #endif
 };
 
 

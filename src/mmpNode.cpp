@@ -90,11 +90,14 @@ void CMmpNode::receiveTdtMessage( const Tdt::CMessage& msg )
 
    // Expand unit tests: Loose messages
    #if ! defined STM32
-      // "Loose" messsages. Don't drop too much, timeouts will kick in
-      if( ! ( m_messageCounter % ( 24 + ( QRandomGenerator::global()->generate() % 24 ) ) ) )
+      if( m_simulateDrops )
       {
-         //qDebug("         Dropping");
-         return;
+         // "Loose" messsages. Don't drop too much, timeouts will kick in
+         if( ! ( m_messageCounter % ( 24 + ( QRandomGenerator::global()->generate() % 24 ) ) ) )
+         {
+            qDebug("         Dropping");
+            return;
+         }
       }
    #endif
 
@@ -425,7 +428,7 @@ void CMmpNode::rxTimeout()
    m_rx.reset();
 }
 
-void CMmpNode::dump()
+void CMmpNode::dump() const
 {
    qDebug("###### Dump #######");
    qDebug("Tx-Timeout: %d / %s / %d", m_txTimeoutTimer.interval(), m_txTimeoutTimer.isActive() ? "Activce": "Inactive"
