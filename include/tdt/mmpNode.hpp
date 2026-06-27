@@ -72,8 +72,10 @@ class CMmpNode
 
       QTimer m_rxTimeoutTimer;
       QTimer m_txTimeoutTimer;
-
-      static constexpr const int m_shredTimeout = 125/4;
+      
+      // (125/4) is ok when there are only 2 praticipants. (125/2) is needed
+      // when more nodes are connected (Tested with 10 devices).
+      static constexpr const int m_shredTimeout = 125/2;
       static constexpr const int m_transferExecutionTimeout = 125*4;
       // Don't keep it too low; testing will simulate framw drops
       static constexpr const int m_receiverTimeout = 1000 * 2;
@@ -81,9 +83,8 @@ class CMmpNode
       #if ! defined STM32
          int m_totalRxTransfers=0;
          int m_messageCounter=0;
+         bool m_simulateDrops=false;
       #endif
-
-      // int m_rxTransferStatus=0;
       
       #if ! defined( STM32 )
       signals:
@@ -159,7 +160,7 @@ class CMmpNode
       void sendTxShred( int pos, uint32_t value );
       bool handleRx( const Tdt::CMessage& msg );
       bool handleTx( const Tdt::CMessage& msg );
-      nodeId_t getNodeId()
+      nodeId_t getNodeId() const
       {
          return( m_nodeId );
       }
@@ -189,7 +190,7 @@ class CMmpNode
             }
          }
 
-         int getTotalRxTransfers()
+         int getTotalRxTransfers() const
          {
             return( m_totalRxTransfers );
          }
@@ -205,10 +206,17 @@ class CMmpNode
          
       #endif
 
-      void dump();
+      void dump() const;
       void emitHandleMmpTransferAck();
       void finishTx( const Tdt::CMessage& msg );
       void finishRx( const Tdt::CMessage& msg );
+
+      #if ! defined( STM32 )
+         void doSimulateDrops()
+         {
+            m_simulateDrops=true;
+         }
+      #endif
 };
 
 

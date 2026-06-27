@@ -95,6 +95,9 @@ TEST_CASE( "MMP simple", "[default]" )
       QElapsedTimer elapsed;
       QEventLoop loop;
       bool finished=false;
+      
+      dut1.doSimulateDrops();
+      dut2.doSimulateDrops();
 
       /* Must not connect the signal sendTdtMessage() to slot receiveTdtMessage()
        * directly. Sending an ACK would directly end up in the receive function
@@ -161,7 +164,10 @@ TEST_CASE( "MMP full duplex", "[default]" )
       int argc=1;
       char* argv[1]{ (char*)"Main" };
       QCoreApplication core(argc, argv);
-
+      
+      dut1.doSimulateDrops();
+      dut2.doSimulateDrops();
+      
       /* Must not connect the signal sendTdtMessage() to slot receiveTdtMessage()
        * directly. Sending an ACK would directly end up in the receive function
        * before having the old shred finished.
