@@ -71,8 +71,10 @@ class CMmpNode
 
       QTimer m_rxTimeoutTimer;
       QTimer m_txTimeoutTimer;
-
-      static constexpr const int m_shredTimeout = 125/4;
+      
+      // (125/4) is ok when there are only 2 praticipants. (125/2) is needed
+      // when more nodes are connected (Tested with 10 devices).
+      static constexpr const int m_shredTimeout = 125/2;
       static constexpr const int m_transferExecutionTimeout = 125*4;
       // Don't keep it too low; testing will simulate framw drops
       static constexpr const int m_receiverTimeout = 1000 * 2;
