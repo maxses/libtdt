@@ -352,7 +352,8 @@ void CMmpNode::sendTransferAck(int pos, Tdt::EReturnCode sta)
    Tdt::CMessage message
    {
       m_nodeId,
-      Tdt::EFunctionCode::ackTransfer,
+      //Tdt::EFunctionCode::ackTransfer,
+      Tdt::EFunctionCode::ackDataBlob,
       (uint16_t)m_rx.getCounterNodeId(),
       (int16_t)pos,
       (uint32_t)sta
