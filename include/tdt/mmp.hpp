@@ -47,12 +47,6 @@
 /*--- Declaration ----------------------------------------------------------*/
 
 
-#if defined( STM32 ) && IS_ENABLED( CONFIG_TDT_MMP_CALLBACKS )
-   void cbSendTdtMessage( const Tdt::CMessage& );
-   Tdt::nodeId_t cbGetNodeId();
-   int cbHandleMmpTransfer( const Tdt::CMmpTransferData& );
-#endif
-
 namespace Tdt
 {
 
