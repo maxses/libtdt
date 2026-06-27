@@ -80,10 +80,12 @@ void CMmpNode::receiveTdtMessage( const Tdt::CMessage& msg )
    {
       fc="ackData";
    }
+   /*
    if( msg.getFunctionCode() == Tdt::EFunctionCode::ackTransfer )
    {
       fc="ackTransfer";
    }
+   */
    #endif
 
    //qDebug("      IN #%d: FC=%s POS=%d", m_nodeId, fc, msg.getMmpPos());
