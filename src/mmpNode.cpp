@@ -469,7 +469,7 @@ void CMmpNode::finishTx( const Tdt::CMessage& msg )
       qFatal("Transfer Ack on non finished ttransfer. Pos is %d, data size is %d."
              , m_tx.pos(), m_tx.header().dataLength);
    }
-   lAssert( msg.getLen()>= 8 );
+   assert( msg.getLen()>= 8 );
    m_tx.setReturnCode( (Tdt::EReturnCode)msg.getTdtValue()->_uint );
    
    #if IS_ENABLED( CONFIG_TDT_PEDANTIC )
@@ -485,6 +485,8 @@ void CMmpNode::finishTx( const Tdt::CMessage& msg )
 
 void CMmpNode::finishRx( const Tdt::CMessage& msg )
 {
+   #if defined ( USE_LEPTO )
+   
    crc32_t crc32=crc32Init( );
    crc32=crc32Update( crc32, m_rx.data(), m_rx.header().dataLength );
    crc32=crc32Finalize(crc32);
@@ -493,6 +495,12 @@ void CMmpNode::finishRx( const Tdt::CMessage& msg )
    {
       crc32=0xffffffff;
    }
+   
+   #else
+   
+   uint32_t crc32=0;
+   
+   #endif
    
    if( crc32 != m_rx.header().crc32Data )
    {
