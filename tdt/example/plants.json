@@ -3,17 +3,17 @@
       {
          "name": "plant",
          "description": "Plant sensors",
-         "objectsOffset": "0x0400",
+         "objectsOffset": "0x0800",
          "size": "0x10",
          "comment": "next object in 'device' is 0x410, TBD",
          "objects": [
             {
-               "address": "0x0008",
+               "address": "0x0000",
                "name": "Sensor",
                "size": "0x8"
             },
             {
-               "address": "0x8008",
+               "address": "0x0008",
                "name": "Sensor raw",
                "size": "0x8"
             }

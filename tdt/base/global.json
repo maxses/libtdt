@@ -3,20 +3,9 @@
       {
          "name": "",
          "description": "Global information like time/date",
-         "objectsOffset": "0x420",
-         "size": "0x10",
+         "objectsOffset": "0x0200",
+         "size": "0x300",
          "objects": [
-            {
-               "address": "0x0001",
-               "name": "Time",
-               "example": "12:00:23"
-            },
-            {
-               "address": "0x0002",
-               "name": "Date",
-               "description": "Date",
-               "example": "17.10.2025"
-            }
          ]
       }
    ]

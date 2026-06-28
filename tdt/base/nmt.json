@@ -3,8 +3,8 @@
       {
          "name": "nmt",
          "description": "Network management",
-         "objectsOffset": "0x1000",
-         "size": "0x10",
+         "objectsOffset": "0x8000",
+         "size": "0x0020",
          "objects": [
             {
                "name": "scan",
