@@ -148,7 +148,7 @@ void CMmpNode::sendTxShred( int pos, uint32_t value )
 bool CMmpNode::handleRx( const Tdt::CMessage& msg )
 {
    // Indicator to abort ttransfer
-   if( m_rx.pos() == -1 )
+   if( msg.getMmpPos() == -1 )
    {
       qCritical( LDS( "MMAB", "MMP abort" ) );
       m_rx.reset();
@@ -555,6 +555,11 @@ __attribute__((weak)) Tdt::EReturnCode cbHandleMmpTransfer( const Tdt::CMmpTrans
 {
    return( Tdt::EReturnCode::notImplemented );
 };
+
+__attribute__((weak)) void cbHandleMmpTransferAck( const Tdt::CMmpTransfer& )
+{
+   // Nothing to do, job is done
+}
 
 #endif // ? CONFIG_TDT_MMP_CALLBACKS
 
