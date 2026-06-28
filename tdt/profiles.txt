@@ -2,15 +2,15 @@ Object/Command offsets:
 
     Generic:    0x0000 - 0x01FF
     Global:     0x0200 - 0x02FF
-    Node:       0x0300 - 0x03FF
+    Node:       0x0300 - 0x03FF         What have all nodes in common
     Log:        0x0400
     Recorder:   0x0500 - 
-    Campo:      0x0600
-    Power:      0x0700
-    Plant:      0x0800
-    infoDisplay:0x0900
-    Facility:   0x0A00
-    Environment:0x0B00
+    Campo:      0x0600                  Article?
+    Power:      0x0700                  Switch power line: Mainswitch, CANSwitch
+    Plant:      0x0800                  Sensemux
+    infoDisplay:0x0900                  CANDis
+    Facility:   0x0A00                  Unit for rooms
+    Environment:0x0B00                  Temperature, humidity, VOC
     NMT:        0x8000
 
 Units offsets:

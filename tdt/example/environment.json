@@ -39,19 +39,19 @@
                "unit": "centi degree"
             },
             {
-               "address": "0x0005",
+               "address": "0x000C",
                "name": "Air pressure",
                "description": "Air pressure",
                "example": "1.001 hPa"
             },
             {
-               "address": "0x0006",
+               "address": "0x000D",
                "name": "Food temperature",
                "description": "supposed to be in the oven",
                "example": "25°C"
             },
             {
-               "address": "0x0007",
+               "address": "0x000E",
                "name": "Connected sensors",
                "description": "Bitmask of detected sensors",
                "example": "0x00003"
