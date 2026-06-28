@@ -294,15 +294,17 @@ bool CMmpNode::handleTx( const Tdt::CMessage& msg )
       {
          // An STM32F103 in the bus forced an STM32L4 to unnecessary retransmits.
          // This could also be seen in cordyceps by scanning devices.
-         qFatal( LDS( "IOA %d", "Ignoring old/previous ACK; MSG:%d" ),
+         qWarning( LDS( "IOA %d", "Ignoring old/previous ACK; MSG:%d" ),
                   pos );
          return(false);
       }
       if( pos != m_tx.pos() )
       {
          qWarning( LDS("ANP", "ACK not plausible") );
-         //qWarning("msg %d vs. cur %d", msg.getTdtValue()->_uint
-         //         ,m_data.pos() );
+         #if ! defined ( STM32 )
+            qWarning("msg %d vs. cur %d", msg.getTdtValue()->_uint
+                  ,m_tx.pos() );
+         #endif
          sendTxAbort();
          return(false);
       }
