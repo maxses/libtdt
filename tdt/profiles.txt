@@ -34,4 +34,6 @@ Units offsets:
 
 Logs:
 
-    Biwak:   0x0100 - 0x01ff
+    Biwak:      0x0100 - 0x01ff
+    Node:       0x0300 - 0x03FF         What have all nodes in common
+
