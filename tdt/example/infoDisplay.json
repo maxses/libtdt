@@ -20,7 +20,7 @@
             },
             {
                "name": "node object offset",
-               "address": "0x0002",
+               "address": "0x0005",
                "size": "4",
                "description": "offset of the object that should be shown relative to 'environmentTemperature0'"
             }
