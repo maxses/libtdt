@@ -55,7 +55,7 @@ TEST_CASE( "CAN TDT", "[default]" )
       const unsigned char data[]=
       {
          0x55, 0x00,
-         (char)Tdt::EUnit::centiCelsius ,
+         (unsigned char)Tdt::EUnit::centiCelsius ,
          0x00,    // reserved
          // 2200 = 0x00000898
          0x98, 0x08,
