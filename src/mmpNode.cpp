@@ -148,7 +148,7 @@ void CMmpNode::sendTxShred( int pos, uint32_t value )
 bool CMmpNode::handleRx( const Tdt::CMessage& msg )
 {
    // Indicator to abort ttransfer
-   if( m_rx.pos() == -1 )
+   if( msg.getMmpPos() == -1 )
    {
       qCritical( LDS( "MMAB", "MMP abort" ) );
       m_rx.reset();
@@ -466,7 +466,8 @@ void CMmpNode::finishTx( const Tdt::CMessage& msg )
    // Acknowledge is missing but i already got transfer ack ?
    if( ! m_tx.isFinished( m_tx.pos()+1 ) )
    {
-      qFatal("Transfer Ack on non finished ttransfer. Pos is %d, data size is %d."
+      qFatal( LDS( "TACK ONF: pis=%d siz=%d"
+         , "Transfer Ack on non finished ttransfer. Pos is %d, data size is %d.")
              , m_tx.pos(), m_tx.header().dataLength);
    }
    assert( msg.getLen()>= 8 );
@@ -557,6 +558,11 @@ __attribute__((weak)) Tdt::EReturnCode cbHandleMmpTransfer( const Tdt::CMmpTrans
 {
    return( Tdt::EReturnCode::notImplemented );
 };
+
+__attribute__((weak)) void cbHandleMmpTransferAck( const Tdt::CMmpTransfer& )
+{
+   // Nothing to do, job is done
+}
 
 #endif // ? CONFIG_TDT_MMP_CALLBACKS
 

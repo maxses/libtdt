@@ -8,7 +8,7 @@
       {
          "name": "biwak",
          "description": "Libbiwak brings some log codes",
-         "objectsOffset": "0x00",
+         "objectsOffset": "0x0100",
          "size": "0x10",
          "No_includes": [
             "<biwak/error_codes.h>"
