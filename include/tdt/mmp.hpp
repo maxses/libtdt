@@ -36,6 +36,9 @@
 
 #if defined( STM32 )
    #define slots
+   #if ! defined USE_BIWAK
+      #error TDT-MMP: On STM32 devices i need libbiwak. Is the order of submodules in CMakeLists.txt correct?
+   #endif
    #include <biwak/sysTimer.hpp>
    #include <biwak/softtimer.h>
 #else
