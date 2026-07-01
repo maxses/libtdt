@@ -39,6 +39,9 @@
       #error On STM32 libbiwak is needed. Maybe you have to move the "add_subdirectory" in your CMakeLists.txt.
    #endif
    #define slots
+   #if ! defined USE_BIWAK
+      #error TDT-MMP: On STM32 devices i need libbiwak. Is the order of submodules in CMakeLists.txt correct?
+   #endif
    #include <biwak/sysTimer.hpp>
    #include <biwak/softtimer.h>
 #else
@@ -51,8 +54,8 @@
 
 
 #if USE_LEPTO
-   #if defined( STM32 ) && IS_ENABLED( CONFIG_TDT_MMP_CALLBACKS )
-      #if 0
+   #if 0
+      #if defined( STM32 ) && IS_ENABLED( CONFIG_TDT_MMP_CALLBACKS )
          void cbSendTdtMessage( const Tdt::CMessage& );
          Tdt::nodeId_t cbGetNodeId();
          int cbHandleMmpTransfer( const Tdt::CMmpTransferData& );

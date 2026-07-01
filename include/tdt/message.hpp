@@ -197,7 +197,7 @@ union SValue
       static_assert( sizeof(softwareVersion) == 4 );
 
       uint32_t softwareVersionCode;
-      uint32_t timestamp;
+      int32_t timestamp;
       int32_t timestampdelta;
       float _float;
       bool _bool;

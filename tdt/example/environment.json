@@ -3,55 +3,55 @@
       {
          "name": "Environment",
          "description": "Environment sensors like temperatures, VOC, humidity",
-         "objectsOffset": "0x400",
-         "size": "0x10",
+         "objectsOffset": "0x0B00",
+         "size": "0x0100",
          "objects": [
             {
-               "address": "0x0014",
+               "address": "0x0000",
                "name": "Air humidity",
                "description": "Air humidity",
                "example": "40 %"
             },
             {
-               "address": "0x0015",
+               "address": "0x0001",
                "name": "VOC",
                "description": "VOC n promil; other factors taken into evaluation. No use at the moment. See air quality.",
                "example": "1000 ‰",
                "unit": "promil"
             },
             {
-               "address": "0x0016",
+               "address": "0x0002",
                "name": "Air quality",
                "description": "Air quality, several factors are taken into account",
                "example": "40 %"
             },
             {
-               "address": "0x0017",
+               "address": "0x0003",
                "name": "VOC Raw",
                "description": "Raw VOC air restistance value in ohm",
                "example": "1000 Ohm"
             },
             {
-               "address": "0x0018",
+               "address": "0x0004",
                "name": "Temperature",
                "example": "22.35°C",
                "size": "8",
                "unit": "centi degree"
             },
             {
-               "address": "0x0021",
+               "address": "0x000C",
                "name": "Air pressure",
                "description": "Air pressure",
                "example": "1.001 hPa"
             },
             {
-               "address": "0x0050",
+               "address": "0x000D",
                "name": "Food temperature",
                "description": "supposed to be in the oven",
                "example": "25°C"
             },
             {
-               "address": "0x0051",
+               "address": "0x000E",
                "name": "Connected sensors",
                "description": "Bitmask of detected sensors",
                "example": "0x00003"
@@ -61,7 +61,7 @@
       {
          "name": "Environment sensor commands",
          "description": "Environment sendor commands",
-         "objectsOffset": "0x600",
+         "objectsOffset": "0x0B00",
          "size": "0x20",
          "commands": [
             {
@@ -84,28 +84,28 @@
       },
       {
          "name": "environmental units",
-         "unitsOffset": "0x10",
-         "size": "0x30",
+         "unitsOffset": "0xB0",
+         "size": "0x08",
          "units": [
             {
                "name": "centiCelsius",
-               "address": "0x04",
+               "address": "0x00",
                "postfix": " °C", 
                "divider": "100"
             },
             {
                "name": "percentHumidity",
                "postfix": " %",
-               "address": "0x05"
+               "address": "0x01"
             },
             {
                "name": "voc",
-               "address": "0x06",
+               "address": "0x02",
                "postfix": " Ohm"
             },
             {
                "name": "percentQuality",
-               "address": "0x16"
+               "address": "0x03"
             }
          ]
       }

@@ -3,7 +3,7 @@
       {
          "name": "Node",
          "description": "Generic device node",
-         "objectsOffset": "0x400",
+         "objectsOffset": "0x0300",
          "size": "0x40",
          "objects": [
             {
@@ -153,13 +153,18 @@
                "address": "0x280",
                "name": "Timestamp not plausible",
                "description": "CANRec: timestamp of an message is older as an previous one"
+            },
+            {
+               "address": "0x290",
+               "name": "Battery low",
+               "description": "The voltage of the battery is low"
             }
          ]
       },
       {
          "name": "Node commands",
          "description": "Generic device node commands",
-         "objectsOffset": "0x600",
+         "objectsOffset": "0x0300",
          "size": "0x20",
          "commands": [
             {

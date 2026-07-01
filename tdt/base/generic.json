@@ -3,16 +3,27 @@
       {
          "name": "Generic",
          "description": "Generic values",
-         "objectsOffset": "0x0400",
-         "size": "0x10",
+         "objectsOffset": "0x0000",
+         "size": "0x200",
          "objects": [
             {
-               "address": "0x0008",
+               "address": "0x0001",
+               "name": "Time",
+               "example": "12:00:23"
+            },
+            {
+               "address": "0x0002",
+               "name": "Date",
+               "description": "Date",
+               "example": "17.10.2025"
+            },
+            {
+               "address": "0x0010",
                "name": "Sensor",
                "size": "0x8"
             },
             {
-               "address": "0x8008",
+               "address": "0x0018",
                "name": "SensorRaw",
                "size": "0x8"
             }
@@ -21,7 +32,7 @@
       {
          "name": "generic units",
          "unitsOffset": "0x0",
-         "size": "0x30",
+         "size": "0x40",
          "units": [
             {
                "name": "null",

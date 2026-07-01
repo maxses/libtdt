@@ -3,24 +3,24 @@
       {
          "name": "display",
          "description": "Super small terminal",
-         "objectsOffset": "0x400",
+         "objectsOffset": "0x0900",
          "size": "0x20",
          "objects": [
             {
                "name": "Fade time",
-               "address": "0x0088",
+               "address": "0x0000",
                "example": "-",
                "description": "After which time shoud the display fade out"
             },
             {
                "name": "node",
-               "address": "0x0060",
+               "address": "0x0001",
                "size": "4",
                "description": "Which nodes information should be shown"
             },
             {
                "name": "node object offset",
-               "address": "0x0064",
+               "address": "0x0005",
                "size": "4",
                "description": "offset of the object that should be shown relative to 'environmentTemperature0'"
             }
