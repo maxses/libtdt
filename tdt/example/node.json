@@ -3,7 +3,7 @@
       {
          "name": "Node",
          "description": "Generic device node",
-         "objectsOffset": "0x400",
+         "objectsOffset": "0x0300",
          "size": "0x40",
          "objects": [
             {
@@ -159,7 +159,7 @@
       {
          "name": "Node commands",
          "description": "Generic device node commands",
-         "objectsOffset": "0x600",
+         "objectsOffset": "0x0300",
          "size": "0x20",
          "commands": [
             {

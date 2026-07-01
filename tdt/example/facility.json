@@ -3,8 +3,8 @@
       {
          "name": "Facility",
          "description": "A building",
-         "objectsOffset": "0x4C0",
-         "unitsOffset": "0x20",
+         "objectsOffset": "0x0A00",
+         "unitsOffset": "0xA0",
          "size": "0x20",
          "objects": [
             {
@@ -16,7 +16,7 @@
          "units": [
             {
                "name": "Room",
-               "address": "0x22",
+               "address": "0x00",
                "format": "E",
                "values": {
                   "Sleeping": "1",
@@ -28,7 +28,7 @@
             },
             {
                "name": "size",
-               "address": "0x23",
+               "address": "0x01",
                "format": "X",
                "postfix": " m²"
             }
