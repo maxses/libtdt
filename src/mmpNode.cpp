@@ -466,9 +466,9 @@ void CMmpNode::finishTx( const Tdt::CMessage& msg )
    // Acknowledge is missing but i already got transfer ack ?
    if( ! m_tx.isFinished( m_tx.pos()+1 ) )
    {
-      qFatal( LDS( "TACK ONF: pis=%d siz=%d"
-         , "Transfer Ack on non finished ttransfer. Pos is %d, data size is %d.")
-             , m_tx.pos(), m_tx.header().dataLength);
+      qFatal( LDS( "TACK NFIT %d/%d"
+            , "Transfer Ack on non finished ttransfer. Pos is %d, data size is %d.")
+            , m_tx.pos(), m_tx.header().dataLength);
    }
    assert( msg.getLen()>= 8 );
    m_tx.setReturnCode( (Tdt::EReturnCode)msg.getTdtValue()->_uint );

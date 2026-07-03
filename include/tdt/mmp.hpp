@@ -35,6 +35,9 @@
 #endif
 
 #if defined( STM32 )
+   #if ! defined ( USE_BIWAK )
+      #error On STM32 libbiwak is needed. Maybe you have to move the "add_subdirectory" in your CMakeLists.txt.
+   #endif
    #define slots
    #if ! defined USE_BIWAK
       #error TDT-MMP: On STM32 devices i need libbiwak. Is the order of submodules in CMakeLists.txt correct?
