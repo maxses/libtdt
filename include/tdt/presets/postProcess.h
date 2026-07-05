@@ -1,5 +1,5 @@
-#ifndef TDT_PRESET_POST_PROCESS_H
-#define TDT_PRESET_POST_PROCESS_H
+#ifndef TDT_PRESET_CONFIG_POST_PROCESS_H
+#define TDT_PRESET_CONFIG_POST_PROCESS_H
 //----------------------------------------------------------------------------
 ///
 /// \brief  Config preset post processingn
@@ -20,4 +20,4 @@
 
 
 //---fin-----------------------------------------------------------------------
-#endif // ? ! TDT_PRESET_POST_PROCESS_H
+#endif // ? ! TDT_PRESET_CONFIG_POST_PROCESS_H
