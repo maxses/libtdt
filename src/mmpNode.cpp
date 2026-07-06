@@ -86,6 +86,8 @@ void CMmpNode::receiveTdtMessage( const Tdt::CMessage& msg )
       fc="ackTransfer";
    }
    */
+   
+   (void)fc;
    #endif
 
    //qDebug("      IN #%d: FC=%s POS=%d", m_nodeId, fc, msg.getMmpPos());
@@ -199,7 +201,7 @@ bool CMmpNode::handleRx( const Tdt::CMessage& msg )
          
          qFatal("Does not make sense: pos %d of total %d is not last?", msgPos, size);
          #else
-            qFatal("");
+            qFatal("UP");
          #endif
       }
       return( false );

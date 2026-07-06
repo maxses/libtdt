@@ -51,6 +51,12 @@
                "address": "0x0011",
                "name": "switch main",
                "example": "-"
+            },
+            {
+               "address": "0x0020",
+               "name": "Switch object offset",
+               "example": "-",
+               "size": "0x4"
             }
          ],
          "XXlogs": [
