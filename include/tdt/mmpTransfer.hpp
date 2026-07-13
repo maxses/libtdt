@@ -189,8 +189,9 @@ class CMmpTransfer
          };
          #else
             memset( &m_header, 0, sizeof(m_header));
-            m_header.magic=0x1234,
-            m_header.dataLength=(int32_t)size,
+            m_header.magic=0x1234;
+            m_header.dataLength=(int32_t)size;
+            m_header.mmpCommand=command;
          #endif
          
          m_rawData=(char*)data;
