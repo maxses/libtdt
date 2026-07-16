@@ -43,7 +43,7 @@ namespace Tdt
 {
 
 
-CMmpNode::CMmpNode( nodeId_t nodeId )
+CMmpNode::CMmpNode( nodeId_t &nodeId )
          :m_nodeId( nodeId )
          ,m_rx( CMmpTransfer::EDirection::in )
          ,m_tx( CMmpTransfer::EDirection::out )
@@ -553,6 +553,7 @@ int CMmpNode::slotHandleMmpTransfer( CMmpTransfer &data )
 
 __attribute__((weak)) void cbSendTdtMessage( const Tdt::CMessage& )
 {
+   abort();
    return;
 }
 
