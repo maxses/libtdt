@@ -116,10 +116,10 @@ class CMmpNode
       {
          if( m_tx.incRetry() > 4 )
          {
-            qWarning( LDS( "TMR", "Too much retries" ) );
+            lWarning( LDS( "TMR", "Too much retries" ) );
             return(false);
          }
-         qWarning( LDS( "RTP%d", "Retry pos %d"), m_tx.pos() );
+         lWarning( LDS( "RTP%d", "Retry pos %d"), m_tx.pos() );
          sendTxShred();
          
          return(true);
