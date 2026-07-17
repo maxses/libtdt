@@ -128,49 +128,8 @@ class CCanTdtPrinter
       }
 };
 
-struct SPrinterObject CCanTdtPrinter::m_objectMap[]{
-   /*
-   ENUM_MAP( Tdt::EObject, none ),
-   ENUM_MAP( Tdt::EObject, ambientLightAll ),
-   ENUM_MAP( Tdt::EObject, ambientLightLivingRoom ),
-   ENUM_MAP( Tdt::EObject, ambientLightSleepingRoom ),
-   ENUM_MAP( Tdt::EObject, ambientLightKitchen ),
-   ENUM_MAP( Tdt::EObject, ambientLightOffice ),
-   ENUM_MAP( Tdt::EObject, ambientLightBath1 ),
-   ENUM_MAP( Tdt::EObject, ambientLightBath2 ),
 
-   ENUM_MAP( Tdt::EObject, plantLight ),
-   ENUM_MAP( Tdt::EObject, multimediaSwitch ),
-   ENUM_MAP( Tdt::EObject, mainSwitch ),
-   ENUM_MAP( Tdt::EObject, date ),
-   ENUM_MAP( Tdt::EObject, time ),
-   ENUM_MAP( Tdt::EObject, dummy ),
-
-   ENUM_MAP( Tdt::EObject, plantSensor ),
-   ENUM_MAP( Tdt::EObject, plantSensor0 ),
-   ENUM_MAP( Tdt::EObject, plantSensor1 ),
-   ENUM_MAP( Tdt::EObject, plantSensor2 ),
-   ENUM_MAP( Tdt::EObject, plantSensor3 ),
-   ENUM_MAP( Tdt::EObject, plantSensor4 ),
-
-   ENUM_MAP( Tdt::EObject, firmwareVersion ),
-   ENUM_MAP( Tdt::EObject, firmwareDate ),
-   ENUM_MAP( Tdt::EObject, hardwareRevision ),
-   ENUM_MAP( Tdt::EObject, hardwareDate ),
-   ENUM_MAP( Tdt::EObject, humidity ),
-   ENUM_MAP( Tdt::EObject, voc ),
-
-   ENUM_MAP( Tdt::EObject, temperature ),
-   ENUM_MAP( Tdt::EObject, temperature0 ),
-   ENUM_MAP( Tdt::EObject, temperature1 ),
-   ENUM_MAP( Tdt::EObject, temperature2 ),
-   ENUM_MAP( Tdt::EObject, temperature3 ),
-   ENUM_MAP( Tdt::EObject, temperature4 ),
-
-   ENUM_MAP( Tdt::EObject, batteryLevel ),
-   ENUM_MAP( Tdt::EObject, rtcDrift ),
-    */
-};
+struct SPrinterObject CCanTdtPrinter::m_objectMap[]{ };
 
 
 const char *CCanTdtPrinter::getObjectString() const
