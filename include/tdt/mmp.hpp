@@ -88,6 +88,9 @@ enum class EMmpCommand: uint32_t
 
    eraseBootloaderFlash,
    writeBootloaderFlash,
+
+   eraseExternFlash,
+   writeExternFlash,
 };
 
 enum class EReturnCode
