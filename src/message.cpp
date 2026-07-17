@@ -4,7 +4,7 @@
  * @brief   The tdt message structures and functions
  *
  * @date      20241219
- * @author    Maximilian Seesslen <mes@seesslen.net>
+ * @author    Maximilian Seesslen <src@seesslen.net>
  * @copyright SPDX-License-Identifier: Apache-2.0
  *
  *--------------------------------------------------------------------------*/

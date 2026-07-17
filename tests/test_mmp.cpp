@@ -86,8 +86,10 @@ TEST_CASE( "MMP simple", "[default]" )
 {
    SECTION( "construct" )
    {
-      Tdt::CMmpNode dut1(8);
-      Tdt::CMmpNode dut2(9);
+      Tdt::nodeId_t nid1=8;
+      Tdt::nodeId_t nid2=9;
+      Tdt::CMmpNode dut1( nid1 );
+      Tdt::CMmpNode dut2( nid2 );
       int argc=1;
       char* argv[1]{ (char*)"Main" };
       QCoreApplication core(argc, argv);
@@ -158,8 +160,10 @@ TEST_CASE( "MMP full duplex", "[default]" )
 {
    SECTION( "construct" )
    {
-      Tdt::CMmpNode dut1(8);
-      Tdt::CMmpNode dut2(9);
+      Tdt::nodeId_t nid1=8;
+      Tdt::nodeId_t nid2=9;
+      Tdt::CMmpNode dut1( nid1 );
+      Tdt::CMmpNode dut2( nid2 );
       QElapsedTimer elapsed;
       int argc=1;
       char* argv[1]{ (char*)"Main" };

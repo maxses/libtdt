@@ -59,7 +59,7 @@ class CMmpNode
       Q_OBJECT
    #endif
 
-      nodeId_t m_nodeId=0;
+      nodeId_t &m_nodeId;
 
       // Needed for unit tests.
       #if ! defined STM32
@@ -111,7 +111,7 @@ class CMmpNode
       //int slotHandleMmpTransfer( Tdt::CMmpTransfer& data );
           
    public:
-      CMmpNode( nodeId_t nodeId = 2 );
+      CMmpNode( nodeId_t &nodeId );
       bool retryTransmit()
       {
          if( m_tx.incRetry() > 4 )

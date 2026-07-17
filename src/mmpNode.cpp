@@ -10,7 +10,7 @@
  * more because the flash would be needed to erased again.
  * 
  * @date      20241003
- * @author    Maximilian Seesslen <mes@seesslen.net>
+ * @author    Maximilian Seesslen <src@seesslen.net>
  * @copyright SPDX-License-Identifier: Apache-2.0
  *
  *--------------------------------------------------------------------------*/
@@ -43,7 +43,7 @@ namespace Tdt
 {
 
 
-CMmpNode::CMmpNode( nodeId_t nodeId )
+CMmpNode::CMmpNode( nodeId_t &nodeId )
          :m_nodeId( nodeId )
          ,m_rx( CMmpTransfer::EDirection::in )
          ,m_tx( CMmpTransfer::EDirection::out )
@@ -553,6 +553,7 @@ int CMmpNode::slotHandleMmpTransfer( CMmpTransfer &data )
 
 __attribute__((weak)) void cbSendTdtMessage( const Tdt::CMessage& )
 {
+   abort();
    return;
 }
 
