@@ -10,7 +10,7 @@
  * more because the flash would be needed to erased again.
  * 
  * @date      20241003
- * @author    Maximilian Seesslen <mes@seesslen.net>
+ * @author    Maximilian Seesslen <src@seesslen.net>
  * @copyright SPDX-License-Identifier: Apache-2.0
  *
  *--------------------------------------------------------------------------*/
@@ -43,7 +43,7 @@ namespace Tdt
 {
 
 
-CMmpNode::CMmpNode( nodeId_t nodeId )
+CMmpNode::CMmpNode( nodeId_t &nodeId )
          :m_nodeId( nodeId )
          ,m_rx( CMmpTransfer::EDirection::in )
          ,m_tx( CMmpTransfer::EDirection::out )
@@ -99,7 +99,7 @@ void CMmpNode::receiveTdtMessage( const Tdt::CMessage& msg )
          // "Loose" messsages. Don't drop too much, timeouts will kick in
          if( ! ( m_messageCounter % ( 24 + ( QRandomGenerator::global()->generate() % 24 ) ) ) )
          {
-            qDebug("         Dropping");
+            lDebug("   Dropping");
             return;
          }
       }
@@ -152,7 +152,7 @@ bool CMmpNode::handleRx( const Tdt::CMessage& msg )
    // Indicator to abort ttransfer
    if( msg.getMmpPos() == -1 )
    {
-      qCritical( LDS( "MMAB", "MMP abort" ) );
+      lCritical( LDS( "MMAB", "MMP abort" ) );
       m_rx.reset();
       #if IS_ENABLED( CONFIG_TDT_PEDANTIC )
          m_rx.setState( ENodeState::idle );
@@ -163,7 +163,7 @@ bool CMmpNode::handleRx( const Tdt::CMessage& msg )
    // An retransmission of an messqage i already have: still acknowledge
    if( m_rx.pos() && ( msg.getMmpPos() == m_rx.pos() - 1 ) )
    {
-      qCritical( LDS("IGRE", "Ignoring retransmit" ) );
+      lCritical( LDS("IGRE", "RX: Ignoring retransmit" ) );
 
       // Cornercase: Sender may have lost return value. Just send the status again
       if( m_rx.isLast( msg.getMmpPos() ) )
@@ -184,7 +184,7 @@ bool CMmpNode::handleRx( const Tdt::CMessage& msg )
       #if IS_ENABLED( CONFIG_TDT_PEDANTIC )
          if( m_rx.state() != ENodeState::idle )
          {
-            qFatal("Foo");
+            lFatal("Foo");
          }
       #endif
 
@@ -199,7 +199,7 @@ bool CMmpNode::handleRx( const Tdt::CMessage& msg )
          int msgPos=msg.getMmpPos();
          int size=(int)sizeof( Tdt::SMmpHeader ) + m_rx.header().dataLength;
          
-         qFatal("Does not make sense: pos %d of total %d is not last?", msgPos, size);
+         lFatal("Does not make sense: pos %d of total %d is not last?", msgPos, size);
          #else
             qFatal("UP");
          #endif
@@ -209,7 +209,7 @@ bool CMmpNode::handleRx( const Tdt::CMessage& msg )
 
    if( msg.getMmpPos() != m_rx.pos() )
    {
-      qCritical( LDS("M ODNM m %d vs c %d", "MMP order missmatch: message %d vs. buffer %d" )
+      lCritical( LDS("M ODNM m %d vs c %d", "MMP order missmatch: message %d vs. buffer %d" )
                 , (int)msg.getMmpPos(), (int)m_rx.pos() );
 
       m_rx.reset();
@@ -225,7 +225,7 @@ bool CMmpNode::handleRx( const Tdt::CMessage& msg )
       #if IS_ENABLED( CONFIG_TDT_PEDANTIC )
          if( m_rx.state( ) != ENodeState::idle )
          {
-            qFatal( LDS("RSO", "Reseiving still ongoing") );
+            lFatal( LDS("RSO", "Reseiving still ongoing") );
          }
       #endif
       m_rx.setCounterNodeId( msg.getNodeId() );
@@ -233,7 +233,7 @@ bool CMmpNode::handleRx( const Tdt::CMessage& msg )
 
    if( m_rx.getCounterNodeId( ) != msg.getNodeId() )
    {
-      qFatal( LDS("SMM", "Sender missmatch") );
+      lFatal( LDS("SMM", "Sender missmatch") );
    }
 
    m_rx.data32()=msg.getTdtValue()->_uint;
@@ -296,15 +296,15 @@ bool CMmpNode::handleTx( const Tdt::CMessage& msg )
       {
          // An STM32F103 in the bus forced an STM32L4 to unnecessary retransmits.
          // This could also be seen in cordyceps by scanning devices.
-         qWarning( LDS( "IOA %d", "Ignoring old/previous ACK; MSG:%d" ),
+         lWarning( LDS( "IOA %d", "Ignoring old/previous ACK; MSG:%d" ),
                   pos );
          return(false);
       }
       if( pos != m_tx.pos() )
       {
-         qWarning( LDS("ANP", "ACK not plausible") );
+         lWarning( LDS("ANP", "ACK not plausible") );
          #if ! defined ( STM32 )
-            qWarning("msg %d vs. cur %d", msg.getTdtValue()->_uint
+            lWarning("msg %d vs. cur %d", msg.getTdtValue()->_uint
                   ,m_tx.pos() );
          #endif
          sendTxAbort();
@@ -416,11 +416,11 @@ int CMmpNode::dummyHandleMmpTransfer( const Tdt::CMmpTransfer& data )
 
 void CMmpNode::txTimeout()
 {
-   qWarning( LDS("%d TXTO","[%d] TX Timeout"), m_nodeId );
+   lWarning( LDS("%d TXTO","[%d] TX Timeout"), m_nodeId );
 
    if( !retryTransmit()  )
    {
-      qWarning("CPD");
+      lWarning( LDS("CPD", "Counterpart dead when transmitting" ) );
       m_tx.setReturnCode( EReturnCode::counterPartDead );
       emitHandleMmpTransferAck();
       return;
@@ -429,7 +429,7 @@ void CMmpNode::txTimeout()
 
 void CMmpNode::rxTimeout()
 {
-   qWarning( LDS("%d RXTO", "[%d] RX Timeout"), m_nodeId );
+   lWarning( LDS("%d RXTO", "[%d] RX Timeout"), m_nodeId );
    // Don't do any retransmit on the receivers side.
    // Its up to the transmitter to retransmit its data when he got no 
    // acknowledge.
@@ -439,8 +439,8 @@ void CMmpNode::rxTimeout()
 
 void CMmpNode::dump() const
 {
-   qDebug("###### Dump #######");
-   qDebug("Tx-Timeout: %d / %s / %d", m_txTimeoutTimer.interval(), m_txTimeoutTimer.isActive() ? "Activce": "Inactive"
+   lDebug("###### Dump #######");
+   lDebug("Tx-Timeout: %d / %s / %d", m_txTimeoutTimer.interval(), m_txTimeoutTimer.isActive() ? "Activce": "Inactive"
             ,m_txTimeoutTimer.isSingleShot());
 }
 
@@ -507,7 +507,7 @@ void CMmpNode::finishRx( const Tdt::CMessage& msg )
    
    if( crc32 != m_rx.header().crc32Data )
    {
-      qWarning( LDS( "CRCWR", "CRC Wrong" ) );
+      lWarning( LDS( "CRCWR", "CRC Wrong" ) );
       m_rx.setReturnCode( EReturnCode::wrongCRC);
    }
    else
@@ -553,6 +553,7 @@ int CMmpNode::slotHandleMmpTransfer( CMmpTransfer &data )
 
 __attribute__((weak)) void cbSendTdtMessage( const Tdt::CMessage& )
 {
+   abort();
    return;
 }
 

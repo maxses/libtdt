@@ -59,7 +59,7 @@ class CMmpNode
       Q_OBJECT
    #endif
 
-      nodeId_t m_nodeId=0;
+      nodeId_t &m_nodeId;
 
       // Needed for unit tests.
       #if ! defined STM32
@@ -111,15 +111,15 @@ class CMmpNode
       //int slotHandleMmpTransfer( Tdt::CMmpTransfer& data );
           
    public:
-      CMmpNode( nodeId_t nodeId = 2 );
+      CMmpNode( nodeId_t &nodeId );
       bool retryTransmit()
       {
          if( m_tx.incRetry() > 4 )
          {
-            qWarning( LDS( "TMR", "Too much retries" ) );
+            lWarning( LDS( "TMR", "Too much retries" ) );
             return(false);
          }
-         qWarning( LDS( "RTP%d", "Retry pos %d"), m_tx.pos() );
+         lWarning( LDS( "RTP%d", "Retry pos %d"), m_tx.pos() );
          sendTxShred();
          
          return(true);
@@ -165,10 +165,12 @@ class CMmpNode
       {
          return( m_nodeId );
       }
+      /*
       void setNodeId( nodeId_t nodeId )
       {
          m_nodeId = nodeId;
       }
+      */
       public slots:
          void txTimeout();
          void rxTimeout();

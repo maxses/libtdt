@@ -3,11 +3,11 @@
  * @file    printer.hpp
  * @brief   Generate text fragments from tdt messages
  *
- * Those text strings can be used by user interfaces on host PC.
+ * Those text strings can be used by user interfaces on host computer.
  * For text fragments to be used on target microcontroller, see "printer_biwak.hpp".
  * 
  * @date      20241214
- * @author    Maximilian Seesslen <mes@seesslen.net>
+ * @author    Maximilian Seesslen <src@seesslen.net>
  * @copyright SPDX-License-Identifier: Apache-2.0
  *
  *--------------------------------------------------------------------------*/
