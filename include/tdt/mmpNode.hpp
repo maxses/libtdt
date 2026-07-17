@@ -165,10 +165,12 @@ class CMmpNode
       {
          return( m_nodeId );
       }
+      /*
       void setNodeId( nodeId_t nodeId )
       {
          m_nodeId = nodeId;
       }
+      */
       public slots:
          void txTimeout();
          void rxTimeout();
