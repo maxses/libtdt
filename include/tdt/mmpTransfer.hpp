@@ -61,11 +61,14 @@ class CMmpTransfer
    public:
       CMmpTransfer( EDirection direction )
       {
+         memset(this, 0, sizeof(*this));
+         /*
          m_header.dataLength=0;
          m_header.mmpCommand=EMmpCommand::null;
          m_maxReceiveSize=0x0;
          m_counterNodeId=0;
          m_rawData=nullptr;
+         */
          #if IS_ENABLED( CONFIG_TDT_PEDANTIC )
             m_direction=direction;
          #endif
@@ -173,6 +176,7 @@ class CMmpTransfer
       }
       void setData(EMmpCommand command, const char* data, uint32_t size)
       {
+         #if 0
          m_header={
              .magic=0x1234,
              .dataLength=(int32_t)size,
@@ -183,6 +187,13 @@ class CMmpTransfer
              .reserved{0},
              //.mmpFunctionCode=0,
          };
+         #else
+            memset( &m_header, 0, sizeof(m_header));
+            m_header.magic=0x1234;
+            m_header.dataLength=(int32_t)size;
+            m_header.mmpCommand=command;
+         #endif
+         
          m_rawData=(char*)data;
          updateCrc();
          m_maxReceiveSize=0;
