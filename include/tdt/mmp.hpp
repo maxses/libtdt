@@ -88,6 +88,9 @@ enum class EMmpCommand: uint32_t
 
    eraseBootloaderFlash,
    writeBootloaderFlash,
+
+   eraseExternFlash,
+   writeExternFlash,
 };
 
 enum class EReturnCode
@@ -136,7 +139,7 @@ enum class ENodeState
 
    #if 1
 
-   static Tdt::ENodeState operator |( Tdt::ENodeState a, Tdt::ENodeState b )
+   inline Tdt::ENodeState operator |( Tdt::ENodeState a, Tdt::ENodeState b )
    {
       return( (Tdt::ENodeState)( (int)a | (int)b ) );
    }

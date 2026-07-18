@@ -59,7 +59,7 @@ class CMmpNode
       Q_OBJECT
    #endif
 
-      nodeId_t m_nodeId=0;
+      nodeId_t &m_nodeId;
 
       // Needed for unit tests.
       #if ! defined STM32
@@ -77,7 +77,7 @@ class CMmpNode
       // when more nodes are connected (Tested with 10 devices).
       static constexpr const int m_shredTimeout = 125/1;
       // Commands can take very long time; e.g. erasing a 128KB Flash
-      static constexpr const int m_transferExecutionTimeout = 1000*4;
+      static constexpr const int m_transferExecutionTimeout = 1000*6;
       // Don't keep it too low; testing will simulate frame drops
       static constexpr const int m_receiverTimeout = 1000 * 6;
 
@@ -111,15 +111,15 @@ class CMmpNode
       //int slotHandleMmpTransfer( Tdt::CMmpTransfer& data );
           
    public:
-      CMmpNode( nodeId_t nodeId = 2 );
+      CMmpNode( nodeId_t &nodeId );
       bool retryTransmit()
       {
          if( m_tx.incRetry() > 4 )
          {
-            qWarning( LDS( "TMR", "Too much retries" ) );
+            lWarning( LDS( "TMR", "Too much retries" ) );
             return(false);
          }
-         qWarning( LDS( "RTP%d", "Retry pos %d"), m_tx.pos() );
+         lWarning( LDS( "RTP%d", "Retry pos %d"), m_tx.pos() );
          sendTxShred();
          
          return(true);
@@ -165,10 +165,12 @@ class CMmpNode
       {
          return( m_nodeId );
       }
+      /*
       void setNodeId( nodeId_t nodeId )
       {
          m_nodeId = nodeId;
       }
+      */
       public slots:
          void txTimeout();
          void rxTimeout();
