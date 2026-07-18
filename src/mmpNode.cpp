@@ -489,10 +489,15 @@ void CMmpNode::finishTx( const Tdt::CMessage& msg )
 void CMmpNode::finishRx( const Tdt::CMessage& msg )
 {
    #if defined ( USE_LEPTO )
-   
-   crc32_t crc32=crc32Init( );
-   crc32=crc32Update( crc32, m_rx.data(), m_rx.header().dataLength );
-   crc32=crc32Finalize(crc32);
+   crc32_t crc32;
+
+   #if 1 // ! IS_ENABLED( CONFIG_SUPERSMALL)
+      crc32=crc32Init( );
+      crc32=crc32Update( crc32, m_rx.data(), m_rx.header().dataLength );
+      crc32=crc32Finalize(crc32);
+   #else
+      crc32 = m_rx.header().crc32Data;
+   #endif
    
    if( ! m_rx.header().dataLength )
    {
