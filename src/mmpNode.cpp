@@ -209,7 +209,7 @@ bool CMmpNode::handleRx( const Tdt::CMessage& msg )
 
    if( msg.getMmpPos() != m_rx.pos() )
    {
-      lCritical( LDS("M ODNM m %d vs c %d", "MMP order missmatch: message %d vs. buffer %d" )
+      lCritical( LDS("ODNM %d vs %d", "MMP order missmatch: message %d vs. buffer %d" )
                 , (int)msg.getMmpPos(), (int)m_rx.pos() );
 
       m_rx.reset();
