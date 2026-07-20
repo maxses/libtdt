@@ -35,6 +35,12 @@
 
 #include <tdt/mmp.hpp>
 #include <tdt/mmpTransfer.hpp>
+#if ! defined( USE_LEPTO )
+   #define lWarning  qWarning
+   #define lDebug    qDebug
+   #define lCritical qCritical
+   #define lFatal    qFatal
+#endif
 
 
 /*--- Declaration ----------------------------------------------------------*/
