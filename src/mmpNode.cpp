@@ -209,7 +209,7 @@ bool CMmpNode::handleRx( const Tdt::CMessage& msg )
 
    if( msg.getMmpPos() != m_rx.pos() )
    {
-      lCritical( LDS("M ODNM m %d vs c %d", "MMP order missmatch: message %d vs. buffer %d" )
+      lCritical( LDS("ODNM %d vs %d", "MMP order missmatch: message %d vs. buffer %d" )
                 , (int)msg.getMmpPos(), (int)m_rx.pos() );
 
       m_rx.reset();
@@ -489,10 +489,15 @@ void CMmpNode::finishTx( const Tdt::CMessage& msg )
 void CMmpNode::finishRx( const Tdt::CMessage& msg )
 {
    #if defined ( USE_LEPTO )
-   
-   crc32_t crc32=crc32Init( );
-   crc32=crc32Update( crc32, m_rx.data(), m_rx.header().dataLength );
-   crc32=crc32Finalize(crc32);
+   crc32_t crc32;
+
+   #if 1 // ! IS_ENABLED( CONFIG_SUPERSMALL)
+      crc32=crc32Init( );
+      crc32=crc32Update( crc32, m_rx.data(), m_rx.header().dataLength );
+      crc32=crc32Finalize(crc32);
+   #else
+      crc32 = m_rx.header().crc32Data;
+   #endif
    
    if( ! m_rx.header().dataLength )
    {
