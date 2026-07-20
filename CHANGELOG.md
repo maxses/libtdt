@@ -1,3 +1,13 @@
+# Changes for v0.6.0
+
+* Added commands for writing external flash
+* Use leptos logging instead of qt logging
+* Fixed compiler warnings
+* Added preset config header
+* Updated TDT description / profiles
+* Removed function code ackTransfer
+* Restructured MMP handling; let unit tests run again.
+
 # Changes for v0.5.0
 
 * Got rid of enum ENmtObject
