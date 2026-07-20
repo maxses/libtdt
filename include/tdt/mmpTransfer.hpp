@@ -35,7 +35,7 @@ class CMmpTransfer
    private:
       SMmpHeader m_header;
       char* m_rawData;
-      int m_maxReceiveSize;
+      static constexpr int m_maxReceiveSize=0x200;
       int m_retry=0;
       nodeId_t m_counterNodeId;
       EReturnCode m_returnCode = EReturnCode::invalidInit;
@@ -61,7 +61,8 @@ class CMmpTransfer
    public:
       CMmpTransfer( EDirection direction )
       {
-         memset(this, 0, sizeof(*this));
+         //memset(this, 0, sizeof(*this));
+         
          /*
          m_header.dataLength=0;
          m_header.mmpCommand=EMmpCommand::null;
@@ -86,9 +87,9 @@ class CMmpTransfer
       void allocRx()
       {
          #if ! defined STM32
-            m_maxReceiveSize=0x10000;
+            //m_maxReceiveSize=0x10000;
          #else
-            m_maxReceiveSize=0x200;
+            //m_maxReceiveSize=0x200;
          #endif
          m_rawData=(char*)malloc( m_maxReceiveSize );
          reset();
@@ -196,7 +197,7 @@ class CMmpTransfer
          
          m_rawData=(char*)data;
          updateCrc();
-         m_maxReceiveSize=0;
+         //m_maxReceiveSize=0;
          reset();
       }
       void setFlashAddress(address_t addr)

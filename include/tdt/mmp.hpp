@@ -72,7 +72,7 @@ enum class EMmpCommand: uint32_t
 {
    null,
    log,
-   eraseApplicationFlash,
+   eraseApplicationFlash,  //2
    writeApplicationFlash,
    dumpApplicationFlash,
    //enableApplication,
@@ -83,7 +83,7 @@ enum class EMmpCommand: uint32_t
    sendFirmware,
    receiveEeprom,
    receiveFirmware,
-   writeEeprom,
+   writeEeprom,            // 0xb
    dummyCommand,
 
    eraseBootloaderFlash,
