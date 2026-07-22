@@ -388,7 +388,7 @@ void CMmpNode::sendTransferAck(int pos, Tdt::EReturnCode sta)
 void CMmpNode::sendTxShred()
 {
    sendTxShred( m_tx.pos(), m_tx.data32() );
-   m_txTimeoutTimer.start( m_shredTimeout );
+   //m_timeoutTimer.start( m_shredTimeout );
 }
 
 void CMmpNode::sendTxAbort()
