@@ -82,15 +82,15 @@ enum class EMmpCommand: uint32_t
    sendEeprom,
    sendFirmware,
    receiveEeprom,
-   receiveFirmware,
+   receiveFirmware,        // 0xa
    writeEeprom,            // 0xb
    dummyCommand,
 
    eraseBootloaderFlash,
    writeBootloaderFlash,
 
-   eraseExternFlash,
-   writeExternFlash,
+   eraseExternFlash,       // 0xF
+   writeExternFlash,       // 0x10
 };
 
 enum class EReturnCode
