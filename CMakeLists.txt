@@ -38,6 +38,9 @@ set (
    TDT_GEN_HEADER
       ${TDT_OUTPUT_DIR}/tdt/gen/objects.hpp
       ${TDT_OUTPUT_DIR}/tdt/gen/printerBase.hpp
+      ${TDT_OUTPUT_DIR}/tdt/gen/units.hpp
+      ${TDT_OUTPUT_DIR}/tdt/gen/commands.hpp
+      ${TDT_OUTPUT_DIR}/tdt/gen/logs.hpp
 )
 
 # Fill default profiles if nothing is specified
@@ -136,12 +139,16 @@ add_library(
 
 if ( COMMON_CONFIG_HEADER )
    set ( TDT_CONFIG_HEADER "${COMMON_CONFIG_HEADER}" )
-elseif( EXISTS "${CMAKE_SYSROOT}/usr/include/lepto/config.h" )
-   set ( TDT_CONFIG_HEADER "${CMAKE_SYSROOT}/usr/include/lepto/config.h" )
+elseif( EXISTS "${CMAKE_SYSROOT}/usr/include/tdt/config.h" )
+   set ( TDT_CONFIG_HEADER "${CMAKE_SYSROOT}/usr/include/tdt/config.h" )
+else()
+   set ( TDT_CONFIG_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/include/tdt/presets/default.h" )
 endif()
 
+# message( FATAL_ERROR "###1 TDT_CONFIG_HEADER: '${TDT_CONFIG_HEADER}'")
 
-if( NOT ${COMMON_CONFIG_HEADER_INCLUDED} )
+if( NOT COMMON_CONFIG_HEADER_INCLUDED )
+   # message( FATAL_ERROR "###1 TDT_CONFIG_HEADER: '${TDT_CONFIG_HEADER}'")
    if( TDT_CONFIG_HEADER )
       get_filename_component( TDT_CONFIG_PATH ${TDT_CONFIG_HEADER} DIRECTORY )
       get_filename_component( TDT_CONFIG_FILE ${TDT_CONFIG_HEADER} NAME )
@@ -153,7 +160,9 @@ if( NOT ${COMMON_CONFIG_HEADER_INCLUDED} )
          PUBLIC
             "SHELL:-include ${TDT_CONFIG_HEADER}"
       )
-   
+
+      # message( FATAL_ERROR "###2 TDT_CONFIG_HEADER: '${TDT_CONFIG_HEADER}'")
+
       set_source_files_properties(
          ${sources}
          ${headers}
@@ -203,6 +212,40 @@ if( "${MCU_PLATFORM}" MATCHES "linux" )
          Qt${QT_VERSION_MAJOR}::Xml
    )
 endif()
+
+
+install(
+   TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}Targets
+   LIBRARY DESTINATION lib
+   ARCHIVE DESTINATION lib
+   RUNTIME DESTINATION bin
+   INCLUDES DESTINATION include
+)
+
+# Includes have to be installed manually for some reason
+install(
+   DIRECTORY
+      include/tdt
+   DESTINATION
+      include
+   COMPONENT Devel
+)
+
+install(
+   FILES
+      ${TDT_GEN_HEADER}
+   DESTINATION
+      include/tdt/gen
+   COMPONENT Devel
+)
+
+install (
+   FILES
+      LICENSE
+   DESTINATION
+      share/doc/liblepto
+)
+
 
 if( "${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86_64" )
     add_subdirectory(tests)
