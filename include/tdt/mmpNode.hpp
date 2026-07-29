@@ -99,9 +99,9 @@ class CMmpNode
          Tdt::EReturnCode signalHandleMmpTransfer( const Tdt::CMmpTransfer& data );
          void signalHandleMmpTransferAck( const Tdt::CMmpTransfer& data );
       #elif IS_ENABLED( CONFIG_TDT_MMP_SIGNALS )
-         CSignal< void, const Tdt::CMessage& > signalSendTdtMessage;
-         CSignal< Tdt::EReturnCode, const Tdt::CMmpTransfer& > signalHandleMmpTransfer;
-         CSignal< void, const Tdt::CMmpTransfer& > signalHandleMmpTransferAck;
+         CSimpleSignal< void, const Tdt::CMessage& > signalSendTdtMessage;
+         CSimpleSignal< Tdt::EReturnCode, const Tdt::CMmpTransfer& > signalHandleMmpTransfer;
+         CSimpleSignal< void, const Tdt::CMmpTransfer& > signalHandleMmpTransferAck;
       #elif IS_ENABLED( CONFIG_TDT_MMP_CALLBACKS )
          // void cbSendTdtMessage( const Tdt::CMessage& );
          // int cbHandleMmpTransfer( const Tdt::CMmpTransfer& );
