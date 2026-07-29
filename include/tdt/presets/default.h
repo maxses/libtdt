@@ -1,0 +1,2 @@
+#define CONFIG_TDT_PEDANTIC			1
+
