@@ -211,7 +211,7 @@ bool CMmpNode::handleRx( const Tdt::CMessage& msg )
 
    if( msg.getMmpPos() != m_rx.pos() )
    {
-      lCritical( LDS("ODNM %d vs %d", "MMP order missmatch: message %d vs. buffer %d" )
+      lCritical( LDS("ODNM %d/%d", "MMP order missmatch: message %d vs. buffer %d" )
                 , (int)msg.getMmpPos(), (int)m_rx.pos() );
 
       m_rx.reset();
@@ -257,6 +257,7 @@ bool CMmpNode::handleRx( const Tdt::CMessage& msg )
    {
       if( m_rx.header().dataLength > m_rx.maxReceiveSize() )
       {
+         // Fatal, not printed
          qFatal( LDS("POTB %d", "Block too big: %d"), m_rx.header().dataLength );
       }
    }
@@ -418,8 +419,12 @@ int CMmpNode::dummyHandleMmpTransfer( const Tdt::CMmpTransfer& data )
 
 void CMmpNode::txTimeout()
 {
-   lWarning( LDS("%d TXTO","[%d] TX Timeout"), m_nodeId );
-
+   #if IS_ENABLED( CONFIG_SUPERSMALL )
+      lWarning( LDS("TXTO","TX Timeout") );
+   #else
+      lWarning( LDS("%d TXTO","[%d] TX Timeout"), m_nodeId );
+   #endif
+      
    if( !retryTransmit()  )
    {
       lWarning( LDS("CPD", "Counterpart dead when transmitting" ) );
@@ -431,7 +436,11 @@ void CMmpNode::txTimeout()
 
 void CMmpNode::rxTimeout()
 {
-   lWarning( LDS("%d RXTO", "[%d] RX Timeout"), m_nodeId );
+   #if IS_ENABLED( CONFIG_SUPERSMALL )
+      lWarning( LDS("RXTO", "RX Timeout") );
+   #else
+      lWarning( LDS("%d RXTO", "[%d] RX Timeout"), m_nodeId );
+   #endif
    // Don't do any retransmit on the receivers side.
    // Its up to the transmitter to retransmit its data when he got no 
    // acknowledge.
@@ -514,7 +523,7 @@ void CMmpNode::finishRx( const Tdt::CMessage& msg )
    
    if( crc32 != m_rx.header().crc32Data )
    {
-      lWarning( LDS( "CRCWR", "CRC Wrong" ) );
+      lWarning( LDS( "CCWR", "CRC Wrong" ) );
       m_rx.setReturnCode( EReturnCode::wrongCRC);
    }
    else
