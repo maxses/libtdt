@@ -10,12 +10,28 @@
             {
                "address": "0x0000",
                "name": "Sensor",
+               "unit": "promil",
+               "example": "610 ‰",
                "size": "0x8"
             },
             {
                "address": "0x0008",
                "name": "Sensor raw",
                "size": "0x8"
+            }
+         ]
+      },
+      {
+         "name": "Plant units",
+         "unitsOffset": "0x80",
+         "size": "0x08",
+         "units": [
+            {
+               "name": "permilMoisture",
+               "address": "0x00",
+               "format": "d",
+               "postfix": " %", 
+               "divider": "10"
             }
          ]
       }
