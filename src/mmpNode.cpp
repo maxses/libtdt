@@ -486,14 +486,14 @@ void CMmpNode::finishTx( const Tdt::CMessage& msg )
    assert( msg.getLen()>= 8 );
    m_tx.setReturnCode( (Tdt::EReturnCode)msg.getTdtValue()->_uint );
    
-   #if IS_ENABLED( CONFIG_TDT_PEDANTIC )
-      m_tx.setState( ENodeState::idle );
-   #endif
-   
    m_txTimeoutTimer.stop();
    
    // Handling mmp transfer ack could setup another transfer
    emitHandleMmpTransferAck();
+
+   #if IS_ENABLED( CONFIG_TDT_PEDANTIC )
+      m_tx.setState( ENodeState::idle );
+   #endif
 }
 
 
