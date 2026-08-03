@@ -1,3 +1,8 @@
+# Changes for v0.6.1
+
+* Addopted changes of liblepto
+* Minor fixes
+
 # Changes for v0.6.0
 
 * Added commands for writing external flash
