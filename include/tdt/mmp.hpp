@@ -86,7 +86,7 @@ enum class EMmpCommand: uint32_t
    writeEeprom,            // 0xb
    dummyCommand,
 
-   eraseBootloaderFlash,
+   eraseBootloaderFlash,   // 0xd
    writeBootloaderFlash,
 
    eraseExternFlash,       // 0xF

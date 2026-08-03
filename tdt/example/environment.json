@@ -55,6 +55,20 @@
                "name": "Connected sensors",
                "description": "Bitmask of detected sensors",
                "example": "0x00003"
+            },
+            {
+               "address": "0x000F",
+               "name": "Alert high temperature",
+               "description": "Winter: 20.50; Summer: 29.00",
+               "example": "29.00°C",
+               "unit": "centi degree"
+            },
+            {
+               "address": "0x0010",
+               "name": "Alert low temperature",
+               "description": "Winter: 17.00",
+               "example": "17.00°C",
+               "unit": "centi degree"
             }
          ]
       },
