@@ -21,7 +21,7 @@
 
 #if defined USE_LEPTO
    #include <lepto/log.h>     // ELogCategory
-   enum class ELogCode: int;
+   // enum class ELogCode: int;
 #else
    #include <tdt/compat.hpp>
    enum class ELogCode: int32_t;

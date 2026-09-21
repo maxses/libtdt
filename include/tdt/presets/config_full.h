@@ -12,7 +12,9 @@
 //----------------------------------------------------------------------------
 
 
-#define CONFIG_TDT_MMP_SIGNALS                  1
+#define CONFIG_TDT_PEDANTIC                  1
+#define CONFIG_TDT_MMP_SIGNALS               1
+// #define CONFIG_TDT_MMP_CALLBACKS             1
 
 #define TDT_CONFIGURED         1
 

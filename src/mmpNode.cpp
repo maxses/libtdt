@@ -56,10 +56,8 @@ CMmpNode::CMmpNode( nodeId_t &nodeId )
       connect( &m_rxTimeoutTimer, SIGNAL( timeout() ),
               this, SLOT( rxTimeout() ) );
    #else
-
-   CONNECT(m_txTimeoutTimer.timeout, this, CMmpNode::txTimeout);
-   CONNECT(m_rxTimeoutTimer.timeout, this, CMmpNode::rxTimeout);
-
+      CONNECT(m_txTimeoutTimer.timeout, this, CMmpNode::txTimeout);
+      CONNECT(m_rxTimeoutTimer.timeout, this, CMmpNode::rxTimeout);
    #endif
 }
 
@@ -198,10 +196,12 @@ bool CMmpNode::handleRx( const Tdt::CMessage& msg )
       else
       {
          #if IS_ENABLED( CONFIG_TDT_PEDANTIC )
-         int msgPos=msg.getMmpPos();
-         int size=(int)sizeof( Tdt::SMmpHeader ) + m_rx.header().dataLength;
-         
-         lFatal("Does not make sense: pos %d of total %d is not last?", msgPos, size);
+            int msgPos=msg.getMmpPos();
+            int size=(int)sizeof( Tdt::SMmpHeader ) + m_rx.header().dataLength;
+            (void)msgPos;
+            (void)size;
+
+            lFatal("Does not make sense: pos %d of total %d is not last?", msgPos, size);
          #else
             qFatal("UP");
          #endif
