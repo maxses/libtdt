@@ -42,7 +42,7 @@ class CSourceFile
       {
          if( !m_file.open( QIODevice::WriteOnly | QIODevice::Text ) )
          {
-            qFatal("Could not open output file");
+            qFatal("Could not open output file '%s'", qPrintable( m_fileName ) );
          }
       }
       void start()
