@@ -155,6 +155,9 @@ TEST_CASE( "MMP simple", "[default]" )
    }
 }
 
+#if ! IS_ENABLED( CONFIG_TDT_PEDANTIC )
+    #error Please set CONFIG_TDT_PEDANTIC for host to fix testing.
+#endif
 
 TEST_CASE( "MMP full duplex", "[default]" )
 {
