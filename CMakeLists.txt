@@ -74,7 +74,9 @@ file( MAKE_DIRECTORY ${TDT_OUTPUT_DIR}/tdt/gen )
 add_custom_command(
    OUTPUT
          ${TDT_GEN_HEADER}
-    COMMAND
+   COMMAND
+      mkdir -p ${TDT_OUTPUT_DIR}/tdt/gen
+   COMMAND
         SOURCE_DIR=${CMAKE_SOURCE_DIR} 
         OUTPUT_DIR=${TDT_OUTPUT_DIR}/tdt
         PROJECT=${CMAKE_PROJECT_NAME} 
