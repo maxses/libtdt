@@ -8,6 +8,7 @@
 cmake_minimum_required(VERSION 3.11)
 project( tdt LANGUAGES CXX )
 
+enable_testing()
 
 # add_definitions( -DCONFIG_TDT_CONSTEXPR_DEFAULT_CONSTRUCTOR=1 )
 
