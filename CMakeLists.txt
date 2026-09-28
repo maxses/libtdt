@@ -8,6 +8,7 @@
 cmake_minimum_required(VERSION 3.11)
 project( tdt LANGUAGES CXX )
 
+enable_testing()
 
 # add_definitions( -DCONFIG_TDT_CONSTEXPR_DEFAULT_CONSTRUCTOR=1 )
 
@@ -16,7 +17,7 @@ if( "${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86_64" )
    set(CMAKE_AUTOUIC ON)
    set(CMAKE_AUTOMOC ON)
    set(CMAKE_AUTORCC ON)
-   set( QT_COMPONENTS Core Widgets Network Xml )
+   set( QT_COMPONENTS Core Network Xml )
 
    # Check either Qt6 or Qt5
    find_package( QT NAMES Qt5 Qt6 COMPONENTS ${QT_COMPONENTS} REQUIRED )
