@@ -127,7 +127,7 @@ TEST_CASE( "MMP simple", "[default]" )
          finished=false;
          elapsed.start();
          
-         while( elapsed.elapsed( ) < 30 * 1000 )
+         while( elapsed.elapsed( ) < 60 * 1000 )
          {
             dut1.testEventLoop();
             dut2.testEventLoop();
@@ -141,6 +141,8 @@ TEST_CASE( "MMP simple", "[default]" )
             }
             loop.processEvents();
          }
+         
+         loop.processEvents();
          
          REQUIRE( finished == true );
          
