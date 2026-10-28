@@ -56,8 +56,8 @@ CMmpNode::CMmpNode( nodeId_t &nodeId )
       connect( &m_rxTimeoutTimer, SIGNAL( timeout() ),
               this, SLOT( rxTimeout() ) );
    #else
-      CONNECT(m_txTimeoutTimer.timeout, this, CMmpNode::txTimeout);
-      CONNECT(m_rxTimeoutTimer.timeout, this, CMmpNode::rxTimeout);
+      lConnect4( &m_txTimeoutTimer, timeout(), this, CMmpNode::txTimeout );
+      lConnect4( &m_rxTimeoutTimer, timeout(), this, CMmpNode::rxTimeout );
    #endif
 }
 

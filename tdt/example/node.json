@@ -39,9 +39,9 @@
                "description": "How much current does the device draw"
             },
             {
-               "name": "supply voltage",
+               "name": "MCU VDD",
                "address": "0x34",
-               "description": "Main supply voltage"
+               "description": "Supply voltage of the MCU"
             },
             {
                "name": "PCB Temperature",
